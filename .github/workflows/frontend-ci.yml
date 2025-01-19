@@ -1,0 +1,108 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  format-and-lint:
+    name: Format & Lint Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Enforce Prettier Formatting
+        run: |
+          cd frontend
+          npm run format
+
+      - name: Run ESLint & TypeScript Checks
+        run: |
+          cd frontend
+          npm run lint
+          npm run type-check
+
+      - name: Enforce PascalCase for Components
+        run: |
+          cd frontend
+          npm run enforce-pascal
+
+  test:
+    name: Run Jest Tests
+    runs-on: ubuntu-latest
+    needs: format-and-lint
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Jest Tests
+        run: |
+          cd frontend
+          npm test
+
+  deploy:
+    name: Build & Deploy to Expo EAS
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build Expo App
+        run: |
+          cd frontend
+          expo build:android
+
+      - name: Deploy to Expo EAS
+        run: |
+          cd frontend
+          EXPO_TOKEN=${{ secrets.EXPO_TOKEN }} eas build --platform android --profile production --non-interactive
