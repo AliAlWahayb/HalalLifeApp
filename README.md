@@ -27,7 +27,17 @@
 
 ---
 
-## 📌 Step 3: Set Up the Backend
+## 📌 Step 3: Install Essential Development Tools
+
+Before proceeding, ensure you have the following tools installed:
+
+- **VS Code (Recommended Code Editor)**: [Download](https://code.visualstudio.com/)
+- **Postman (For API Testing)**: [Download](https://www.postman.com/downloads/)
+- **Xcode (For iOS Development - macOS Only)**: Install via Mac App Store.
+- **MySQL Workbench (For Database Management)**: [Download](https://dev.mysql.com/downloads/workbench/)
+- **Firebase Console (For Firestore Management)**: [Go to Console](https://console.firebase.google.com/)
+
+## 📌 Step 4: Set Up the Backend
 
 ### 🔹 Install Python (if you haven't already)
 
@@ -74,7 +84,7 @@ uvicorn app.main:app --reload
 
 ---
 
-## 📌 Step 4: Set Up the Frontend
+## 📌 Step 5: Set Up the Frontend
 
 ### 🔹 Install Node.js & npm (if you haven't already)
 
@@ -117,7 +127,7 @@ npx expo start
 
 ---
 
-## 📌 Step 5: CI/CD Automation & Code Quality
+## 📌 Step 6: CI/CD Automation & Code Quality
 
 The project includes **GitHub Actions** to ensure code quality and consistency before merging changes.
 
@@ -151,7 +161,7 @@ The project includes **GitHub Actions** to ensure code quality and consistency b
 
 ---
 
-<!-- ## 📌 Step 6: Run the Project with Docker (Optional)
+<!-- ## 📌 Step 7: Run the Project with Docker (Optional)
 If you prefer to use **Docker**, run:
 ```sh
 docker-compose up --build
@@ -159,7 +169,19 @@ docker-compose up --build
 
 ---
 
-## 📌 Step 7: Keeping Your Fork Updated
+## 📌 Step 8: Recommended VS Code Extensions
+
+For a smoother development experience, install the following **VS Code extensions**:
+
+- **ESLint** - Enforce JavaScript/TypeScript coding standards.
+- **Prettier** - Auto-format code for consistency.
+- **Python** - Essential for FastAPI backend development.
+- **Codeium** - AI-powered code autocomplete for enhanced productivity.
+- **Better Comments** - Helps in writing readable and organized comments in code.
+
+---
+
+## 📌 Step 9: Keeping Your Fork Updated
 
 1. Open **GitHub Desktop**.
 2. Click on **"Fetch origin"** to get the latest changes from your fork.
@@ -169,6 +191,15 @@ docker-compose up --build
    git fetch upstream
    git merge upstream/main
    ``` -->
+
+---
+
+## 📌 Step 10: Important Links
+
+- 🔗 **Firebase Console**: [https://console.firebase.google.com/](https://console.firebase.google.com/)
+- 🔗 **Expo Documentation**: [https://docs.expo.dev/](https://docs.expo.dev/)
+- 🔗 **FastAPI Documentation**: [https://fastapi.tiangolo.com/](https://fastapi.tiangolo.com/)
+- 🔗 **MySQL Documentation**: [https://dev.mysql.com/doc/](https://dev.mysql.com/doc/)
 
 ---
 
