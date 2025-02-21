@@ -1,13 +1,13 @@
-import { ScreenContent } from 'components/ScreenContent';
-import { StatusBar } from 'expo-status-bar';
 
+
+import HomeView from 'components/Home/HomeView';
 import './global.css';
+import { View, Text } from 'react-native';
 
 export default function App() {
   return (
     <>
-      <ScreenContent title="Home" path="App.tsx" />
-      <StatusBar style="auto" />
+      <HomeView />
     </>
   );
 }
