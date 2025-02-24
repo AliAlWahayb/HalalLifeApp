@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'; 
 import { View, Text, TouchableOpacity } from 'react-native';
 
@@ -24,4 +25,3 @@ const [isLoading, setIsLoading] = useState(false);
 };
 
 export default Buttons;
-
