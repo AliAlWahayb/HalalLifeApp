@@ -6,7 +6,7 @@ module.exports = {
   trailingComma: 'es5',
   endOfLine: 'crlf',
   semi: true,
-  
+
   plugins: [require.resolve('prettier-plugin-tailwindcss')],
   tailwindAttributes: ['className'],
 };

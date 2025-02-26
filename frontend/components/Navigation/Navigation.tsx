@@ -3,17 +3,18 @@ import { View, Text } from 'react-native';
 import React, { useState } from 'react';
 import { MaterialCommunityIcons, Feather, Octicons, Entypo } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import FakeView from 'components/Home/FakeView';
 import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
+import FakeMenu from 'components/SideMenu/FakeMenu';
 
 const Tab = createBottomTabNavigator();
 
-
-
 const BottomTab = () => {
   const IconSize = 28;
-  const [modalVisible, setModalVisible] = useState(false); // State to manage modal visibility
+  const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <>
@@ -30,7 +31,8 @@ const BottomTab = () => {
               size={IconSize + 5}
               color="black"
               className="p-5"
-              onPress={() => console.log('test')}
+              // @ts-ignore
+              onPress={() => navigation.navigate('Information')}
             />
           ),
           headerRight: () => (
@@ -118,6 +120,50 @@ const BottomTab = () => {
           component={HomeView}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="home" size={24} color={color} />,
+          }}
+        />
+        {/* screen for the side menu */}
+        <Tab.Screen
+          name="History"
+          component={FakeMenu}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        <Tab.Screen
+          name="Preferences"
+          component={FakeMenu}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        <Tab.Screen
+          name="Favorites"
+          component={FakeMenu}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        <Tab.Screen
+          name="User settings"
+          component={FakeMenu}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        <Tab.Screen
+          name="Theme"
+          component={FakeMenu}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        {/* screen for the Information */}
+        <Tab.Screen
+          name="Information"
+          component={FakeMenu}
+          options={{
+            tabBarItemStyle: { display: 'none' },
           }}
         />
       </Tab.Navigator>
