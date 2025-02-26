@@ -59,7 +59,7 @@ const BottomTab = () => {
         initialRouteName="Home">
         <Tab.Screen
           name="Chat"
-          component={HomeView}
+          component={FakeView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="chat-processing-outline" size={24} color={color} />
@@ -110,14 +110,14 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Search"
-          component={HomeView}
+          component={FakeView}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="search" size={24} color={color} />,
           }}
         />
         <Tab.Screen
           name="Home"
-          component={HomeView}
+          component={FakeView}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="home" size={24} color={color} />,
           }}
