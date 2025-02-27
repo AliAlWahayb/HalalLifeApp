@@ -8,6 +8,7 @@ import FakeView from 'components/Home/FakeView';
 import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
 import FakeMenu from 'components/SideMenu/FakeMenu';
+import Information from 'components/Information/Information';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,6 +26,9 @@ const BottomTab = () => {
         screenOptions={{
           headerShown: true,
           headerTitle: () => null,
+          headerStyle: {
+            minHeight: 100,
+          },
           headerLeft: () => (
             <MaterialCommunityIcons
               name="information-variant"
@@ -117,7 +121,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Home"
-          component={FakeView}
+          component={HomeView}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="home" size={24} color={color} />,
           }}
@@ -161,7 +165,7 @@ const BottomTab = () => {
         {/* screen for the Information */}
         <Tab.Screen
           name="Information"
-          component={FakeMenu}
+          component={Information}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}

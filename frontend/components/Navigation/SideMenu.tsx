@@ -40,7 +40,6 @@ const SideMenu = ({
   const navigation = useNavigation();
   const state = navigation.getState();
 
-
   return (
     <Modal
       animationType="fade"

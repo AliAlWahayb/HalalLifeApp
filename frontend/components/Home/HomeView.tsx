@@ -1,82 +1,57 @@
-import { View, Text, ImageBackground,TouchableOpacity , Image} from 'react-native';
-import Home from '../../assets/Home.png';
-import GoogleImage from '../../assets/GoogleImge.png';
-import FacebookImage from '../../assets/FacebookImge.png';
-import Buttons from '../../Shared/components/FormElements/Buttons'; 
+import { View, Text, Image, ScrollView } from 'react-native';
+import React from 'react';
+import Buttons from 'components/Shared/components/FormElements/Buttons';
+import Contributors from './Components/Contributors';
 
+const contributorsData = [
+  { index: 1, name: 'John Doe', contributions: 100 },
+  { index: 2, name: 'Doe John', contributions: 10 },
+  { index: 3, name: 'Jane Smith', contributions: 1 },
+  { index: 4, name: 'Jane Smith', contributions: 1 },
+  { index: 5, name: 'Jane Smith', contributions: 1 },
+  { index: 6, name: 'Jane Smith', contributions: 1 },
+];
 
-const HomeView = ({ navigation , onPress }) => {
+const HomeView = () => {
+  return (
+    <ScrollView className="flex-1 flex-col bg-white">
+      <View className="flex flex-col items-center  py-5">
+        <Text className="text-center text-4xl font-bold text-[#5FCE59]">HalalLife</Text>
+        <Image source={require('../../assets/Home/Home.png')} className="" />
+      </View>
+      <View className="flex flex-col items-center gap-2 py-5">
+        <Text className="text-center text-4xl font-bold text-[#5FCE59]">Fast Navigation</Text>
+        <View className="flex flex-col items-center gap-5">
+          <View className="flex flex-row  gap-5">
+            <Buttons title="Scanner" onPress={() => {}} />
+            <Buttons title="Liked" onPress={() => {}} />
+          </View>
+          <View className="flex flex-row gap-5">
+            <Buttons title="Search" onPress={() => {}} />
+            <Buttons title="History" onPress={() => {}} />
+          </View>
+        </View>
+      </View>
+      <View className="flex flex-col items-center gap-2 py-5">
+        <Text className="text-center text-3xl font-bold text-[#5FCE59]">
+          Contributors of the month
+        </Text>
+        <View className="flex flex-col gap-5">
+          {contributorsData.map((contributor) => (
+            <Contributors
+              key={contributor.index}
+              index={contributor.index}
+              name={contributor.name}
+              contributions={contributor.contributions}
+              onPress={() => {
+                console.log('Follow ' + contributor.name);
+              }}
+            />
+          ))}
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
 
-  const handlePress = () => {
-  onPress();
-
-  };
-return (
-  <ImageBackground
-
-  source={Home}
-  className='flex-1 justify-center items-center p-5'
-  resizeMode='cover'>
-
-  <View className="absolute inset-0 bg-black opacity-50" />
-
-  <View className='flex flex-col items-left mb-28 fixed'>
-      
-      <Text className='text-white text-6xl font-bold'>Welcome to </Text>
-      <Text className='text-green-500 font-bold text-5xl'>HalalLife</Text>
-      <Text className='text-gray-200 text-lg  font-bold ml-4'>Your favourite Halal</Text>
-      <Text className='text-gray-200 text-lg mb-40 ml-4 font-bold'>Community</Text>
-     
-  </View>
-
-
-   <View className='flex flex-col items-center '>
-
-    <Text className='text-gray-400 text-1xl font-bold '>Sign in with</Text>
-
-   </View >
-
-   <View className=" flex-row  mt-4">
-     
-      <TouchableOpacity className="bg-white rounded-full px-6 py-4 flex flex-row items-center  ">
-        <Image source={FacebookImage} className="w-6 h-6 mr-2" />
-        <Text className="text-black font-semibold">Facebook</Text>
-      </TouchableOpacity>
-
-     
-      <TouchableOpacity className="bg-white rounded-full px-6 py-4 flex flex-row items-center ml-20">
-        <Image source={GoogleImage} className="w-6 h-6 mr-2" />
-        <Text className="text-black font-semibold">Google</Text>
-      </TouchableOpacity>
-      
-    </View>
-
-    <View className="">
-
-      <TouchableOpacity onPress={() => navigation.navigate('Auth')} className="bg-black rounded-full px-8 py-4 m-4">
-
-        <Text className='text-white text-lg font-semibold'>Start with email or phone</Text>
-
-      </TouchableOpacity>
-      
-    </View>
-
-      <Text 
-      
-      className='text-gray-300 mt-4 '> Already have an account?
-
-        <TouchableOpacity
-
-         onPress={() => navigation.navigate('Auth')}>
-        <Text className='underline text-gray-400 '>Sign Up</Text>
-        
-        </TouchableOpacity>
-        
-    </Text>
-      
-
-  </ImageBackground>
-)
-
-}
 export default HomeView;

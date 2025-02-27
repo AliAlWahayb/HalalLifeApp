@@ -16,9 +16,9 @@ const Buttons = ({ title, onPress }: ButtonProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      className="flex h-12 w-5/12 items-center justify-center rounded-full bg-[#77C273]"
+      className="flex h-5 items-center justify-center rounded-full bg-[#77C273] p-2"
       onPress={handlePress}>
-      <Text className="text-center text-2xl font-semibold text-white">{title}</Text>
+      <Text className="text-center text-sm font-medium text-white">{title}</Text>
     </TouchableOpacity>
   );
 };
