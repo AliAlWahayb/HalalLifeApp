@@ -1,17 +1,21 @@
-import { View, Text } from 'react-native';
-import { title } from './SMall/title';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Feed from './small/feed'; // Feed component
+import PostDetail from './small/PostDetail'; // Post detail component
+import CommentDetail from './small/CommentDetail'; // Comment detail component
 
-export default function App() {
+const Stack = createStackNavigator();
+
+const App = () => {
   return (
-    <>
-      <View className="flex flex-col p-5">
-        <title />
-        <Text className="pt-5 text-lg font-black text-emerald-900">
-          Success in React Native development starts with strong collaboration. Communicate openly,
-          delegate tasks efficiently, and support each other in problem-solving. Regular check-ins
-          and knowledge sharing will help your team grow and build amazing apps together!!!
-        </Text>
-      </View>
-    </>
+    
+      <Stack.Navigator initialRouteName="Feed">
+        <Stack.Screen name="Feed" component={Feed} />
+        <Stack.Screen name="PostDetail" component={PostDetail} />
+        <Stack.Screen name="CommentDetail" component={CommentDetail} />
+      </Stack.Navigator> 
   );
-}
+};
+
+export default App;
