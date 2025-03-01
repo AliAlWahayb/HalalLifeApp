@@ -9,6 +9,8 @@ import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
 import FakeMenu from 'components/SideMenu/FakeMenu';
 
+import comView from 'components/com/comView';
+
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
@@ -59,7 +61,7 @@ const BottomTab = () => {
         initialRouteName="Home">
         <Tab.Screen
           name="Chat"
-          component={FakeView}
+          component={comView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="chat-processing-outline" size={24} color={color} />
