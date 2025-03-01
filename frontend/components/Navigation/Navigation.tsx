@@ -9,6 +9,8 @@ import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
 import FakeMenu from 'components/SideMenu/FakeMenu';
 import Information from 'components/Information/Information';
+import Scanner from 'components/Camera/Scanner';
+import Haram from 'components/Products/Haram';
 
 const Tab = createBottomTabNavigator();
 
@@ -60,7 +62,7 @@ const BottomTab = () => {
             paddingTop: 5,
           },
         }}
-        initialRouteName="Home">
+        initialRouteName="Search">
         <Tab.Screen
           name="Chat"
           component={FakeView}
@@ -82,7 +84,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Camera"
-          component={FakeView}
+          component={Scanner}
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ color }) => (
@@ -114,7 +116,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Search"
-          component={FakeView}
+          component={Haram}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="search" size={24} color={color} />,
           }}

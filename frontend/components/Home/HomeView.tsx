@@ -1,4 +1,5 @@
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
 import React from 'react';
 import Buttons from 'components/Shared/components/FormElements/Buttons';
 import Contributors from './Components/Contributors';
@@ -12,12 +13,24 @@ const contributorsData = [
   { index: 6, name: 'Jane Smith', contributions: 1 },
 ];
 
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 const HomeView = () => {
   return (
     <ScrollView className="flex-1 flex-col bg-white">
       <View className="flex flex-col items-center  py-5">
-        <Text className="text-center text-4xl font-bold text-[#5FCE59]">HalalLife</Text>
-        <Image source={require('../../assets/Home/Home.png')} className="" />
+        <Text className="pb-2 text-center text-4xl font-bold text-[#5FCE59]">HalalLife</Text>
+        <Image
+          source={require('../../assets/Home/Home.png')}
+          style={{
+            width: '75%',
+            height: undefined,
+            aspectRatio: 1.5,
+          }}
+          placeholder={{ blurhash }}
+          contentFit="contain"
+        />
       </View>
       <View className="flex flex-col items-center gap-2 py-5">
         <Text className="text-center text-4xl font-bold text-[#5FCE59]">Fast Navigation</Text>
