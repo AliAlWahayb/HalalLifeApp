@@ -8,6 +8,9 @@ import FakeView from 'components/Home/FakeView';
 import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
 import FakeMenu from 'components/SideMenu/FakeMenu';
+import Information from 'components/Information/Information';
+import Scanner from 'components/Camera/Scanner';
+import Haram from 'components/Products/Haram';
 
 import comView from 'components/com/comView';
 
@@ -27,6 +30,9 @@ const BottomTab = () => {
         screenOptions={{
           headerShown: true,
           headerTitle: () => null,
+          headerStyle: {
+            minHeight: 100,
+          },
           headerLeft: () => (
             <MaterialCommunityIcons
               name="information-variant"
@@ -58,7 +64,7 @@ const BottomTab = () => {
             paddingTop: 5,
           },
         }}
-        initialRouteName="Home">
+        initialRouteName="Search">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -80,7 +86,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Camera"
-          component={FakeView}
+          component={Scanner}
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ color }) => (
@@ -112,14 +118,14 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Search"
-          component={FakeView}
+          component={Haram}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="search" size={24} color={color} />,
           }}
         />
         <Tab.Screen
           name="Home"
-          component={FakeView}
+          component={HomeView}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="home" size={24} color={color} />,
           }}
@@ -163,7 +169,7 @@ const BottomTab = () => {
         {/* screen for the Information */}
         <Tab.Screen
           name="Information"
-          component={FakeMenu}
+          component={Information}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
