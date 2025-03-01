@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-const Buttons = ({ title, onPress }) => {
-  const [isLoading, setIsLoading] = useState(false);
+const Buttons = props => {
 
   const handlePress = () => {
-    onPress();
+    if (props.href) {
+     
+    } else if (props.onPress) {
+      props.onPress(); 
+    }
   };
 
+  
+
   return (
-    <View className="mt-6 flex w-full items-center justify-center px-8">
-      <TouchableOpacity className="rounded-full bg-green-500 px-20 py-2" onPress={handlePress}>
-        <Text className="text-base text-white">{title}</Text>
-      </TouchableOpacity>
-    </View>
+
+    <TouchableOpacity 
+
+    className='bg-[#77C273] rounded-full py-4  px-24 mt-4'
+    onPress={handlePress}
+    >
+    <Text className="text-white font-bold">{props.children}</Text>
+     
+
+    </TouchableOpacity>
+  
+ 
   );
+
 };
 
 export default Buttons;

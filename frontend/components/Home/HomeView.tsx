@@ -2,7 +2,9 @@ import { View, Text, ImageBackground,TouchableOpacity , Image} from 'react-nativ
 import Home from '../../assets/Home.png';
 import GoogleImage from '../../assets/GoogleImge.png';
 import FacebookImage from '../../assets/FacebookImge.png';
-import Buttons from '../../Shared/components/FormElements/Buttons'; 
+import Buttons from '../../Shared/components/FormElements/Buttons';
+
+
 
 
 const HomeView = ({ navigation , onPress }) => {
@@ -11,6 +13,9 @@ const HomeView = ({ navigation , onPress }) => {
   onPress();
 
   };
+
+
+
 return (
   <ImageBackground
 
@@ -21,6 +26,7 @@ return (
   <View className="absolute inset-0 bg-black opacity-50" />
 
   <View className='flex flex-col items-left mb-28 fixed'>
+
       
       <Text className='text-white text-6xl font-bold'>Welcome to </Text>
       <Text className='text-green-500 font-bold text-5xl'>HalalLife</Text>
@@ -68,7 +74,7 @@ return (
         <TouchableOpacity
 
          onPress={() => navigation.navigate('Auth')}>
-        <Text className='underline text-gray-400 '>Sign Up</Text>
+        <Text className='underline text-gray-400 '>Log In</Text>
         
         </TouchableOpacity>
         
