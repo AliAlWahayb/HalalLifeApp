@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import React from 'react';
-import Buttons from 'components/Shared/components/FormElements/Buttons';
+import Buttons from 'components/Shared/components/FormElements/AliButtons';
 import Contributors from './Components/Contributors';
 
 const contributorsData = [

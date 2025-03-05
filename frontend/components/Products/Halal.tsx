@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Accordion from 'components/Shared/components/Accordion';
-import Buttons from 'components/Shared/components/FormElements/Buttons';
+import Buttons from 'components/Shared/components/FormElements/AliButtons';
 import { Fontisto, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 const data = [

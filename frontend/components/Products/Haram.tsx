@@ -4,7 +4,7 @@ import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Accordion from 'components/Shared/components/Accordion';
-import Buttons from 'components/Shared/components/FormElements/Buttons';
+import Buttons from 'components/Shared/components/FormElements/AliButtons';
 import { Image } from 'expo-image';
 
 const data = [
