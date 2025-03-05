@@ -1,11 +1,11 @@
 /* eslint-disable import/order */
-import { Fontisto, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Fontisto, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Accordion from 'components/Shared/components/Accordion';
 import Buttons from 'components/Shared/components/FormElements/AliButtons';
 import { Image } from 'expo-image';
+import AlternativeCarousel from './Components/AlternativeCarousel';
 
 const data = [
   {
@@ -27,6 +27,32 @@ const data = [
       {
         title: 'Nutritional Facts',
         number: 1,
+      },
+    ],
+    alternatives: [
+      {
+        title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+        img: require('../../assets/Products/image.png'),
+      },
+      {
+        title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+        img: require('../../assets/Products/image.png'),
+      },
+      {
+        title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+        img: require('../../assets/Products/image.png'),
+      },
+      {
+        title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+        img: require('../../assets/Products/image.png'),
+      },
+      {
+        title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+        img: require('../../assets/Products/image.png'),
+      },
+      {
+        title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+        img: require('../../assets/Products/image.png'),
       },
     ],
   },
@@ -75,6 +101,10 @@ const Halal = () => {
             </Accordion>
           ))}
         </View>
+      </View>
+      <View className="mb-5 flex h-36 w-full flex-col gap-3 ">
+        <Text className="text-center text-2xl font-bold">Alternative</Text>
+        <AlternativeCarousel carouselItems={data[0].alternatives} />
       </View>
       <View className="flex flex-row gap-5 pb-6">
         <Buttons
