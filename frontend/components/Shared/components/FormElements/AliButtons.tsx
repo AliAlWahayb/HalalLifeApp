@@ -5,10 +5,11 @@ import { View, Text, TouchableOpacity } from 'react-native';
 interface ButtonProps {
   title: string;
   icon?: JSX.Element;
+  classname?: string;
   onPress: () => void;
 }
 
-const Buttons = ({ title, icon, onPress }: ButtonProps) => {
+const Buttons = ({ title, icon, classname, onPress }: ButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePress = () => {
@@ -18,7 +19,7 @@ const Buttons = ({ title, icon, onPress }: ButtonProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      className="flex h-12 w-5/12 items-center justify-center rounded-full bg-[#77C273]"
+      className={`flex h-12 ${classname ? classname : 'w-5/12'} items-center justify-center rounded-full bg-[#77C273]`}
       onPress={handlePress}>
       <View className="flex h-full w-full flex-row items-center justify-center gap-2 ">
         {icon && icon}

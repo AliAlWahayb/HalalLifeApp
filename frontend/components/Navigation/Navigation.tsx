@@ -10,7 +10,7 @@ import SideMenu from './SideMenu';
 import FakeMenu from 'components/SideMenu/FakeMenu';
 import Information from 'components/Information/Information';
 import Scanner from 'components/Camera/Scanner';
-import Haram from 'components/Products/Haram';
+import SearchView from 'components/Search/SearchView';
 
 const Tab = createBottomTabNavigator();
 
@@ -116,7 +116,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Search"
-          component={Haram}
+          component={SearchView}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="search" size={24} color={color} />,
           }}

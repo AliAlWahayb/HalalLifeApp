@@ -1,10 +1,10 @@
-import { View, Text, ScrollView } from 'react-native';
-import { Image } from 'expo-image';
-import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Accordion from 'components/Shared/components/Accordion';
-import Buttons from 'components/Shared/components/FormElements/AliButtons';
-import { Fontisto, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import React from 'react';
+import { View, Text, ScrollView } from 'react-native';
+
+import ProductButtons from './Components/ProductButtons';
 
 const data = [
   {
@@ -41,16 +41,16 @@ const Halal = () => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center' }}
       className="flex-1 flex-col  bg-white py-5 ">
-      <View className="flex w-5/6 flex-col items-center justify-center rounded-3xl border-4 border-[#61A55D] p-3">
-        <View className="rounded-full bg-[#61A55D] p-2">
+      <View className="flex w-5/6 flex-col items-center justify-center rounded-3xl border-4 border-[#77C273] p-3">
+        <View className="rounded-full bg-[#77C273] p-2">
           <FontAwesome name="check" size={48} color="white" />
         </View>
-        <Text className="text-3xl font-bold text-[#61A55D]">Halal</Text>
+        <Text className="text-3xl font-bold text-[#77C273]">Halal</Text>
       </View>
       <View className="w-5/6 py-2">
         <View className="flex flex-col items-center">
           <Text
-            className={`flex-wrap text-center ${calculateFontSize(data[0].title)} font-bold text-[#61A55D]`}>
+            className={`flex-wrap text-center ${calculateFontSize(data[0].title)} font-bold text-[#77C273]`}>
             {data[0].title}
           </Text>
           <Image
@@ -71,18 +71,7 @@ const Halal = () => {
           ))}
         </View>
       </View>
-      <View className="flex flex-row gap-5 pb-6">
-        <Buttons
-          title="Favorite"
-          icon={<Fontisto name="favorite" size={24} color="white" />}
-          onPress={() => {}}
-        />
-        <Buttons
-          title="Report"
-          icon={<MaterialCommunityIcons name="flag-variant" size={30} color="white" />}
-          onPress={() => {}}
-        />
-      </View>
+      <ProductButtons />
     </ScrollView>
   );
 };
