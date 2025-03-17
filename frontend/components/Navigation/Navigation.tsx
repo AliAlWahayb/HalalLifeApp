@@ -12,6 +12,7 @@ import Information from 'components/Information/Information';
 import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
+import Theme from 'components/Theme/Theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -76,7 +77,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={Preference}
+          component={Theme}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
@@ -132,21 +133,21 @@ const BottomTab = () => {
         {/* screen for the side menu */}
         <Tab.Screen
           name="History"
-          component={FakeMenu}
+          component={SearchView}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
         />
         <Tab.Screen
           name="Preferences"
-          component={FakeMenu}
+          component={Preference}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
         />
         <Tab.Screen
           name="Favorites"
-          component={FakeMenu}
+          component={SearchView}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}

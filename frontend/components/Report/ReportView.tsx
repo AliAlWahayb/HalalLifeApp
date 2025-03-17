@@ -22,7 +22,7 @@ const ReportView = () => {
         <Text className="text-2xl font-bold ">Hint</Text>
         <Text className=" text-gray-500">You Can Select More Than One</Text>
       </View>
-      <View className='items-center'>
+      <View className="items-center">
         <ReportButtons />
       </View>
     </View>

@@ -42,8 +42,8 @@ const Card = ({
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={handlePress}
-      className="m-3 flex   flex-row rounded-2xl bg-white p-4 shadow-2xl shadow-black">
-      <View className="flex flex-col gap-2 p-2">
+      className="m-3 flex flex-row rounded-2xl bg-white p-4 shadow-2xl shadow-black">
+      <View className="flex min-w-[50%] flex-col gap-2 p-2">
         <Text className={`text-black ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
         <Text className={`text-gray-500 ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
         <View

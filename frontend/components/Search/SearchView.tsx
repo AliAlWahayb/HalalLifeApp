@@ -21,8 +21,8 @@ const SearchView = () => {
         tabBarActiveTintColor: '#77C273',
         tabBarInactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="Ingredients" component={IngredientsSearch} />
       <Tab.Screen name="Products" component={ProductsSearch} />
+      <Tab.Screen name="Ingredients" component={IngredientsSearch} />
     </Tab.Navigator>
   );
 };
