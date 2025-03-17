@@ -11,6 +11,7 @@ import FakeMenu from 'components/SideMenu/FakeMenu';
 import Information from 'components/Information/Information';
 import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
+import Preference from 'components/Preference/Preference';
 
 const Tab = createBottomTabNavigator();
 
@@ -62,7 +63,7 @@ const BottomTab = () => {
             paddingTop: 5,
           },
         }}
-        initialRouteName="Search">
+        initialRouteName="Map">
         <Tab.Screen
           name="Chat"
           component={FakeView}
@@ -75,7 +76,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={FakeView}
+          component={Preference}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
