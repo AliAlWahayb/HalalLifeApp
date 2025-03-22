@@ -1,7 +1,7 @@
 import { FlatList, View } from 'react-native';
 
 import Card from './Components/Card';
-import SearchBar from '../Componetnts/SearchBar';
+import SearchBar from '../../Shared/SearchBar';
 
 const ProductsSearch = () => {
   const products = [
@@ -71,7 +71,7 @@ const ProductsSearch = () => {
   ];
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="bg-background flex-1">
       <SearchBar />
       <FlatList
         data={products}

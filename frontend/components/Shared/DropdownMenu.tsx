@@ -2,6 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useTheme } from 'themes/ThemeProvider';
 
 interface DropdownMenuProps {
   placeholder: string;
@@ -31,6 +32,8 @@ const DropdownMenu = ({
     setValue(newValue);
   };
 
+  const { theme } = useTheme();
+
   return (
     <DropDownPicker
       zIndex={zIndex}
@@ -42,28 +45,34 @@ const DropdownMenu = ({
       setOpen={setOpen}
       setValue={handleChange as React.Dispatch<React.SetStateAction<string[]>>}
       setItems={() => {}}
-      style={{ width: '90%', alignSelf: 'center', borderColor: 'grey', borderRadius: 12 }}
+      style={{
+        width: '90%',
+        alignSelf: 'center',
+        borderColor: theme.colors.textMuted,
+        borderRadius: 12,
+        borderWidth: 2,
+      }}
       dropDownContainerStyle={{
         width: '90%',
         alignSelf: 'center',
-        borderColor: 'gray',
+        borderColor: theme.colors.textMuted,
         borderTopWidth: 0,
       }}
       placeholder={placeholder}
       placeholderStyle={{
-        color: 'grey',
+        color: theme.colors.textMuted,
         fontWeight: 'bold',
       }}
       TickIconComponent={() => (
-        <View className="rounded-full bg-[#77C273] p-1">
-          <FontAwesome name="check" size={16} color="white" />
+        <View className="bg-accent rounded-full p-1">
+          <FontAwesome name="check" size={16} color={theme.colors.textSecondary} />
         </View>
       )}
       mode="BADGE"
       showBadgeDot={false}
-      badgeColors="#77C273"
+      badgeColors={theme.colors.accent}
       badgeTextStyle={{
-        color: 'white',
+        color: theme.colors.textSecondary,
       }}
       searchable
       searchTextInputProps={{
@@ -74,7 +83,7 @@ const DropdownMenu = ({
       }}
       searchPlaceholder="Search..."
       textStyle={{
-        color: 'black',
+        color: theme.colors.textPrimary,
         fontSize: 16,
       }}
     />

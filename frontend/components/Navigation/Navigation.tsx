@@ -12,9 +12,13 @@ import Information from 'components/Information/Information';
 import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
-import Theme from 'components/Theme/Theme';
+import Theme from 'components/Theme/ThemeView';
 
 import comView from 'components/com/comView';
+import Halal from 'components/Products/Halal';
+import Haram from 'components/Products/Haram';
+import ReportView from 'components/Report/ReportView';
+import { useTheme } from 'themes/ThemeProvider';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,8 +27,10 @@ const BottomTab = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
+  const { theme, themeName } = useTheme();
+
   return (
-    <>
+    <View className={`theme-${themeName} flex-1`}>
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
@@ -39,7 +45,7 @@ const BottomTab = () => {
             <MaterialCommunityIcons
               name="information-variant"
               size={IconSize + 5}
-              color="black"
+              color={theme.colors.textPrimary}
               className="p-5"
               // @ts-ignore
               onPress={() => navigation.navigate('Information')}
@@ -49,17 +55,17 @@ const BottomTab = () => {
             <Entypo
               name="menu"
               size={IconSize + 5}
-              color="black"
+              color={theme.colors.textPrimary}
               className="p-5"
               onPress={() => setModalVisible(true)}
             />
           ),
-          tabBarActiveTintColor: '#77C273',
-          tabBarInactiveTintColor: '#0C0C0C',
+          tabBarActiveTintColor: theme.colors.accent,
+          tabBarInactiveTintColor: theme.colors.textPrimary,
           tabBarHideOnKeyboard: true,
           animation: 'fade',
           tabBarStyle: {
-            backgroundColor: '#fff',
+            backgroundColor: theme.colors.background,
             borderTopWidth: 1,
             height: 70,
             paddingBottom: 5,
@@ -79,7 +85,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={FakeMenu}
+          component={ReportView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
@@ -94,7 +100,7 @@ const BottomTab = () => {
             tabBarIcon: ({ color }) => (
               <View
                 style={{
-                  backgroundColor: '#77C273',
+                  backgroundColor: theme.colors.accent,
                   width: 60,
                   height: 60,
                   borderRadius: 30,
@@ -109,7 +115,7 @@ const BottomTab = () => {
                   elevation: 5,
                 }}>
                 <Text>
-                  <Feather name="camera" size={32} color="white" />
+                  <Feather name="camera" size={32} color={theme.colors.textSecondary} />
                 </Text>
               </View>
             ),
@@ -177,7 +183,7 @@ const BottomTab = () => {
           }}
         />
       </Tab.Navigator>
-    </>
+    </View>
   );
 };
 

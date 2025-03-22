@@ -2,7 +2,7 @@ import { FlatList, TextInput, View } from 'react-native';
 
 import Card from './Components/Card';
 import { useState } from 'react';
-import SearchBar from '../Componetnts/SearchBar';
+import SearchBar from '../../Shared/SearchBar';
 const products = [
   {
     id: 1,
@@ -63,7 +63,7 @@ const ProductsSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="bg-background flex-1">
       <SearchBar />
       <FlatList
         data={products}

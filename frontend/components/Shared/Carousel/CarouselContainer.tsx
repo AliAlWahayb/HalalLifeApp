@@ -23,7 +23,7 @@ const CarouselContainer = ({
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={handlePress}
-      className="mx-1 flex w-fit items-center justify-center rounded-2xl bg-[#77C273] p-4">
+      className="bg-accent mx-1 flex w-fit items-center justify-center rounded-2xl p-4">
       <Image
         source={item.img}
         placeholder={{ blurhash }}

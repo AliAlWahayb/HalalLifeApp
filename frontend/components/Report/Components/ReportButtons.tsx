@@ -1,4 +1,4 @@
-import Buttons from 'components/Shared/components/FormElements/AliButtons';
+import Buttons from 'components/Shared/Buttons/AliButtons';
 import React from 'react';
 import { View } from 'react-native';
 

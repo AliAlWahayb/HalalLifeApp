@@ -2,6 +2,7 @@ import { View, Text, SafeAreaView } from 'react-native';
 import React, { useEffect } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import { useTheme } from 'themes/ThemeProvider';
 
 const Scanner = () => {
   const [permissions, requestPermission] = useCameraPermissions();
@@ -21,6 +22,8 @@ const Scanner = () => {
     }, 2000);
   }
 
+  const { theme } = useTheme();
+
   return (
     <SafeAreaView className="flex-1">
       {!isPermissionGranted ? (
@@ -34,7 +37,11 @@ const Scanner = () => {
           flash="auto"
           autofocus="on"
           onBarcodeScanned={(barcode) => handleBarCodeScanned(barcode.data)}>
-          <SimpleLineIcons name="frame" size={250} color={Scanner ? '#77C273' : 'white'} />
+          <SimpleLineIcons
+            name="frame"
+            size={250}
+            color={Scanner ? theme.colors.accent : theme.colors.background}
+          />
         </CameraView>
       )}
     </SafeAreaView>
