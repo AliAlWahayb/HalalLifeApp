@@ -17,7 +17,7 @@ const data = [
         number: 1,
       },
       {
-        title: 'Haram',
+        title: 'Unknown',
         number: 1,
       },
       {
@@ -72,16 +72,16 @@ const Halal = () => {
     <ScrollView
       contentContainerStyle={{ alignItems: 'center' }}
       className="flex-1 flex-col  bg-white py-5 ">
-      <View className="flex w-5/6 flex-col items-center justify-center rounded-3xl border-4 border-[#F76666] p-3">
-        <View className="rounded-full bg-[#F76666] p-2">
+      <View className="flex w-5/6 flex-col items-center justify-center rounded-3xl border-4 border-[#F7B766] p-3">
+        <View className="rounded-full bg-[#F7B766] p-2">
           <Ionicons name="alert-sharp" size={48} color="white" />
         </View>
-        <Text className="text-3xl font-bold text-[#F76666]">Haram</Text>
+        <Text className="text-3xl font-bold text-[#F7B766]">Unknown</Text>
       </View>
       <View className="w-5/6 py-2">
         <View className="flex flex-col items-center">
           <Text
-            className={`flex-wrap text-center ${calculateFontSize(data[0].title)} font-bold text-[#F76666]`}>
+            className={`flex-wrap text-center ${calculateFontSize(data[0].title)} font-bold text-[#F7B766]`}>
             {data[0].title}
           </Text>
           <Image
