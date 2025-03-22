@@ -58,6 +58,7 @@ const SideMenu = ({
                   setSelectedItem(item.id);
                   // @ts-ignore
                   navigation.navigate(item.id);
+                  setModalVisible(false);
                 }}
                 activeOpacity={1}>
                 {item.icon}

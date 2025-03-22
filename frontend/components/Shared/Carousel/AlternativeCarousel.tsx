@@ -1,14 +1,16 @@
 import React from 'react';
 import { Dimensions } from 'react-native';
 import { Carousel } from 'react-native-snap-carousel';
-
 import CarouselContainer from './CarouselContainer';
+
 
 const renderItem = ({ item, index }: { item: any; index: number }) => {
   return (
     <CarouselContainer
       baseData={{ item, index, dataIndex: index }}
-      onPress={() => {console.log(item.title)}}
+      onPress={() => {
+        console.log(item.title);
+      }}
       key={index}
     />
   );

@@ -2,9 +2,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
-import Accordion from 'components/Shared/components/Accordion';
+import Accordion from 'components/Shared/Accordion';
 import { Image } from 'expo-image';
-import AlternativeCarousel from './Components/AlternativeCarousel';
+import AlternativeCarousel from '../Shared/Carousel/AlternativeCarousel';
 import ProductButtons from './Components/ProductButtons';
 
 const data = [

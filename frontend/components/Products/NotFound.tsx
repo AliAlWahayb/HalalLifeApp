@@ -1,7 +1,7 @@
 import { View, Text, Button } from 'react-native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import Buttons from 'components/Shared/components/FormElements/AliButtons';
+import Buttons from 'components/Shared/Buttons/AliButtons';
 import { useNavigation } from '@react-navigation/native';
 
 const NotFound = () => {

@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import React from 'react';
-import ButtonsSmall from 'components/Shared/components/FormElements/ButtonsSmall';
+import ButtonsSmall from 'components/Shared/Buttons/ButtonsSmall';
 
 interface ContributorsProps {
   index: number;

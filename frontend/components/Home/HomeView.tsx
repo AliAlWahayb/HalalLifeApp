@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import React from 'react';
-import Buttons from 'components/Shared/components/FormElements/AliButtons';
+import Buttons from 'components/Shared/Buttons/AliButtons';
 import Contributors from './Components/Contributors';
 
 const contributorsData = [
@@ -68,4 +68,3 @@ const HomeView = () => {
 };
 
 export default HomeView;
-

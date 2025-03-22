@@ -2,7 +2,7 @@ import { FlatList, TextInput, View } from 'react-native';
 
 import Card from './Components/Card';
 import { useState } from 'react';
-import SearchBar from '../Componetnts/SearchBar';
+import SearchBar from '../../Shared/SearchBar';
 const products = [
   {
     id: 1,

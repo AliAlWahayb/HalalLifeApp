@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button, View } from 'react-native';
-import DropdownMenu from './Components/DropdownMenu';
+
 import PreferenceButtons from './Components/PreferenceButtons';
+import DropdownMenu from '../Shared/DropdownMenu';
 
 const ParentPage = () => {
   const [selectedValues1, setSelectedValues1] = useState<string[]>([]);

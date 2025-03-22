@@ -1,5 +1,5 @@
 import { Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
-import Buttons from 'components/Shared/components/FormElements/AliButtons';
+import Buttons from 'components/Shared/Buttons/AliButtons';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 

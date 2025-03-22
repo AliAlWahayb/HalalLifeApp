@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import Buttons from '../../Shared/components/FormElements/Buttons'; // copy this component in your page for using this button
+import Buttons from '../../Shared/Buttons/Buttons'; // copy this component in your page for using this button
 
 const Auth = () => {
   return (

@@ -1,4 +1,4 @@
-import Accordion from 'components/Shared/components/Accordion';
+import Accordion from 'components/Shared/Accordion';
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';

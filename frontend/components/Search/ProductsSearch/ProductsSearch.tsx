@@ -1,7 +1,7 @@
 import { FlatList, View } from 'react-native';
 
 import Card from './Components/Card';
-import SearchBar from '../Componetnts/SearchBar';
+import SearchBar from '../../Shared/SearchBar';
 
 const ProductsSearch = () => {
   const products = [

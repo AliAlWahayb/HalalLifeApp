@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import React from 'react';
-import Checkbox from './Components/CheckBox';
-import TextInputCheckBox from './Components/TextInputCheckBox';
+import Checkbox from '../Shared/CheckBox/CheckBox';
+import TextInputCheckBox from '../Shared/CheckBox/TextInputCheckBox';
 import ReportButtons from './Components/ReportButtons';
 
 const ReportView = () => {

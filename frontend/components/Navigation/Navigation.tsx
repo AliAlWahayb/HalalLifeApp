@@ -15,6 +15,9 @@ import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/Theme';
 
 import comView from 'components/com/comView';
+import Halal from 'components/Products/Halal';
+import Haram from 'components/Products/Haram';
+import ReportView from 'components/Report/ReportView';
 
 const Tab = createBottomTabNavigator();
 
@@ -79,7 +82,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={FakeMenu}
+          component={ReportView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />

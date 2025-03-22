@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Accordion from 'components/Shared/components/Accordion';
+import Accordion from 'components/Shared/Accordion';
 import { Image } from 'expo-image';
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
