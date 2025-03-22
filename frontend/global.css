@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.theme-light {
+    --color-primary: #3b3879;
+    --color-secondary: #ff0000;
+    --color-background: #ff0000;
+    --color-textPrimary: #5FCE59;
+    --color-accent: #ff0000;
+  }
+  
+  .theme-dark {
+    --color-primary: #e5ff00;
+    --color-secondary: #ff0000;
+    --color-background: #ff0000;
+    --color-text: #ff0000;
+    --color-accent: #ff0000;
+  }
+  
+  /* Add your other 3 themes here */

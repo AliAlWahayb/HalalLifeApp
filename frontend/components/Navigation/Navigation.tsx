@@ -12,12 +12,13 @@ import Information from 'components/Information/Information';
 import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
-import Theme from 'components/Theme/Theme';
+import Theme from 'components/Theme/ThemeView';
 
 import comView from 'components/com/comView';
 import Halal from 'components/Products/Halal';
 import Haram from 'components/Products/Haram';
 import ReportView from 'components/Report/ReportView';
+import { useTheme } from 'themes/ThemeProvider';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,8 +27,10 @@ const BottomTab = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
+  const { themeName } = useTheme();
+
   return (
-    <>
+    <View className={`theme-${themeName} flex-1`}>
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
@@ -180,7 +183,7 @@ const BottomTab = () => {
           }}
         />
       </Tab.Navigator>
-    </>
+    </View>
   );
 };
 
