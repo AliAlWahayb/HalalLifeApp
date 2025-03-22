@@ -1,15 +1,20 @@
 // utils/withTheme.tsx
 import { View } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
+import { Theme } from 'themes/themes';
 
-export const withTheme =
-  <P extends object>(Component: React.ComponentType<P>) =>
-  (props: P) => {
-    const { themeName } = useTheme();
+type WithThemeProps = {
+  theme: Theme;
+};
+
+export const withTheme = <P extends object>(Component: React.ComponentType<P & WithThemeProps>) => {
+  return (props: P) => {
+    const { theme, themeName } = useTheme();
 
     return (
       <View className={`theme-${themeName} flex-1`}>
-        <Component {...props} />
+        <Component {...props} theme={theme} themeName={themeName} />
       </View>
     );
   };
+};

@@ -12,7 +12,7 @@ interface ContributorsProps {
 const Contributors = ({ index, name, contributions, onPress }: ContributorsProps) => {
   return (
     <View className="flex flex-row items-center justify-between gap-5">
-      <Text className="rounded-full bg-[#77C273] p-2 text-black">{index}#</Text>
+      <Text className="bg-accent rounded-full p-2 text-black">{index}#</Text>
       <Text className="text-xl font-semibold text-black">{name}</Text>
       <Text className="text-base font-semibold text-gray-500">{contributions} Contributions</Text>
       <ButtonsSmall title="Follow" onPress={onPress} />

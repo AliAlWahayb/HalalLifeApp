@@ -7,11 +7,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Using CSS variables
+        //global colors
+        Halal: 'var(--color-Halal)',
+        Haram: 'var(--color-Haram)',
+        Unknown: 'var(--color-Unknown)',
+        //color mappings
         primary: 'var(--color-primary)',
         secondary: 'var(--color-secondary)',
         background: 'var(--color-background)',
         textPrimary: 'var(--color-textPrimary)',
+        textSecondary: 'var(--color-textSecondary)',
+        textMuted: 'var(--color-textMuted)',
         accent: 'var(--color-accent)',
       },
     },

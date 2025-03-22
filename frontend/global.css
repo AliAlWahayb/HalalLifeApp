@@ -2,13 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Global colors */
+  --color-Halal: #77C273;
+  --color-Haram: #F76666;
+  --color-Unknown: #F7B766;
+}
 
 .theme-light {
-    --color-primary: #3b3879;
-    --color-secondary: #ff0000;
-    --color-background: #ff0000;
-    --color-textPrimary: #5FCE59;
-    --color-accent: #ff0000;
+    --color-primary: #5FCE59;
+    --color-secondary: #61A55D;
+    --color-background: #ffffff;
+    --color-textPrimary: #000000;
+    --color-textSecondary: #ffffff;
+    --color-textMuted: #6b7280;
+    --color-accent: #77C273;
   }
   
   .theme-dark {

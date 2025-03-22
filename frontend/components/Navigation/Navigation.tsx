@@ -27,7 +27,7 @@ const BottomTab = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
-  const { themeName } = useTheme();
+  const { theme, themeName } = useTheme();
 
   return (
     <View className={`theme-${themeName} flex-1`}>

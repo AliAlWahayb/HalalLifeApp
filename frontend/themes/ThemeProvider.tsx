@@ -1,11 +1,12 @@
-// providers/ThemeProvider.tsx
+//Higher-Order Componen (Theme Provider) HOC
 import React, { createContext, useContext, useState } from 'react';
 
-import { THEMES, Theme, ThemeNames } from './themes';
+import { THEMES, Theme, ThemeNames, GLOBAL_COLORS } from './themes';
 
 type ThemeContextType = {
   theme: Theme;
   themeName: ThemeNames;
+  globalColors: typeof GLOBAL_COLORS;
   setTheme: (name: ThemeNames) => void;
 };
 
@@ -20,7 +21,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, themeName, setTheme }}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={{ theme, themeName, globalColors: GLOBAL_COLORS, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
   );
 };
 

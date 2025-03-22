@@ -2,6 +2,7 @@ import { View, Text, SafeAreaView } from 'react-native';
 import React, { useEffect } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import { useTheme } from 'themes/ThemeProvider';
 
 const Scanner = () => {
   const [permissions, requestPermission] = useCameraPermissions();
@@ -20,6 +21,9 @@ const Scanner = () => {
       setScanner(false);
     }, 2000);
   }
+
+  const { theme } = useTheme();
+
 
   return (
     <SafeAreaView className="flex-1">

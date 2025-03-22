@@ -1,11 +1,18 @@
-// themes.ts
+export const GLOBAL_COLORS = {
+  Halal: '#77C273',
+  Haram: '#F76666',
+  Unknown: '#F7B766',
+} as const;
+
 export type Theme = {
   name: string;
   colors: {
     primary: string;
     secondary: string;
     background: string;
-    text: string;
+    textPrimary: string;
+    textSecondary: string;
+    textMuted: string;
     accent: string;
   };
 };
@@ -14,24 +21,27 @@ export const THEMES = {
   light: {
     name: 'light',
     colors: {
-      primary: '#007AFF',
-      secondary: '#34C759',
-      background: '#FFFFFF',
-      text: '#1C1C1E',
-      accent: '#FF9500',
+      primary: '#5FCE59',
+      secondary: '#61A55D',
+      background: '#ffffff',
+      textPrimary: '#000000',
+      textSecondary: '#ffffff',
+      textMuted: '#6b7280',
+      accent: '#77C273',
     },
   },
   dark: {
     name: 'dark',
     colors: {
-      primary: '#0A84FF',
-      secondary: '#32D74B',
-      background: '#000000',
-      text: '#FFFFFF',
-      accent: '#FF9F0A',
+      primary: '#e5ff00',
+      secondary: '#ff0000',
+      background: '#ff0000',
+      textPrimary: '#ffffff',
+      textSecondary: '#cccccc',
+      textMuted: '#999999',
+      accent: '#ff0000',
     },
   },
-  // Add 3 more themes here
 } satisfies Record<string, Theme>;
 
 export type ThemeNames = keyof typeof THEMES;
