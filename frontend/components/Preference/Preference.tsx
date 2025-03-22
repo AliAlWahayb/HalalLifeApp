@@ -49,7 +49,7 @@ const ParentPage = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-between bg-white py-5">
+    <View className="bg-background flex-1 items-center justify-between py-5">
       <View className="flex flex-col  gap-5">
         <DropdownMenu
           zIndex={4000}

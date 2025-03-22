@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Checkbox from 'expo-checkbox';
+import { useTheme } from 'themes/ThemeProvider';
 
 interface Props {
   title: string;
@@ -16,18 +17,20 @@ const CheckBox = ({ title, onPress, isChecked }: Props) => {
     onPress();
   };
 
+  const { theme } = useTheme();
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={HandleChange}
-      className="flex flex-row items-center rounded-xl bg-white py-2">
+      className="bg-background flex flex-row items-center rounded-xl py-2">
       <Checkbox
         style={{ marginLeft: 20, marginRight: 10 }}
         value={checked}
         onValueChange={setChecked}
-        color={checked ? '#61A55D' : undefined}
+        color={checked ? theme.colors.secondary : undefined}
       />
-      <Text className="text-2xl font-semibold text-black">{title}</Text>
+      <Text className="text-textPrimary text-2xl font-semibold">{title}</Text>
     </TouchableOpacity>
   );
 };

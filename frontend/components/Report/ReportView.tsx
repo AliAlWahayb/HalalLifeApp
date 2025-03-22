@@ -6,8 +6,8 @@ import ReportButtons from './Components/ReportButtons';
 
 const ReportView = () => {
   return (
-    <View className="flex-1 flex-col bg-white px-5 py-5 ">
-      <Text className="text-center text-4xl font-bold text-[#61A55D]">Reason For Report</Text>
+    <View className="bg-background flex-1 flex-col px-5 py-5 ">
+      <Text className="text-primary text-center text-4xl font-bold">Reason For Report</Text>
       <View className="flex flex-col gap-2 py-3">
         <Checkbox title="Product is not halal" onPress={() => {}} />
         <Checkbox title="Product is not halal" onPress={() => {}} />
@@ -20,7 +20,7 @@ const ReportView = () => {
       </View>
       <View className="flex flex-col ">
         <Text className="text-2xl font-bold ">Hint</Text>
-        <Text className=" text-gray-500">You Can Select More Than One</Text>
+        <Text className=" text-textMuted">You Can Select More Than One</Text>
       </View>
       <View className="items-center">
         <ReportButtons />

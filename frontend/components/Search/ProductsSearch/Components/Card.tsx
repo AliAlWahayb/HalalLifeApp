@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { Image } from 'expo-image';
+import { useTheme } from 'themes/ThemeProvider';
 
 const dynamicFontSize = (text: string) => {
   const length = text.length;
@@ -11,13 +12,6 @@ const dynamicFontSize = (text: string) => {
   } else {
     return 'text-sm'; // Smaller font for long text
   }
-};
-
-const statusColor = (status: string) => {
-  if (status === 'Halal') return '#77C273';
-  if (status === 'Haram') return '#F76666';
-  if (status === 'Unknown') return '#F7B766';
-  return '#6B7280';
 };
 
 const blurhash =
@@ -38,18 +32,27 @@ const Card = ({
     console.log(Name);
   };
 
+  const { theme, globalColors } = useTheme();
+
+  const statusColor = (status: string) => {
+    if (status === 'Halal') return globalColors.Halal;
+    if (status === 'Haram') return globalColors.Haram;
+    if (status === 'Unknown') return globalColors.Unknown;
+    return globalColors.Muted;
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={handlePress}
-      className="m-3 flex flex-row rounded-2xl bg-white p-4 shadow-2xl shadow-black">
+      className="bg-background shadow-textPrimary m-3 flex flex-row rounded-2xl p-4 shadow-2xl">
       <View className="flex min-w-[50%] flex-col gap-2 p-2">
-        <Text className={`text-black ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
-        <Text className={`text-gray-500 ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
+        <Text className={`text-textPrimary ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
+        <Text className={`text-textMuted ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
         <View
           style={{ backgroundColor: statusColor(Status), height: 40, width: '66%' }}
           className=" items-center justify-center rounded-2xl">
-          <Text className="text-lg font-semibold text-white">{Status}</Text>
+          <Text className="text-textSecondary text-lg font-semibold">{Status}</Text>
         </View>
       </View>
       <View className="items-center justify-center rounded-xl px-2">

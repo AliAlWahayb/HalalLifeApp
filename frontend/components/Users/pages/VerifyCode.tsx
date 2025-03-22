@@ -27,9 +27,9 @@ const VerifyCode = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-white px-8">
+    <View className="bg-background flex-1 items-center justify-center px-8">
       <Header />
-      <Text className="m-2 ml-4 w-full text-4xl font-bold text-[#77C273]">Verification Code</Text>
+      <Text className="text-accent m-2 ml-4 w-full text-4xl font-bold">Verification Code</Text>
       <Text className="mr-20 text-sm font-bold text-gray-400">
         please type the Verification Code send to your number{' '}
       </Text>
@@ -48,7 +48,7 @@ const VerifyCode = () => {
       <View className="mt-4 w-full flex-col  items-center">
         <Text className="text-sm font-bold text-gray-400">
           I Dont’t recevie a code!{' '}
-          <Text className="text-sm font-bold text-[#77C273]">Plaese resend</Text>
+          <Text className="text-accent text-sm font-bold">Plaese resend</Text>
         </Text>
       </View>
     </View>

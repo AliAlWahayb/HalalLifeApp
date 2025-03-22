@@ -57,9 +57,9 @@ const Auth = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-white px-8 ">
+    <View className="bg-background flex-1 items-center justify-center px-8 ">
       <Header />
-      <Text className="mb-4 w-full text-3xl font-bold text-[#77C273]">
+      <Text className="text-accent mb-4 w-full text-3xl font-bold">
         {isLoginMode ? 'Log In' : 'Sign Up'}
       </Text>
       {!isLoginMode && (
@@ -99,7 +99,7 @@ const Auth = () => {
 
       {isLoginMode && (
         <TouchableOpacity>
-          <Text className="text-1xl  font-bold text-[#77C273] ">Forget password?</Text>
+          <Text className="text-1xl  text-accent font-bold ">Forget password?</Text>
         </TouchableOpacity>
       )}
 
@@ -109,7 +109,7 @@ const Auth = () => {
         <Text className="text-gry-300 mt-4">
           {' '}
           {isLoginMode ? 'Dont’t have an account?' : 'Already have an account? '}{' '}
-          <Text className="font-bold text-[#77C273] ">{isLoginMode ? 'Sign Up' : 'Log In'}</Text>
+          <Text className="text-accent font-bold ">{isLoginMode ? 'Sign Up' : 'Log In'}</Text>
         </Text>
       </TouchableOpacity>
 
@@ -120,12 +120,12 @@ const Auth = () => {
       <View className=" mt-4  flex-row">
         <TouchableOpacity className="flex flex-row items-center rounded-full bg-gray-100 px-6 py-4  ">
           <Image source={FacebookImage} className="mr-2 h-6 w-6" />
-          <Text className="font-semibold text-black">Facebook</Text>
+          <Text className="text-textPrimary font-semibold">Facebook</Text>
         </TouchableOpacity>
 
         <TouchableOpacity className="ml-20 flex flex-row items-center rounded-full bg-gray-100 px-6 py-4">
           <Image source={GoogleImage} className="mr-2 h-6 w-6" />
-          <Text className="font-semibold text-black">Google</Text>
+          <Text className="text-textPrimary font-semibold">Google</Text>
         </TouchableOpacity>
       </View>
     </View>

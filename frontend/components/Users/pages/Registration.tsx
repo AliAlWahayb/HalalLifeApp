@@ -32,9 +32,9 @@ const Registration = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-white px-8">
+    <View className="bg-background flex-1 items-center justify-center px-8">
       <Header />
-      <Text className="m-2 mr-32 text-4xl font-bold text-[#77C273]">Registrations</Text>
+      <Text className="text-accent m-2 mr-32 text-4xl font-bold">Registrations</Text>
       <Text className="mr-24 text-sm font-bold text-gray-400">
         Enter your phone number to verify your account
       </Text>

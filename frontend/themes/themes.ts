@@ -2,6 +2,7 @@ export const GLOBAL_COLORS = {
   Halal: '#77C273',
   Haram: '#F76666',
   Unknown: '#F7B766',
+  Muted: '#6B7280',
 } as const;
 
 export type Theme = {

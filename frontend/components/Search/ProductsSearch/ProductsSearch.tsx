@@ -71,7 +71,7 @@ const ProductsSearch = () => {
   ];
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="bg-background flex-1">
       <SearchBar />
       <FlatList
         data={products}

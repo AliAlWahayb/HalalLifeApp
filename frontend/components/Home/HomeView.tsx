@@ -18,9 +18,9 @@ const blurhash =
 
 const HomeView = () => {
   return (
-    <ScrollView className="flex-1 flex-col bg-white">
+    <ScrollView className="bg-background flex-1 flex-col">
       <View className="flex flex-col items-center  py-5">
-        <Text className="pb-2 text-center text-4xl font-bold text-[#5FCE59]">HalalLife</Text>
+        <Text className="text-primary pb-2 text-center text-4xl font-bold">HalalLife</Text>
         <Image
           source={require('../../assets/Home/Home.png')}
           style={{
@@ -33,7 +33,7 @@ const HomeView = () => {
         />
       </View>
       <View className="flex flex-col items-center gap-2 py-5">
-        <Text className="text-center text-4xl font-bold text-[#5FCE59]">Fast Navigation</Text>
+        <Text className="text-primary text-center text-4xl font-bold">Fast Navigation</Text>
         <View className="flex flex-col items-center gap-5">
           <View className="flex flex-row  gap-5">
             <Buttons title="Scanner" onPress={() => {}} />
@@ -46,7 +46,7 @@ const HomeView = () => {
         </View>
       </View>
       <View className="flex flex-col items-center gap-2 py-5">
-        <Text className="text-center text-3xl font-bold text-[#5FCE59]">
+        <Text className="text-primary text-center text-3xl font-bold">
           Contributors of the month
         </Text>
         <View className="flex flex-col gap-5">

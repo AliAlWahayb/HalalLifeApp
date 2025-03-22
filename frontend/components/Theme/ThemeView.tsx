@@ -12,9 +12,9 @@ const Theme = () => {
   const size = 8;
 
   return (
-    <View className="flex-1 flex-col  justify-between  gap-5 bg-white py-5">
+    <View className="bg-background flex-1  flex-col  justify-between gap-5 py-5">
       <View className="flex flex-row flex-wrap items-center justify-center gap-5">
-        <Colors id="Primary" size={size} color={['[#77C273]', 'white', 'black']} />
+        <Colors id="Primary" size={size} color={['accent', 'white', 'black']} />
         <Colors id="1" size={size} color={['[#A5D6A7]', '[#F1F8E9]', '[#2E2E2E]']} />
         <Colors id="2" size={size} color={['[#4A90E2]', '[#1C1C1E]', '[#E0E0E0]']} />
         <Colors id="3" size={size} color={['[#8E7B68]', '[#F4ECE4]', '[#303030]']} />

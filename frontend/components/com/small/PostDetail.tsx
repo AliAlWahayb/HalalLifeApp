@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, Image, Button, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Modal, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Button,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  Modal,
+  StyleSheet,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const dummyComments = [
@@ -65,53 +77,64 @@ const PostDetail = ({ route, navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}>
       <ScrollView className="bg-gray-100 p-4" contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="bg-white rounded-lg shadow-lg mb-4 p-4">
+        <View className="bg-background mb-4 rounded-lg p-4 shadow-lg">
           {/* User Info */}
-          <View className="flex-row items-center mb-4">
-            <Image source={{ uri: post.profileImage }} className="w-12 h-12 rounded-full" />
+          <View className="mb-4 flex-row items-center">
+            <Image source={{ uri: post.profileImage }} className="h-12 w-12 rounded-full" />
             <View className="ml-3">
               <Text className="font-semibold">{post.username}</Text>
-              <Text className="text-sm text-gray-500">{post.address}</Text>
+              <Text className="text-textMuted text-sm">{post.address}</Text>
               <Text className="text-xs text-gray-400">{post.time}</Text>
             </View>
           </View>
 
           {/* Post Content */}
-          <Text className="text-lg mb-2">{post.text}</Text>
+          <Text className="mb-2 text-lg">{post.text}</Text>
 
           {/* Post Image */}
           <TouchableOpacity onPress={() => toggleModal(post.image)}>
-            <Image source={{ uri: post.image }} className="w-full h-48 rounded-lg mb-2" />
+            <Image source={{ uri: post.image }} className="mb-2 h-48 w-full rounded-lg" />
           </TouchableOpacity>
 
           {/* Likes and Comments */}
-          <View className="flex-row justify-between items-center mb-4">
+          <View className="mb-4 flex-row items-center justify-between">
             <TouchableOpacity onPress={handleLike} className="flex-row items-center">
-              <Icon name={isLiked ? 'heart' : 'heart-o'} size={24} color={isLiked ? 'red' : 'gray'} />
+              <Icon
+                name={isLiked ? 'heart' : 'heart-o'}
+                size={24}
+                color={isLiked ? 'red' : 'gray'}
+              />
               <Text className="ml-2 text-sm text-gray-600">{likes} Likes</Text>
             </TouchableOpacity>
             <Text className="text-sm text-gray-600">{post.comments} Comments</Text>
           </View>
 
           {/* View Comments Button */}
-          <Button title={isExpanded ? 'Hide Comments' : 'View Comments'} onPress={() => setIsExpanded(!isExpanded)} />
+          <Button
+            title={isExpanded ? 'Hide Comments' : 'View Comments'}
+            onPress={() => setIsExpanded(!isExpanded)}
+          />
         </View>
 
         {/* TextInput to add a new comment */}
         {isExpanded && (
           <>
-            <View className="bg-white p-4 rounded-lg mb-4">
+            <View className="bg-background mb-4 rounded-lg p-4">
               <TextInput
                 value={newComment}
                 onChangeText={setNewComment}
                 placeholder="Add a comment..."
-                className="border border-gray-300 rounded-lg p-2 mt-4"
+                className="mt-4 rounded-lg border border-gray-300 p-2"
                 multiline
               />
-              <TouchableOpacity onPress={handleAddComment} className="bg-blue-500 rounded-lg p-2 mt-2">
-                <Text className="text-white text-center">Post Comment</Text>
+              <TouchableOpacity
+                onPress={handleAddComment}
+                className="mt-2 rounded-lg bg-blue-500 p-2">
+                <Text className="text-textSecondary text-center">Post Comment</Text>
               </TouchableOpacity>
             </View>
 
@@ -122,19 +145,31 @@ const PostDetail = ({ route, navigation }) => {
                   {/* Root Comment Container as Touchable */}
                   <TouchableOpacity
                     onPress={() => navigation.navigate('CommentDetail', { comment })}
-                    style={{ backgroundColor: '#F9FAFB', padding: 16, borderRadius: 8, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 4, shadowOffset: { width: 0, height: 2 } }}
-                  >
-                    <View className="flex-row items-center mb-2">
-                      <Image source={{ uri: comment.profileImage }} className="w-12 h-12 rounded-full" />
+                    style={{
+                      backgroundColor: '#F9FAFB',
+                      padding: 16,
+                      borderRadius: 8,
+                      shadowColor: '#000',
+                      shadowOpacity: 0.1,
+                      shadowRadius: 4,
+                      shadowOffset: { width: 0, height: 2 },
+                    }}>
+                    <View className="mb-2 flex-row items-center">
+                      <Image
+                        source={{ uri: comment.profileImage }}
+                        className="h-12 w-12 rounded-full"
+                      />
                       <View className="ml-3">
-                        <Text className="font-semibold text-lg">{comment.username}</Text>
-                        <Text className="text-sm text-gray-500">{comment.time}</Text>
+                        <Text className="text-lg font-semibold">{comment.username}</Text>
+                        <Text className="text-textMuted text-sm">{comment.time}</Text>
                       </View>
                     </View>
                     <Text className="mt-2 text-base">{comment.text}</Text>
                     {/* Display number of responses */}
                     {comment.responses.length > 0 && (
-                      <Text className="text-sm text-blue-500 mt-2">{comment.responses.length} Responses</Text>
+                      <Text className="mt-2 text-sm text-blue-500">
+                        {comment.responses.length} Responses
+                      </Text>
                     )}
                   </TouchableOpacity>
                 </View>
@@ -149,8 +184,7 @@ const PostDetail = ({ route, navigation }) => {
         visible={isModalVisible}
         animationType="fade"
         transparent={true}
-        onRequestClose={() => setIsModalVisible(false)}
-      >
+        onRequestClose={() => setIsModalVisible(false)}>
         <View style={styles.modalContainer}>
           <TouchableOpacity style={styles.modalClose} onPress={() => setIsModalVisible(false)}>
             <Icon name="arrow-left" size={30} color="#fff" />

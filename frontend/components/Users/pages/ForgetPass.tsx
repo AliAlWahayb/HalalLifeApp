@@ -25,9 +25,9 @@ const ForgetPass = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-white px-8">
+    <View className="bg-background flex-1 items-center justify-center px-8">
       <Header />
-      <Text className="m-2 mr-12 text-4xl font-bold text-[#77C273]">Resset Password</Text>
+      <Text className="text-accent m-2 mr-12 text-4xl font-bold">Resset Password</Text>
       <Text className="mr-20 text-sm font-bold text-gray-400">
         please enter your email address to
       </Text>

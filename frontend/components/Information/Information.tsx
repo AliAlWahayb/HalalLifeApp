@@ -24,8 +24,8 @@ const data = [
 
 const Information = () => {
   return (
-    <ScrollView className="flex-1 flex-col bg-white py-5">
-      <Text className="text-center text-4xl font-bold text-[#5FCE59]">How To Page</Text>
+    <ScrollView className="bg-background flex-1 flex-col py-5">
+      <Text className="text-primary text-center text-4xl font-bold">How To Page</Text>
       <View className="flex flex-col px-8 py-5">
         {data.map((item, index) => (
           <Accordion key={index} title={item.title}>

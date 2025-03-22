@@ -3,7 +3,7 @@ import Buttons from '../../Shared/Buttons/Buttons'; // copy this component in yo
 
 const Auth = () => {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
+    <View className="bg-background flex-1 items-center justify-center">
       <Text className="text-2xl font-bold text-blue-500">HalalLife Auth Page</Text>
       <Buttons />
     </View>

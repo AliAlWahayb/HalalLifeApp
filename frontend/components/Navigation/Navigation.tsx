@@ -45,7 +45,7 @@ const BottomTab = () => {
             <MaterialCommunityIcons
               name="information-variant"
               size={IconSize + 5}
-              color="black"
+              color={theme.colors.textPrimary}
               className="p-5"
               // @ts-ignore
               onPress={() => navigation.navigate('Information')}
@@ -55,17 +55,17 @@ const BottomTab = () => {
             <Entypo
               name="menu"
               size={IconSize + 5}
-              color="black"
+              color={theme.colors.textPrimary}
               className="p-5"
               onPress={() => setModalVisible(true)}
             />
           ),
-          tabBarActiveTintColor: '#77C273',
-          tabBarInactiveTintColor: '#0C0C0C',
+          tabBarActiveTintColor: theme.colors.accent,
+          tabBarInactiveTintColor: theme.colors.textPrimary,
           tabBarHideOnKeyboard: true,
           animation: 'fade',
           tabBarStyle: {
-            backgroundColor: '#fff',
+            backgroundColor: theme.colors.background,
             borderTopWidth: 1,
             height: 70,
             paddingBottom: 5,
@@ -100,7 +100,7 @@ const BottomTab = () => {
             tabBarIcon: ({ color }) => (
               <View
                 style={{
-                  backgroundColor: '#77C273',
+                  backgroundColor: theme.colors.accent,
                   width: 60,
                   height: 60,
                   borderRadius: 30,
@@ -115,7 +115,7 @@ const BottomTab = () => {
                   elevation: 5,
                 }}>
                 <Text>
-                  <Feather name="camera" size={32} color="white" />
+                  <Feather name="camera" size={32} color={theme.colors.textSecondary} />
                 </Text>
               </View>
             ),

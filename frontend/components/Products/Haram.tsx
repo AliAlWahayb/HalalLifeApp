@@ -6,6 +6,7 @@ import Accordion from 'components/Shared/Accordion';
 import { Image } from 'expo-image';
 import AlternativeCarousel from '../Shared/Carousel/AlternativeCarousel';
 import ProductButtons from './Components/ProductButtons';
+import { useTheme } from 'themes/ThemeProvider';
 
 const data = [
   {
@@ -62,6 +63,8 @@ const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 const Halal = () => {
+  const { theme } = useTheme();
+
   const calculateFontSize = (text: string | any[]) => {
     const textLength = text.length;
     if (textLength < 20) return 'text-3xl'; // Larger font for short text
@@ -71,17 +74,17 @@ const Halal = () => {
   return (
     <ScrollView
       contentContainerStyle={{ alignItems: 'center' }}
-      className="flex-1 flex-col  bg-white py-5 ">
+      className="bg-background flex-1  flex-col py-5 ">
       <View className="flex w-5/6 flex-col items-center justify-center rounded-3xl border-4 border-[#F76666] p-3">
-        <View className="rounded-full bg-[#F76666] p-2">
-          <Ionicons name="alert-sharp" size={48} color="white" />
+        <View className="bg-Haram rounded-full p-2">
+          <Ionicons name="alert-sharp" size={48} color={theme.colors.textSecondary} />
         </View>
-        <Text className="text-3xl font-bold text-[#F76666]">Haram</Text>
+        <Text className="text-Haram text-3xl font-bold">Haram</Text>
       </View>
       <View className="w-5/6 py-2">
         <View className="flex flex-col items-center">
           <Text
-            className={`flex-wrap text-center ${calculateFontSize(data[0].title)} font-bold text-[#F76666]`}>
+            className={`flex-wrap text-center ${calculateFontSize(data[0].title)} text-Haram font-bold`}>
             {data[0].title}
           </Text>
           <Image

@@ -24,7 +24,6 @@ const Scanner = () => {
 
   const { theme } = useTheme();
 
-
   return (
     <SafeAreaView className="flex-1">
       {!isPermissionGranted ? (
@@ -38,7 +37,11 @@ const Scanner = () => {
           flash="auto"
           autofocus="on"
           onBarcodeScanned={(barcode) => handleBarCodeScanned(barcode.data)}>
-          <SimpleLineIcons name="frame" size={250} color={Scanner ? '#77C273' : 'white'} />
+          <SimpleLineIcons
+            name="frame"
+            size={250}
+            color={Scanner ? theme.colors.accent : theme.colors.background}
+          />
         </CameraView>
       )}
     </SafeAreaView>
