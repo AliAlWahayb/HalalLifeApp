@@ -10,7 +10,9 @@ import SideMenu from './SideMenu';
 import FakeMenu from 'components/SideMenu/FakeMenu';
 import Information from 'components/Information/Information';
 import Scanner from 'components/Camera/Scanner';
-import Haram from 'components/Products/Haram';
+import SearchView from 'components/Search/SearchView';
+import Preference from 'components/Preference/Preference';
+import Theme from 'components/Theme/Theme';
 
 import comView from 'components/com/comView';
 
@@ -64,7 +66,7 @@ const BottomTab = () => {
             paddingTop: 5,
           },
         }}
-        initialRouteName="Search">
+        initialRouteName="Map">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -77,7 +79,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={FakeView}
+          component={FakeMenu}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
@@ -118,7 +120,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Search"
-          component={Haram}
+          component={SearchView}
           options={{
             tabBarIcon: ({ color }) => <Octicons name="search" size={24} color={color} />,
           }}
@@ -133,21 +135,21 @@ const BottomTab = () => {
         {/* screen for the side menu */}
         <Tab.Screen
           name="History"
-          component={FakeMenu}
+          component={SearchView}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
         />
         <Tab.Screen
           name="Preferences"
-          component={FakeMenu}
+          component={Preference}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
         />
         <Tab.Screen
           name="Favorites"
-          component={FakeMenu}
+          component={SearchView}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
@@ -161,7 +163,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Theme"
-          component={FakeMenu}
+          component={Theme}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
