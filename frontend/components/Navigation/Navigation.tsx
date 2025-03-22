@@ -14,6 +14,8 @@ import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/Theme';
 
+import comView from 'components/com/comView';
+
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
@@ -67,7 +69,7 @@ const BottomTab = () => {
         initialRouteName="Map">
         <Tab.Screen
           name="Chat"
-          component={FakeView}
+          component={comView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="chat-processing-outline" size={24} color={color} />
