@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native';
+import TwoButtons from 'components/Shared/Buttons/TwoButtons';
 import React from 'react';
+import { View, Text } from 'react-native';
+
 import Checkbox from '../Shared/CheckBox/CheckBox';
 import TextInputCheckBox from '../Shared/CheckBox/TextInputCheckBox';
-import ReportButtons from './Components/ReportButtons';
 
 const ReportView = () => {
   return (
@@ -23,7 +24,7 @@ const ReportView = () => {
         <Text className=" text-textMuted">You Can Select More Than One</Text>
       </View>
       <View className="items-center">
-        <ReportButtons />
+        <TwoButtons title1="Cancel" title2="Report" handle1={() => {}} handle2={() => {}} />
       </View>
     </View>
   );

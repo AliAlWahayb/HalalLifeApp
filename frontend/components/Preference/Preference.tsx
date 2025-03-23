@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, View } from 'react-native';
+import { View } from 'react-native';
 
-import PreferenceButtons from './Components/PreferenceButtons';
+import TwoButtons from '../Shared/Buttons/TwoButtons';
 import DropdownMenu from '../Shared/DropdownMenu';
 
 const ParentPage = () => {
@@ -80,7 +80,7 @@ const ParentPage = () => {
           setValue={setSelectedValues4}
         />
       </View>
-      <PreferenceButtons handleSubmit={handleSubmit} handleReset={handleReset} />
+      <TwoButtons title1="Reset" title2="Save" handle1={handleSubmit} handle2={handleReset} />
     </View>
   );
 };

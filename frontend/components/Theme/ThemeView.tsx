@@ -5,8 +5,8 @@ import React from 'react';
 import Colors from './Components/Colors';
 import Card from 'components/Search/ProductsSearch/Components/Card';
 import AliButtons from 'components/Shared/Buttons/AliButtons';
-import ThemeButtons from './Components/ThemeButtons';
 import BottomTabShowcase from './Components/BottomTabShowcase';
+import TwoButtons from 'components/Shared/Buttons/TwoButtons';
 
 const Theme = () => {
   const size = 8;
@@ -34,7 +34,7 @@ const Theme = () => {
         <BottomTabShowcase />
       </View>
       <View className="flex flex-row justify-center">
-        <ThemeButtons />
+        <TwoButtons title1="Back" title2="Save" handle1={() => {}} handle2={() => {}} />
       </View>
     </View>
   );
