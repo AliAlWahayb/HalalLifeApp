@@ -45,14 +45,27 @@ const Card = ({
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={handlePress}
-      className="bg-background shadow-textPrimary m-3 flex flex-row rounded-2xl p-4 shadow-2xl">
+      className="bg-background shadow-textPrimary m-3 flex flex-row rounded-2xl p-4 shadow-2xl"
+      style={{ backgroundColor: theme.colors.background }}>
       <View className="flex min-w-[50%] flex-col gap-2 p-2">
-        <Text className={`text-textPrimary ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
-        <Text className={`text-textMuted ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
+        <Text
+          className={`text-textPrimary ${dynamicFontSize(Name)} text-wrap`}
+          style={{ color: theme.colors.textPrimary }}>
+          {Name}
+        </Text>
+        <Text
+          className={`text-textMuted ${dynamicFontSize(Source)} text-wrap`}
+          style={{ color: theme.colors.textMuted }}>
+          {Source}
+        </Text>
         <View
           style={{ backgroundColor: statusColor(Status), height: 40, width: '66%' }}
           className=" items-center justify-center rounded-2xl">
-          <Text className="text-textSecondary text-lg font-semibold">{Status}</Text>
+          <Text
+            className="text-textSecondary text-lg font-semibold"
+            style={{ color: theme.colors.textSecondary }}>
+            {Status}
+          </Text>
         </View>
       </View>
       <View className="items-center justify-center rounded-xl px-2">

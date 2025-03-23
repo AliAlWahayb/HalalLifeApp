@@ -24,7 +24,7 @@ module.exports = {
   },
   plugins: [
     function ({ addVariant }) {
-      const themes = ['light', 'dark', 'theme2', 'theme3', 'theme4'];
+      const themes = ['light', 'forest', 'oceanDark', 'vintage', 'coralLight', 'royalLight'];
       themes.forEach((theme) => {
         addVariant(`theme-${theme}`, `.theme-${theme} &`);
       });

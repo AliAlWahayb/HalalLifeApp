@@ -2,13 +2,14 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 import { ThemeNames, THEMES } from 'themes/themes';
+
 import Colors from './Colors';
 
 const ThemeSwitcher = () => {
   const { theme, themeName, setTheme } = useTheme();
 
   return (
-    <View className="p-4" style={{ backgroundColor: theme.colors.background }}>
+    <View className=" rounded-2xl p-4 px-8" style={{ backgroundColor: theme.colors.background }}>
       <Text className="mb-4 text-xl" style={{ color: theme.colors.textPrimary }}>
         Select Theme
       </Text>
@@ -28,11 +29,10 @@ const ThemeSwitcher = () => {
               className={`mb-4 rounded-lg p-2 ${isActive ? 'border-2' : ''}`}
               style={{
                 borderColor: isActive ? theme.colors.accent : 'transparent',
-                width: '30%',
               }}>
               <Colors
                 id={key}
-                size={16}
+                size={25}
                 color={[
                   themeConfig.colors.primary,
                   themeConfig.colors.background,
