@@ -23,7 +23,9 @@ const SearchView = () => {
         tabBarIndicatorStyle: { display: 'none' },
         tabBarActiveTintColor: theme.colors.accent,
         tabBarInactiveTintColor: theme.colors.textMuted,
-      }}>
+        swipeEnabled: false,
+      }}
+      >
       <Tab.Screen name="Products" component={ProductsSearch} />
       <Tab.Screen name="Ingredients" component={IngredientsSearch} />
     </Tab.Navigator>

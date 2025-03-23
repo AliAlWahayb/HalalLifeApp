@@ -1,8 +1,9 @@
-import { View, Text, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import React from 'react';
-import Buttons from 'components/Shared/Buttons/AliButtons';
+import { View, Text, ScrollView } from 'react-native';
+
 import Contributors from './Components/Contributors';
+import FastNav from './Components/FastNav';
 
 const contributorsData = [
   { index: 1, name: 'John Doe', contributions: 100 },
@@ -34,16 +35,7 @@ const HomeView = () => {
       </View>
       <View className="flex flex-col items-center gap-2 py-5">
         <Text className="text-primary text-center text-4xl font-bold">Fast Navigation</Text>
-        <View className="flex flex-col items-center gap-5">
-          <View className="flex flex-row  gap-5">
-            <Buttons title="Scanner" onPress={() => {}} />
-            <Buttons title="Liked" onPress={() => {}} />
-          </View>
-          <View className="flex flex-row gap-5">
-            <Buttons title="Search" onPress={() => {}} />
-            <Buttons title="History" onPress={() => {}} />
-          </View>
-        </View>
+        <FastNav />
       </View>
       <View className="flex flex-col items-center gap-2 py-5">
         <Text className="text-primary text-center text-3xl font-bold">
