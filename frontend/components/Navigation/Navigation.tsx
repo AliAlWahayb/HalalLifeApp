@@ -13,6 +13,7 @@ import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
+import UserSettings from 'components/UserSettings/UserSettings';
 
 import comView from 'components/com/comView';
 import Halal from 'components/Products/Halal';
@@ -161,8 +162,8 @@ const BottomTab = () => {
           }}
         />
         <Tab.Screen
-          name="User settings"
-          component={FakeMenu}
+          name="UserSettings"
+          component={UserSettings}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
