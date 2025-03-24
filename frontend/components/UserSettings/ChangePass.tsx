@@ -1,15 +1,14 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import React, { useContext } from 'react';
-import Buttons from '../../Shared/components/FormElements/Buttons';
-import InputForm from '../../Shared/components/FormElements/InputForm';
-import { AuthContext } from 'components/Shared/context/Auth-context';
-import { useForm } from '../../Shared/hooks/form-hooks';
-import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../Shared/util/Validators';
-import VerifyCom from '../components/VerifyCom';
-import { useNavigation } from '@react-navigation/native';
+import Buttons from '../Shared/Buttons/Buttons';
+import InputForm from '../Shared/FormElements/InputForm';
+import { AuthContext } from '../../context/Auth-context';
+import { useForm } from '../../hooks/form-hooks';
+import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../util/Validators';
+import VerifyCom from '../../components/Users/components/VerifyCom';
 
-const ChangePass = () => {
-  const navigation = useNavigation();
+
+const ChangePass = ({ goBack }) => {
   const auth = useContext(AuthContext);
 
   const [formState, inputHandler] = useForm(
@@ -28,12 +27,11 @@ const ChangePass = () => {
     }
     console.log('Password Updated:', formState.inputs.newPassword.value);
     auth.login();
-    navigation.navigate('Home');
+    goBack(); 
   };
 
   return (
     <View className="flex-1 bg-white px-6 pt-12">
-      {/* ✅ إدخال كلمة المرور الحالية */}
       <InputForm
         element="input"
         id="currentPassword"
@@ -46,7 +44,6 @@ const ChangePass = () => {
         className="mb-4 rounded-lg border border-green-400 p-4"
       />
 
-      {/* ✅ إدخال كلمة المرور الجديدة */}
       <InputForm
         element="input"
         id="newPassword"
@@ -59,7 +56,6 @@ const ChangePass = () => {
         className="mb-4 rounded-lg border border-green-400 p-4"
       />
 
-      {/* ✅ تأكيد كلمة المرور الجديدة */}
       <InputForm
         element="input"
         id="confirmNewPassword"
@@ -72,14 +68,13 @@ const ChangePass = () => {
         className="mb-6 rounded-lg border border-green-400 p-4"
       />
 
-      {/* ✅ مكون التحقق عبر الكود */}
       <VerifyCom onVerify={(code) => console.log('Verified Code:', code)} />
 
-      {/* ✅ زر الرجوع */}
       <View className="mt-12 items-center">
         <Buttons
           className="mt-6 w-3/4 rounded-full bg-[#77C273] py-4"
-          onPress={() => navigation.goBack()}>
+          onPress={goBack} 
+        >
           <Text className="text-lg font-bold text-white">Back</Text>
         </Buttons>
       </View>

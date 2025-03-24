@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
-const VerifyCom = ({ onVerify }) => {
+const VerifyCom2 = ({ onVerify }) => {
   const inputRefs = useRef([]);
   const [code, setCode] = useState(['', '', '', '']);
   const [focusedIndex, setFocusedIndex] = useState(null); 
@@ -33,7 +33,7 @@ const VerifyCom = ({ onVerify }) => {
 
   return (
     <View className="flex-1 items-center justify-center bg-white px-8">
-      <Text className="m-2 w-full text-center text-3xl font-bold text-[#77C273]">
+      <Text className="m-2 w-full text-center text-3xl font-bold text-red-500">
         Verification Code
       </Text>
       <Text className="mb-4 text-center text-sm font-bold text-gray-400">
@@ -46,7 +46,7 @@ const VerifyCom = ({ onVerify }) => {
             key={index}
             ref={(ref) => (inputRefs.current[index] = ref)}
             className={`m-2 h-14 w-14 rounded-lg border text-center text-2xl font-bold
-            ${focusedIndex === index || code[index] !== '' ? 'border-green-500' : 'border-gray-300'}`}
+            ${focusedIndex === index || code[index] !== '' ? 'border-red-500' : 'border-gray-300'}`}
             keyboardType="numeric"
             maxLength={1}
             value={num}
@@ -61,11 +61,11 @@ const VerifyCom = ({ onVerify }) => {
       <TouchableOpacity onPress={() => console.log('Resending Code...')}>
         <Text className="text-sm font-bold text-gray-400">
           I don’t receive a code!{' '}
-          <Text className="text-sm font-bold text-[#77C273]">Please resend</Text>
+          <Text className="text-sm font-bold text-red-500">Please resend</Text>
         </Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default VerifyCom;
+export default VerifyCom2;

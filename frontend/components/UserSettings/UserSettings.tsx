@@ -5,11 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import TwoButtons from '../Shared/Buttons/TwoButtons';
 import DropdownMenu from '../Shared/DropdownMenu';
 import DropdownAdvanceSettings from './com/DropdownAdvanceSettings';
-
+import ChangeUnami from './ChangeUnami';
+import ChangePass from './ChangePass';
+import DeleteAccount from './DeleteAccount';
 
 const UserSettings = () => {
 
-    const navigation = useNavigation();
+  const [currentScreen, setCurrentScreen] = useState<'main' | 'changeUsername' | 'changePassword' | 'deleteAccount'>('main');
 
     const [notifications,setNotifications] = useState(false);
     const[privacy,setPrivacy] = useState(false);
@@ -38,16 +40,15 @@ const UserSettings = () => {
     ];
     
     const handleAdvancedSelect = (value: string) => {
-      console.log('Selected advanced option:', value);
       switch (value) {
         case 'changeUsername':
-          navigation.navigate('Navigation', { screen: item.id });
+          setCurrentScreen('changeUsername');//
           break;
           case 'changePassword':
-            navigation.navigate('ChangeUnami');
+            setCurrentScreen('changePassword');
             break;
             case 'deleteAccount':
-              navigation.navigate('DeleteAccount');
+              setCurrentScreen('deleteAccount');
               break;
               default:
                 break;
@@ -73,7 +74,8 @@ const UserSettings = () => {
 
   return (
     <View className='flex-1 bg-background px-4 py-6 '>
-
+         {currentScreen === 'main' && (
+          <>
         <Text className='text-xl font-bold '>UserName</Text>
         <Text className='text-xl font-bold'>Email@Email.com</Text>
         <Text className='text-xl text-gray-300 font-bold'>Date Created</Text>
@@ -125,6 +127,21 @@ const UserSettings = () => {
            handle2={handleSubmit} 
             />
         </View>
+        </>
+        )}
+        {currentScreen === 'changeUsername' && (
+            <ChangeUnami goBack={() => setCurrentScreen('main')} />
+        )}
+
+       {currentScreen === 'changePassword' && (
+         <ChangePass goBack={() => setCurrentScreen('main')} />
+        )}
+
+       {currentScreen === 'deleteAccount' && (
+         <DeleteAccount goBack={() => setCurrentScreen('main')} />
+        )}
+
+
 
     </View>
     

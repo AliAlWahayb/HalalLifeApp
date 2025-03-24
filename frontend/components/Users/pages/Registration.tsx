@@ -8,7 +8,7 @@ import PhoneInputForm from '../components/PhoneInputForm';
 import InputForm from 'components/Shared/components/FormElements/InputForm';
 import { AuthContext } from 'context/Auth-context';
 import { useForm } from 'hooks/form-hooks';
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_MAXLENGTH } from 'util/Validators';
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_MAXLENGTH , VALIDATOR_PHONE } from 'util/Validators';
 
 const Registration = () => {
   const navigation = useNavigation();
@@ -46,7 +46,7 @@ const Registration = () => {
           element="input"
           id="numeric"
           type="int"
-          validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(9), VALIDATOR_MAXLENGTH(12)]}
+          validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(9), VALIDATOR_MAXLENGTH(12),VALIDATOR_PHONE()]}
           errorText="Please enter a valid phone number (9-12 digits)."
           onInput={inputHandler}
         />
