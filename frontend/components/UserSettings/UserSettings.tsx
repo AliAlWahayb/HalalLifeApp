@@ -41,7 +41,7 @@ const UserSettings = () => {
       console.log('Selected advanced option:', value);
       switch (value) {
         case 'changeUsername':
-          navigation.navigate('ChangeUnami');
+          navigation.navigate('Navigation', { screen: item.id });
           break;
           case 'changePassword':
             navigation.navigate('ChangeUnami');
@@ -72,7 +72,7 @@ const UserSettings = () => {
     };
 
   return (
-    <View className='flex-1 bg-white px-4 py-6 '>
+    <View className='flex-1 bg-background px-4 py-6 '>
 
         <Text className='text-xl font-bold '>UserName</Text>
         <Text className='text-xl font-bold'>Email@Email.com</Text>

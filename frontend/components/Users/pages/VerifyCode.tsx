@@ -10,7 +10,7 @@ const VerifyCode = () => {
       <Header />
 
       {/* ✅ إضافة مكون إدخال الكود */}
-      <VerifyCom onVerify={(code) => console.log("Verification Code:", code)} />
+      <VerifyCom onVerify={(code: any) => console.log("Verification Code:", code)} />
     </View>
   );
 };

@@ -73,7 +73,7 @@ const BottomTab = () => {
             paddingTop: 5,
           },
         }}
-        initialRouteName="Map">
+        initialRouteName="Home">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -86,7 +86,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={Theme}
+          component={FakeMenu}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
