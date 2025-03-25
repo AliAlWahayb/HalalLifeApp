@@ -31,10 +31,11 @@ const DropdownAdvanceSettings = ({ items, onSelect }: DropdownAdvanceSettingsPro
     },
   }));
 
-  const handleChange = (val: string | null) => {
-    setValue(val);
-    if (val) onSelect(val);
-  };
+  React.useEffect(() => {
+    if (value) {
+      onSelect(value);
+  }
+}, [value]);
 
   return (
     <DropDownPicker
@@ -42,7 +43,7 @@ const DropdownAdvanceSettings = ({ items, onSelect }: DropdownAdvanceSettingsPro
       value={value}
       items={styledItems}
       setOpen={setOpen}
-      setValue={handleChange}
+      setValue={setValue}
       setItems={() => {}}
       placeholder="Advance User Settings"
       searchable={false}
