@@ -85,7 +85,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={Theme}
+          component={FakeView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
