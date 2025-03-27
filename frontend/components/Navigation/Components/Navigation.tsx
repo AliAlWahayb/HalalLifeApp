@@ -19,6 +19,7 @@ import comView from 'components/com/comView';
 import Halal from 'components/Products/Halal';
 import Haram from 'components/Products/Haram';
 import ReportView from 'components/Report/ReportView';
+import profile from 'components/Profile/Profile';
 import { useTheme } from 'themes/ThemeProvider';
 
 const Tab = createBottomTabNavigator();
@@ -162,8 +163,8 @@ const BottomTab = () => {
           }}
         />
         <Tab.Screen
-          name="UserSettings"
-          component={UserSettings}
+          name="Profile"
+          component={profile}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
