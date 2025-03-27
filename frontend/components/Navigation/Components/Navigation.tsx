@@ -15,6 +15,7 @@ import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
 
 import comView from 'components/com/comView';
+import profile from 'components/Profile/Profile';
 import { useTheme } from 'themes/ThemeProvider';
 
 const Tab = createBottomTabNavigator();
@@ -158,8 +159,8 @@ const BottomTab = () => {
           }}
         />
         <Tab.Screen
-          name="User settings"
-          component={FakeMenu}
+          name="UserSettings"
+          component={UserSettings}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}

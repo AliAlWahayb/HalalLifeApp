@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View , Text , TouchableOpacity} from 'react-native';
 import CheckBox from 'components/Shared/CheckBox/CheckBox';
-import { useNavigation } from '@react-navigation/native';
 import TwoButtons from '../Shared/Buttons/TwoButtons';
 import DropdownMenu from '../Shared/DropdownMenu';
 import DropdownAdvanceSettings from './com/DropdownAdvanceSettings';

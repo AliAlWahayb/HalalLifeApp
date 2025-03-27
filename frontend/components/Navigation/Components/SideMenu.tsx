@@ -40,7 +40,7 @@ const SideMenu = ({
       icon: <Fontisto name="favorite" size={IconSize} color={color} className="ms-2" />,
     },
     {
-      id: 'User settings',
+      id: 'Profile',
       icon: <FontAwesome5 name="user-alt" size={IconSize} color={color} />,
     },
     {
