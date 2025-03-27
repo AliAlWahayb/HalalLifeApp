@@ -1,56 +1,16 @@
-import { Text, View } from 'react-native';
-import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../../util/Validators';
-import InputForm from '../../Shared/FormElements/InputForm';
-import Buttons from '../../Shared/Buttons/Buttons';
-import Header from '../components/Header';
-import React, { useState, useContext } from 'react';
-import { useForm } from '../../../hooks/form-hooks';
-import { AuthContext } from '../../../context/Auth-context';
+import { View } from "react-native";
+import React from "react";
+import VerifyCom from "../components/VerifyCom"; // ✅ مكون إدخال الكود
+import Header from "../components/Header"; // ✅ الهيدر
 
 const VerifyCode = () => {
-  const auth = useContext(AuthContext);
-
-  const [formState, inputHandler, setFormData] = useForm({
-    Number: {
-      value: '',
-      isValid: false,
-    },
-  });
-
-  const authSubmitHandler = () => {
-    if (!formState.isValid) {
-      console.log('Invalid Code');
-      return;
-    }
-    console.log(' ', formState.inputs.number.value);
-    auth.login();
-  };
-
   return (
-    <View className="bg-background flex-1 items-center justify-center px-8">
+    <View className="flex-1 bg-white">
+      {/* ✅ إضافة الهيدر */}
       <Header />
-      <Text className="text-accent m-2 ml-4 w-full text-4xl font-bold">Verification Code</Text>
-      <Text className="mr-20 text-sm font-bold text-gray-400">
-        please type the Verification Code send to your number{' '}
-      </Text>
 
-      <View className="w-full  items-center">
-        <InputForm
-          element="input"
-          id="numeric"
-          type="int"
-          validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(4)]}
-          errorText="Please enter a valid Code "
-          onInput={inputHandler}
-        />
-      </View>
-
-      <View className="mt-4 w-full flex-col  items-center">
-        <Text className="text-sm font-bold text-gray-400">
-          I Dont’t recevie a code!{' '}
-          <Text className="text-accent text-sm font-bold">Plaese resend</Text>
-        </Text>
-      </View>
+      {/* ✅ إضافة مكون إدخال الكود */}
+      <VerifyCom onVerify={(code: any) => console.log("Verification Code:", code)} />
     </View>
   );
 };

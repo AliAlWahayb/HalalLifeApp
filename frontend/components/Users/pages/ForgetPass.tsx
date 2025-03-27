@@ -1,37 +1,45 @@
-import { Text, View } from 'react-native';
-import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../../../util/Validators';
-import InputForm from '../../Shared/FormElements/InputForm';
-import Buttons from '../../Shared/Buttons/Buttons';
-import Header from '../components/Header';
+import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from 'context/Auth-context';
+import { useForm } from 'hooks/form-hooks';
 import React, { useState, useContext } from 'react';
-import { useForm } from '../../../hooks/form-hooks';
-import { AuthContext } from '../../../context/Auth-context';
+import { Text, View, Alert } from 'react-native';
+import { VALIDATOR_EMAIL } from 'util/Validators';
+
+import Buttons from '../../Shared/components/FormElements/Buttons';
+import InputForm from '../../Shared/components/FormElements/InputForm';
+import Header from '../components/Header';
 
 const ForgetPass = () => {
+  const navigation = useNavigation();
   const auth = useContext(AuthContext);
 
-  const [formState, inputHandler, setFormData] = useForm({
-    email: {
-      value: '',
-      isValid: false,
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      email: {
+        value: '',
+        isValid: false,
+      },
     },
-  });
+    false
+  );
 
-  const authSubmitHandler = (event) => {
-    event.preventDefault();
-    console.log(formState.inputs);
-    console.log('Password reset request sent.', formState.inputs.email.value);
-    auth.login();
+  const authSubmitHandler = (event: any) => {
+    if (!formState.isValid) {
+      Alert.alert('Invalid Input', 'Please enter a valid email address.', [{ text: 'OK' }]);
+      return;
+    }
+    Alert.alert('password Reset', `A reset link has been sent to ${formState.inputs.email.value}`, [
+      { text: 'OK', onPress: () => navigation.navigate('Auth' as never) },
+    ]);
   };
 
   return (
-    <View className="bg-background flex-1 items-center justify-center px-8">
+    <View className="flex-1 items-center justify-center bg-white px-8">
       <Header />
-      <Text className="text-accent m-2 mr-12 text-4xl font-bold">Resset Password</Text>
-      <Text className="mr-20 text-sm font-bold text-gray-400">
-        please enter your email address to
+      <Text className="m-2 mr-14 text-4xl font-bold text-[#77C273]">Resset Password</Text>
+      <Text className="mr-24 text-sm font-bold text-gray-400">
+        please enter your email address to request a Password rest
       </Text>
-      <Text className="mr-44 text-sm font-bold text-gray-400">request a E-mail rest</Text>
 
       <View className="w-full  items-center ">
         <InputForm
