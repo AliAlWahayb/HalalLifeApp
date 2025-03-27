@@ -13,12 +13,8 @@ import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
-import UserSettings from 'components/UserSettings/UserSettings';
 
 import comView from 'components/com/comView';
-import Halal from 'components/Products/Halal';
-import Haram from 'components/Products/Haram';
-import ReportView from 'components/Report/ReportView';
 import { useTheme } from 'themes/ThemeProvider';
 
 const Tab = createBottomTabNavigator();
@@ -73,7 +69,7 @@ const BottomTab = () => {
             paddingTop: 5,
           },
         }}
-        initialRouteName="Home">
+        initialRouteName="Map">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -86,7 +82,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={FakeMenu}
+          component={FakeView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
@@ -162,8 +158,8 @@ const BottomTab = () => {
           }}
         />
         <Tab.Screen
-          name="UserSettings"
-          component={UserSettings}
+          name="User settings"
+          component={FakeMenu}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
