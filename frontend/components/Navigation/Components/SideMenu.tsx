@@ -1,3 +1,6 @@
+import { FontAwesome5, Fontisto, MaterialIcons, Octicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,9 +9,6 @@ import {
   TouchableWithoutFeedback,
   SafeAreaView,
 } from 'react-native';
-import React, { useState } from 'react';
-import { FontAwesome5, Fontisto, MaterialIcons, Octicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'themes/ThemeProvider';
 
 const SideMenu = ({
