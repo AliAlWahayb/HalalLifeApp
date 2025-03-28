@@ -18,7 +18,7 @@ const Welcome = () => {
 
       <TouchableOpacity
         onPress={() => navigation.getParent()?.navigate('Navigation')}
-        className="absolute right-8 top-8  rounded-full bg-[#77C273] px-4 py-2">
+        className="absolute right-8 top-12  rounded-full bg-[#77C273] px-4 py-2">
         <Text className="text-1xl  font-bold text-white ">skip</Text>
       </TouchableOpacity>
 

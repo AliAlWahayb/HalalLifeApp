@@ -10,7 +10,7 @@ import { View } from 'react-native';
 export default function App() {
   const Stack = createStackNavigator();
   return (
-    <View className="flex-1 pt-5">
+    <View className="flex-1">
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="Auth" component={Auth} />
