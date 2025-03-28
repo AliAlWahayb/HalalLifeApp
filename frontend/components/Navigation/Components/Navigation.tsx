@@ -13,7 +13,6 @@ import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
-
 import comView from 'components/com/comView';
 import profile from 'components/Profile/Profile';
 import { useTheme } from 'themes/ThemeProvider';
@@ -70,7 +69,7 @@ const BottomTab = () => {
             paddingTop: 5,
           },
         }}
-        initialRouteName="Map">
+        initialRouteName="Home">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -159,8 +158,8 @@ const BottomTab = () => {
           }}
         />
         <Tab.Screen
-          name="UserSettings"
-          component={UserSettings}
+          name="Profile"
+          component={profile}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}

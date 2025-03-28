@@ -67,7 +67,7 @@ const SideMenu = ({
                   onPress={() => {
                     setSelectedItem(item.id);
                     // @ts-ignore
-                    navigation.navigate(item.id);
+                    navigation.navigate('Navigation', { screen: item.id });
                     setModalVisible(false);
                   }}
                   activeOpacity={1}>
