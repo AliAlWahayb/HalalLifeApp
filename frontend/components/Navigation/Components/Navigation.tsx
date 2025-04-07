@@ -14,6 +14,7 @@ import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
 import comView from 'components/com/comView';
+import mapView from 'components/map/mapView';
 import profile from 'components/Profile/Profile';
 import { useTheme } from 'themes/ThemeProvider';
 
@@ -82,7 +83,7 @@ const BottomTab = () => {
         />
         <Tab.Screen
           name="Map"
-          component={FakeView}
+          component={mapView}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="map-marker-outline" size={24} color={color} />
