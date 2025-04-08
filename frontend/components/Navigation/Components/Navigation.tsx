@@ -37,7 +37,7 @@ const BottomTab = () => {
           headerShown: true,
           headerTitle: () => null,
           headerStyle: {
-            minHeight: 100,
+            minHeight: 50,
           },
           headerLeft: () => (
             <MaterialCommunityIcons
@@ -46,7 +46,7 @@ const BottomTab = () => {
               color={theme.colors.textPrimary}
               className="p-5"
               // @ts-ignore
-              onPress={() => navigation.navigate('Information')}
+              onPress={() => navigation.navigate('Navigation', { screen: 'Information' })}
             />
           ),
           headerRight: () => (

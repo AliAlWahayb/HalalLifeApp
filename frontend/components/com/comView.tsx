@@ -1,19 +1,19 @@
-import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 import { SafeAreaView, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 // Import all components
-import Feed from './small/feed';
-import PostDetail from './small/PostDetail';
-import CommentDetail from './small/CommentDetail';
-import UserProfile from './small/UserProfile';
-import Notifications from './small/Notifications';
-import Search from './small/Search';
-import Header from './small/Header';
-import EditProfile from './small/EditProfile';
 import AccountSettings from './small/AccountSettings';
+import CommentDetail from './small/CommentDetail';
+import EditProfile from './small/EditProfile';
+import Header from './small/Header';
+import Notifications from './small/Notifications';
+import PostDetail from './small/PostDetail';
 import Preferences from './small/Preferences';
+import Search from './small/Search';
+import UserProfile from './small/UserProfile';
+import Feed from './small/feed';
 
 // Define the types for responses and comments
 interface Response {
@@ -71,13 +71,12 @@ const HalalLifeTitle = () => {
   const { theme } = useTheme();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Text 
-        style={{ 
-          fontSize: 22, 
-          fontWeight: 'bold', 
+      <Text
+        style={{
+          fontSize: 22,
+          fontWeight: 'bold',
           color: theme.colors.primary,
-        }}
-      >
+        }}>
         Halal<Text style={{ color: theme.colors.textPrimary }}>Life</Text>
       </Text>
     </View>
@@ -86,20 +85,16 @@ const HalalLifeTitle = () => {
 
 const ComView: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <StatusBar
-        backgroundColor={theme.colors.background}
-        barStyle="dark-content"
-      />
+      <StatusBar backgroundColor={theme.colors.background} barStyle="dark-content" />
       <Stack.Navigator
         initialRouteName="Feed"
         screenOptions={{
           headerShown: false,
-          cardStyle: { backgroundColor: theme.colors.background }
-        }}
-      >
+          cardStyle: { backgroundColor: theme.colors.background },
+        }}>
         <Stack.Screen name="Feed" component={Feed} />
         <Stack.Screen name="PostDetail" component={PostDetail} />
         <Stack.Screen name="CommentDetail" component={CommentDetail} />

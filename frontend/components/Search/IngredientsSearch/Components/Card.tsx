@@ -24,7 +24,7 @@ const Card = ({ Name, Source, Status }: { Name: string; Source: string; Status: 
   };
 
   return (
-    <View className="bg-background shadow-textPrimary m-3 max-w-lg flex-row justify-between rounded-2xl p-4 shadow-2xl">
+    <View className="m-2 max-w-lg flex-row justify-between rounded-2xl bg-background p-4 shadow-2xl shadow-textPrimary">
       <View className="flex flex-shrink flex-col px-2">
         <Text className={`text-textPrimary ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
         <Text className={`text-textMuted ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
@@ -32,7 +32,7 @@ const Card = ({ Name, Source, Status }: { Name: string; Source: string; Status: 
       <View
         style={{ backgroundColor: statusColor(Status), height: 40 }}
         className="w-1/3 items-center justify-center rounded-2xl">
-        <Text className="text-textSecondary text-lg font-semibold">{Status}</Text>
+        <Text className="text-lg font-semibold text-textSecondary">{Status}</Text>
       </View>
     </View>
   );

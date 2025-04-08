@@ -45,7 +45,7 @@ const Card = ({
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={handlePress}
-      className="bg-background shadow-textPrimary m-3 flex flex-row rounded-2xl p-4 shadow-2xl"
+      className="m-2 flex flex-row rounded-2xl bg-background p-4 shadow-2xl shadow-textPrimary"
       style={{ backgroundColor: theme.colors.background }}>
       <View className="flex min-w-[50%] flex-col gap-2 p-2">
         <Text
@@ -62,7 +62,7 @@ const Card = ({
           style={{ backgroundColor: statusColor(Status), height: 40, width: '66%' }}
           className=" items-center justify-center rounded-2xl">
           <Text
-            className="text-textSecondary text-lg font-semibold"
+            className="text-lg font-semibold text-textSecondary"
             style={{ color: theme.colors.textSecondary }}>
             {Status}
           </Text>
