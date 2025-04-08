@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React from 'react';
 import { Image } from 'expo-image';
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 const dynamicFontSize = (text: string) => {
@@ -49,13 +49,15 @@ const Card = ({
       style={{ backgroundColor: theme.colors.background }}>
       <View className="flex min-w-[50%] flex-col gap-2 p-2">
         <Text
-          className={`text-textPrimary ${dynamicFontSize(Name)} text-wrap`}
-          style={{ color: theme.colors.textPrimary }}>
+          className="text-wrap font-semibold text-textPrimary"
+          style={{ color: theme.colors.textPrimary }}
+          adjustsFontSizeToFit>
           {Name}
         </Text>
         <Text
-          className={`text-textMuted ${dynamicFontSize(Source)} text-wrap`}
-          style={{ color: theme.colors.textMuted }}>
+          className="text-wrap text-textMuted"
+          style={{ color: theme.colors.textMuted }}
+          adjustsFontSizeToFit>
           {Source}
         </Text>
         <View

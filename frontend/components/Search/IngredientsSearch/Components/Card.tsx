@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native';
 import React from 'react';
+import { View, Text } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 const dynamicFontSize = (text: string) => {
@@ -26,8 +26,12 @@ const Card = ({ Name, Source, Status }: { Name: string; Source: string; Status: 
   return (
     <View className="m-2 max-w-lg flex-row justify-between rounded-2xl bg-background p-4 shadow-2xl shadow-textPrimary">
       <View className="flex flex-shrink flex-col px-2">
-        <Text className={`text-textPrimary ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
-        <Text className={`text-textMuted ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
+        <Text className="text-wrap font-semibold text-textPrimary" adjustsFontSizeToFit>
+          {Name}
+        </Text>
+        <Text className="text-wrap  text-textMuted" adjustsFontSizeToFit>
+          {Source}
+        </Text>
       </View>
       <View
         style={{ backgroundColor: statusColor(Status), height: 40 }}
