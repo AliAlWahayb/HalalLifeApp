@@ -20,7 +20,7 @@ const ChangeUnami = ({ goBack }) => {
   
 
   return (
-    <View className="flex-1 bg-white px-6 pt-12">
+    <View className="flex-1 bg-textSecondary px-6 pt-12">
       <InputForm
         element="input"
         id="currentUserName"
@@ -29,7 +29,7 @@ const ChangeUnami = ({ goBack }) => {
         errorText="Please enter your username!"
         onInput={inputHandler}
         placeholder="Enter current User Name"
-        className="mb-4 rounded-lg border border-green-400 p-4"
+        className="mb-4 rounded-lg border border-primary p-4"
       />
 
       <InputForm
@@ -40,17 +40,17 @@ const ChangeUnami = ({ goBack }) => {
         errorText="This username is already taken."
         onInput={inputHandler}
         placeholder="Enter new User Name"
-        className="mb-4 rounded-lg border border-green-400 p-4"
+        className="mb-4 rounded-lg border border-primary p-4"
       />
 
       <VerifyCom onVerify={(code) => console.log('Verified Code:', code)} />
 
       <View className="mt-12 items-center">
         <Buttons
-          className="mt-6 w-3/4 rounded-full bg-[#77C273] py-4"
+          className="mt-6 w-3/4 rounded-full bg-accent py-4"
           onPress={goBack} 
         >
-          <Text className="text-lg font-bold text-white">Back</Text>
+          <Text className="text-lg font-bold text-textSecondary">Back</Text>
         </Buttons>
       </View>
     </View>

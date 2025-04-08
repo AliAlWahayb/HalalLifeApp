@@ -77,7 +77,7 @@ const UserSettings = () => {
           <>
         <Text className='text-xl font-bold '>UserName</Text>
         <Text className='text-xl font-bold'>Email@Email.com</Text>
-        <Text className='text-xl text-gray-300 font-bold'>Date Created</Text>
+        <Text className='text-xl text-textMuted font-bold'>Date Created</Text>
 
         <CheckBox 
         title='Allow Notification'
