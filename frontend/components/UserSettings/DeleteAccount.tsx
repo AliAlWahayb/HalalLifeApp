@@ -27,8 +27,10 @@ const DeleteAccount = ({ goBack }) => {
   );
 
   return (
-    <View className="flex-1 bg-background px-6 pt-12">
-      <Text className="text-3xl text-red-500">ARE YOU SHURE YOU WANT TO DELETE THE ACCOUNT?</Text>
+    <View className="flex-1 bg-background px-6 ">
+      <Text className="py-2 text-3xl font-bold text-red-500">
+        ARE YOU SHURE YOU WANT TO DELETE THE ACCOUNT?
+      </Text>
       <CheckBox
         title="YES I’M SURE"
         isChecked={confirmed}

@@ -20,7 +20,7 @@ const ChangeUnami = ({ goBack }) => {
   
 
   return (
-    <View className="flex-1 bg-textSecondary px-6 pt-12">
+    <View className="flex-1 bg-textSecondary px-6">
       <InputForm
         element="input"
         id="currentUserName"

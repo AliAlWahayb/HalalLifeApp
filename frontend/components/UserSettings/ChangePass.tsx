@@ -30,7 +30,7 @@ const ChangePass = ({ goBack }) => {
   };
 
   return (
-    <View className="flex-1 bg-background px-6 pt-12">
+    <View className="flex-1 bg-background px-6 ">
       <InputForm
         element="input"
         id="currentPassword"
@@ -64,7 +64,7 @@ const ChangePass = ({ goBack }) => {
         onInput={inputHandler}
         placeholder="Confirm new password"
         secureTextEntry={true}
-        className="mb-6 rounded-lg border border-primary p-4"
+        className="mb-7 rounded-lg border border-primary p-4"
       />
 
       <VerifyCom onVerify={(code) => console.log('Verified Code:', code)} />
