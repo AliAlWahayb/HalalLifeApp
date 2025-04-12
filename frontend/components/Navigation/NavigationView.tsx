@@ -12,23 +12,11 @@ const Stack = createNativeStackNavigator();
 const NavigationView = () => {
   return (
     <View className="flex-1">
-      <Stack.Navigator>
-        <Stack.Screen
-          name="FirstNavigation"
-          component={FirstNavigation}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Navigation" component={Navigation} options={{ headerShown: false }} />
-        <Stack.Screen
-          name="profile"
-          component={profile}
-          options={{ headerShown: true, title: 'Profile' }}
-        />
-        <Stack.Screen
-          name="PostPreview"
-          component={PostPreview}
-          options={{ headerShown: true, title: 'Post Preview' }}
-        />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        
+        <Stack.Screen name="FirstNavigation" component={FirstNavigation} />
+        <Stack.Screen name="Navigation" component={Navigation} />
+
       </Stack.Navigator>
     </View>
   );
