@@ -117,10 +117,10 @@ const HomeView = () => {
           top: 8,
           left: 0,
           right: 0,
-          height: headerHeight,
+          // height: headerHeight,
           backgroundColor: theme.colors.background,
           zIndex: 10,
-          opacity: headerOpacity,
+          // opacity: headerOpacity,
           elevation: 4,
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 2 },
@@ -137,8 +137,8 @@ const HomeView = () => {
             style={{ 
               fontSize: 20, 
               fontWeight: 'bold', 
-              color: theme.colors.primary,
-              transform: [{ scale: titleScale }, { translateY: titleTranslateY }]
+              color: theme.colors.primary
+              // transform: [{ scale: titleScale }, { translateY: titleTranslateY }]
             }}
           >
             Halal<Text style={{ color: theme.colors.textPrimary }}>Life</Text>
