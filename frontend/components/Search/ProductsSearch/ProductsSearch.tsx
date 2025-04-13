@@ -112,7 +112,7 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
 
   const renderListHeader = () => {
     return (
-      <View className="px-2 mb-2">
+      <View className="px-2 m-2">
         <View className="flex-row justify-between items-center px-2 mb-2">
           <Text style={{ color: theme.colors.textPrimary }} className="text-base">
             {filteredProducts.length} results

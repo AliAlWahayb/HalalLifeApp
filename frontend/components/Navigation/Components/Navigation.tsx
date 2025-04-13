@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import React, { useState } from 'react';
 import { MaterialCommunityIcons, Feather, Octicons, Entypo } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -38,6 +38,8 @@ const BottomTab = () => {
           headerTitle: () => null,
           headerStyle: {
             minHeight: 100,
+            top: Platform.OS === 'ios' ? 88 : 70,
+            bottom: 0,
           },
           headerLeft: () => (
             <MaterialCommunityIcons
@@ -65,9 +67,24 @@ const BottomTab = () => {
           tabBarStyle: {
             backgroundColor: theme.colors.background,
             borderTopWidth: 1,
-            height: 70,
-            paddingBottom: 5,
+            borderTopColor: 'rgba(0,0,0,0.1)',
+            height: Platform.OS === 'ios' ? 88 : 70,
+            paddingBottom: Platform.OS === 'ios' ? 28 : 5,
+            paddingTop: 8,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 3,
+            elevation: 5,
+          },
+          tabBarItemStyle: {
             paddingTop: 5,
+          },
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: '500',
+            marginTop: 3,
+            marginBottom: Platform.OS === 'ios' ? 5 : 3,
           },
         }}
         initialRouteName="Home">
@@ -104,7 +121,7 @@ const BottomTab = () => {
                   borderRadius: 30,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  bottom: -10,
+                  bottom: Platform.OS === 'ios' ? -8 : -10,
                   alignSelf: 'center',
                   shadowColor: '#000',
                   shadowOffset: { width: 0, height: 4 },

@@ -22,7 +22,8 @@ const SearchView = () => {
     <SafeAreaView style={{ 
       flex: 1, 
       backgroundColor: theme.colors.background,
-      paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 
+      paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0, 
+      top: 10,
     }}>
       {/* Header */}
       <View className="px-4 pt-2 pb-1">
