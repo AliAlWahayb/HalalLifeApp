@@ -1,83 +1,222 @@
-import { FlatList, TextInput, View } from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Card from './Components/Card';
-import { useState } from 'react';
-import SearchBar from '../../Shared/SearchBar';
-const products = [
-  {
-    id: 1,
-    Name: 'Namsadwadwsadwadwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Halal',
-  },
-  {
-    id: 2,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Haram',
-  },
-  {
-    id: 3,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Unknown',
-  },
-  {
-    id: 4,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Haram',
-  },
-  {
-    id: 5,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Haram',
-  },
-  {
-    id: 6,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Haram',
-  },
-  {
-    id: 7,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Haram',
-  },
-  {
-    id: 8,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Haram',
-  },
-  {
-    id: 9,
-    Name: 'Namsadwadwdwasdwadsd',
-    Source: 'Sousadwarce',
-    Status: 'Haram',
-  },
-];
-const ProductsSearch = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+import { useTheme } from 'themes/ThemeProvider';
+import { FontAwesome5 } from '@expo/vector-icons';
+
+interface IngredientsSearchProps {
+  searchQuery: string;
+}
+
+const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) => {
+  const { theme } = useTheme();
+  const [loading, setLoading] = useState(false);
+  const [ingredients, setIngredients] = useState([
+    {
+      id: 1,
+      Name: 'Gelatin',
+      Source: 'Animal-derived',
+      Status: 'Haram',
+    },
+    {
+      id: 2,
+      Name: 'Citric Acid',
+      Source: 'Synthetic/Plant',
+      Status: 'Halal',
+    },
+    {
+      id: 3,
+      Name: 'Carmine',
+      Source: 'Insect-derived',
+      Status: 'Haram',
+    },
+    {
+      id: 4,
+      Name: 'Lecithin',
+      Source: 'Soy/Egg',
+      Status: 'Unknown',
+    },
+    {
+      id: 5,
+      Name: 'Mono and Diglycerides',
+      Source: 'Animal/Plant',
+      Status: 'Unknown',
+    },
+    {
+      id: 6,
+      Name: 'Vanilla Extract',
+      Source: 'Plant-derived',
+      Status: 'Halal',
+    },
+    {
+      id: 7,
+      Name: 'Ethyl Alcohol',
+      Source: 'Fermentation',
+      Status: 'Haram',
+    },
+    {
+      id: 8,
+      Name: 'Agar',
+      Source: 'Seaweed',
+      Status: 'Halal',
+    },
+    {
+      id: 9,
+      Name: 'L-Cysteine',
+      Source: 'Human/Animal Hair',
+      Status: 'Haram',
+    },
+  ]);
+
+  const [filteredIngredients, setFilteredIngredients] = useState(ingredients);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState('name'); // 'name' or 'source'
+
+  // Filter statuses
+  const filters = ['All', 'Halal', 'Haram', 'Unknown'];
+
+  // Apply filters whenever search query or selected filter changes
+  useEffect(() => {
+    setLoading(true);
+
+    // Simulate API call delay
+    setTimeout(() => {
+      let result = [...ingredients];
+
+      // Apply search query filter
+      if (searchQuery) {
+        result = result.filter(
+          (item) =>
+            item.Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.Source.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      // Apply status filter
+      if (selectedFilter && selectedFilter !== 'All') {
+        result = result.filter((item) => item.Status === selectedFilter);
+      }
+
+      // Apply sorting
+      if (sortBy === 'name') {
+        result = [...result].sort((a, b) => a.Name.localeCompare(b.Name));
+      } else if (sortBy === 'source') {
+        result = [...result].sort((a, b) => a.Source.localeCompare(b.Source));
+      }
+
+      setFilteredIngredients(result);
+      setLoading(false);
+    }, 300);
+  }, [searchQuery, selectedFilter, ingredients, sortBy]);
+
+  const renderListHeader = () => {
+    return (
+      <View className="px-2 mb-2">
+        <View className="flex-row justify-between items-center px-2 mb-2">
+          <Text style={{ color: theme.colors.textPrimary }} className="text-base">
+            {filteredIngredients.length} results
+          </Text>
+          <TouchableOpacity
+            className="flex-row items-center"
+            onPress={() => setSortBy(sortBy === 'name' ? 'source' : 'name')}
+          >
+            <FontAwesome5 name="sort" size={14} color={theme.colors.primary} />
+            <Text style={{ color: theme.colors.primary }} className="ml-1">
+              Sort by {sortBy === 'name' ? 'Source' : 'Name'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View className="flex-row pb-2">
+          <FlatList
+            horizontal
+            data={filters}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => {
+              const isSelected = selectedFilter === item || (!selectedFilter && item === 'All');
+              return (
+                <TouchableOpacity
+                  onPress={() => setSelectedFilter(item === 'All' ? null : item)}
+                  className={`px-4 py-2 rounded-full mr-2 border`}
+                  style={{
+                    backgroundColor: isSelected ? theme.colors.primary : 'transparent',
+                    borderColor: theme.colors.border,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: isSelected ? theme.colors.background : theme.colors.textPrimary,
+                    }}
+                    className="font-medium"
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  const renderEmptyList = () => (
+    <View className="flex-1 justify-center items-center py-20">
+      <FontAwesome5 
+        name="flask" 
+        size={50} 
+        color={theme.colors.textMuted} 
+        style={{ opacity: 0.5 }}
+      />
+      <Text 
+        style={{ color: theme.colors.textMuted }} 
+        className="mt-4 text-lg text-center"
+      >
+        No ingredients found
+      </Text>
+      <Text 
+        style={{ color: theme.colors.textMuted }} 
+        className="mt-1 text-sm text-center max-w-[250px]"
+      >
+        Try adjusting your search or filters to find what you're looking for
+      </Text>
+    </View>
+  );
 
   return (
-    <View className="bg-background flex-1">
-      <SearchBar />
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Card Name={item.Name} Source={item.Source} Status={item.Status} />
-        )}
-        contentContainerStyle={{ alignItems: 'center' }}
-        initialNumToRender={10}
-        maxToRenderPerBatch={5}
-        removeClippedSubviews
-      />
+    <View className="flex-1" style={{ backgroundColor: theme.colors.background }}>
+      {renderListHeader()}
+
+      {loading ? (
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredIngredients}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <Card 
+              Name={item.Name} 
+              Source={item.Source} 
+              Status={item.Status} 
+            />
+          )}
+          contentContainerStyle={{ 
+            paddingHorizontal: 12,
+            paddingBottom: 20,
+            flexGrow: filteredIngredients.length === 0 ? 1 : undefined 
+          }}
+          ListEmptyComponent={renderEmptyList}
+          initialNumToRender={10}
+          maxToRenderPerBatch={5}
+          removeClippedSubviews
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 };
 
-export default ProductsSearch;
+export default IngredientsSearch;

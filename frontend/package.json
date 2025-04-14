@@ -25,6 +25,7 @@
     "expo-checkbox": "~4.0.1",
     "expo-dev-client": "^5.0.12",
     "expo-image": "~2.0.6",
+    "expo-linear-gradient": "^14.0.2",
     "expo-location": "^18.0.10",
     "expo-permissions": "^14.4.0",
     "expo-router": "^4.0.17",

@@ -1,90 +1,113 @@
-import { Image } from 'expo-image';
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, Image } from 'react-native';
+import React, { useState } from 'react';
 import { useTheme } from 'themes/ThemeProvider';
-
-const dynamicFontSize = (text: string) => {
-  const length = text.length;
-  if (length < 8) {
-    return 'text-xl'; // Large font for short text
-  } else if (length >= 8 && length < 21) {
-    return 'text-md'; // Medium font for medium-length text
-  } else {
-    return 'text-sm'; // Smaller font for long text
-  }
-};
+import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-const Card = ({
-  Name,
-  img,
-  Source,
-  Status,
-}: {
+interface CardProps {
   Name: string;
-  img: string;
+  img: any;
   Source: string;
   Status: string;
-}) => {
+}
+
+const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
+  const navigation = useNavigation();
+  const { theme, globalColors } = useTheme();
+  const [imageError, setImageError] = useState(false);
+
   const handlePress = () => {
-    console.log(Name);
+    // Navigate to product details
+    console.log(`Pressed on product: ${Name}`);
   };
 
-  const { theme, globalColors } = useTheme();
-
-  const statusColor = (status: string) => {
-    if (status === 'Halal') return globalColors.Halal;
-    if (status === 'Haram') return globalColors.Haram;
-    if (status === 'Unknown') return globalColors.Unknown;
-    return globalColors.Muted;
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Halal':
+        return globalColors.Halal;
+      case 'Haram':
+        return globalColors.Haram;
+      case 'Unknown':
+        return globalColors.Unknown;
+      default:
+        return theme.colors.textMuted;
+    }
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
+    <Pressable
       onPress={handlePress}
-      className="m-2 flex flex-row rounded-2xl bg-background p-4 shadow-2xl shadow-textPrimary"
-      style={{ backgroundColor: theme.colors.background }}>
-      <View className="flex min-w-[50%] flex-col gap-2 p-2">
-        <Text
-          className="text-wrap font-semibold text-textPrimary"
-          style={{ color: theme.colors.textPrimary }}
-          adjustsFontSizeToFit>
-          {Name}
-        </Text>
-        <Text
-          className="text-wrap text-textMuted"
-          style={{ color: theme.colors.textMuted }}
-          adjustsFontSizeToFit>
-          {Source}
-        </Text>
-        <View
-          style={{ backgroundColor: statusColor(Status), height: 40, width: '66%' }}
-          className=" items-center justify-center rounded-2xl">
-          <Text
-            className="text-lg font-semibold text-textSecondary"
-            style={{ color: theme.colors.textSecondary }}>
-            {Status}
-          </Text>
+      className="mb-3 w-full overflow-hidden rounded-xl"
+      style={({ pressed }) => [
+        {
+          backgroundColor: pressed ? theme.colors.highlight : theme.colors.card,
+          borderWidth: 1,
+          borderColor: theme.colors.border,
+          shadowColor: theme.colors.shadow,
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.1,
+          shadowRadius: 2,
+          elevation: 2,
+        }
+      ]}
+    >
+      <View className="flex-row p-3">
+        <View className="mr-3 h-20 w-20 rounded-lg overflow-hidden justify-center items-center" style={{ backgroundColor: theme.colors.highlight }}>
+          {!img || imageError ? (
+            <FontAwesome5 
+              name="shopping-bag" 
+              size={30} 
+              color={theme.colors.textMuted} 
+              style={{ opacity: 0.7 }}
+            />
+          ) : (
+            <Image
+              source={img}
+              style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
+              onError={() => setImageError(true)}
+            />
+          )}
+        </View>
+        
+        <View className="flex-1 justify-between">
+          <View>
+            <Text 
+              className="font-medium text-lg" 
+              style={{ color: theme.colors.textPrimary }}
+              numberOfLines={1}
+            >
+              {Name}
+            </Text>
+            <Text 
+              className="text-sm mt-1" 
+              style={{ color: theme.colors.textSecondary }}
+              numberOfLines={1}
+            >
+              {Source}
+            </Text>
+          </View>
+          
+          <View 
+            className="flex-row items-center mt-2" 
+            style={{ marginBottom: 2 }}
+          >
+            <View 
+              className="h-3 w-3 rounded-full mr-2" 
+              style={{ backgroundColor: getStatusColor(Status) }}
+            />
+            <Text 
+              className="font-medium"
+              style={{ color: getStatusColor(Status) }}
+            >
+              {Status}
+            </Text>
+          </View>
         </View>
       </View>
-      <View className="items-center justify-center rounded-xl px-2">
-        <Image
-          source={img}
-          placeholder={{ blurhash }}
-          contentFit="contain"
-          transition={1000}
-          style={{
-            width: '100%',
-            height: 60,
-            aspectRatio: 2,
-          }}
-          alt={Name}
-        />
-      </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
