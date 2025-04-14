@@ -7,7 +7,6 @@ import { useForm } from '../../hooks/form-hooks';
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../util/Validators';
 import VerifyCom from '../../components/Users/components/VerifyCom';
 
-
 const ChangePass = ({ goBack }) => {
   const auth = useContext(AuthContext);
 
@@ -27,11 +26,11 @@ const ChangePass = ({ goBack }) => {
     }
     console.log('Password Updated:', formState.inputs.newPassword.value);
     auth.login();
-    goBack(); 
+    goBack();
   };
 
   return (
-    <View className="flex-1 bg-white px-6 pt-12">
+    <View className="flex-1 bg-background px-6 ">
       <InputForm
         element="input"
         id="currentPassword"
@@ -41,7 +40,7 @@ const ChangePass = ({ goBack }) => {
         onInput={inputHandler}
         placeholder="Enter current password"
         secureTextEntry={true}
-        className="mb-4 rounded-lg border border-green-400 p-4"
+        className="mb-4 rounded-lg border border-primary p-4"
       />
 
       <InputForm
@@ -53,7 +52,7 @@ const ChangePass = ({ goBack }) => {
         onInput={inputHandler}
         placeholder="Enter new password"
         secureTextEntry={true}
-        className="mb-4 rounded-lg border border-green-400 p-4"
+        className="mb-4 rounded-lg border border-primary p-4"
       />
 
       <InputForm
@@ -65,17 +64,14 @@ const ChangePass = ({ goBack }) => {
         onInput={inputHandler}
         placeholder="Confirm new password"
         secureTextEntry={true}
-        className="mb-6 rounded-lg border border-green-400 p-4"
+        className="mb-7 rounded-lg border border-primary p-4"
       />
 
       <VerifyCom onVerify={(code) => console.log('Verified Code:', code)} />
 
       <View className="mt-12 items-center">
-        <Buttons
-          className="mt-6 w-3/4 rounded-full bg-[#77C273] py-4"
-          onPress={goBack} 
-        >
-          <Text className="text-lg font-bold text-white">Back</Text>
+        <Buttons className="mt-6 w-3/4 rounded-full bg-accent py-4" onPress={goBack}>
+          <Text className="text-lg font-bold text-textSecondary">Back</Text>
         </Buttons>
       </View>
     </View>

@@ -17,6 +17,7 @@ import comView from 'components/com/comView';
 import mapView from 'components/map/mapView';
 import profile from 'components/Profile/Profile';
 import { useTheme } from 'themes/ThemeProvider';
+import UserSettings from 'components/UserSettings/UserSettings';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,7 +49,7 @@ const BottomTab = () => {
               color={theme.colors.textPrimary}
               className="p-5"
               // @ts-ignore
-              onPress={() => navigation.navigate('Information')}
+              onPress={() => navigation.navigate('Navigation', { screen: 'Information' })}
             />
           ),
           headerRight: () => (
@@ -176,8 +177,8 @@ const BottomTab = () => {
           }}
         />
         <Tab.Screen
-          name="Profile"
-          component={profile}
+          name="UserSettings"
+          component={UserSettings}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}
