@@ -122,7 +122,7 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
             onPress={() => console.log('Sort pressed')}
           >
             <FontAwesome5 name="sort" size={14} color={theme.colors.primary} />
-            <Text style={{ color: theme.colors.primary }} className="ml-1">
+            <Text style={{ color: theme.colors.accent }} className="ml-1">
               Sort
             </Text>
           </TouchableOpacity>
@@ -139,10 +139,9 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
               return (
                 <TouchableOpacity
                   onPress={() => setSelectedFilter(item === 'All' ? null : item)}
-                  className={`px-4 py-2 rounded-full mr-2 border`}
+                  className={`px-4 py-2 rounded-full mr-2 `}
                   style={{
-                    backgroundColor: isSelected ? theme.colors.primary : 'transparent',
-                    borderColor: theme.colors.border,
+                    backgroundColor: isSelected ? theme.colors.accent : 'transparent',
                   }}
                 >
                   <Text

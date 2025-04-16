@@ -34,8 +34,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
       style={{ 
         backgroundColor: theme.colors.background, 
         borderWidth: 1,
-        borderColor: theme.colors.border,
-        shadowColor: theme.colors.shadow,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 3,

@@ -4,10 +4,8 @@ import React, { useState } from 'react';
 import { MaterialCommunityIcons, Feather, Octicons, Entypo } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import FakeView from 'components/Home/FakeView';
 import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
-import FakeMenu from 'components/SideMenu/FakeMenu';
 import Information from 'components/Information/Information';
 import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
@@ -15,7 +13,6 @@ import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
 import comView from 'components/com/comView';
 import mapView from 'components/map/mapView';
-import profile from 'components/Profile/Profile';
 import { useTheme } from 'themes/ThemeProvider';
 import UserSettings from 'components/UserSettings/UserSettings';
 
@@ -38,9 +35,8 @@ const BottomTab = () => {
           headerShown: true,
           headerTitle: () => null,
           headerStyle: {
-            minHeight: 100,
-            top: Platform.OS === 'ios' ? 88 : 70,
-            bottom: 0,
+            minHeight: Platform.OS === 'ios' ? 88 : 50,
+            backgroundColor: theme.colors.background,
           },
           headerLeft: () => (
             <MaterialCommunityIcons
