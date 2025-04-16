@@ -1,31 +1,42 @@
-import { View, Text, TouchableOpacity, Pressable, Image } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import React, { useState, useCallback, memo, useMemo } from 'react';
 import { useTheme } from 'themes/ThemeProvider';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
+/**
+ * Product card props interface
+ */
 interface CardProps {
+  /** Product name */
   Name: string;
+  /** Product image source */
   img: any;
+  /** Source of the product data */
   Source: string;
-  Status: string;
+  /** Halal status of the product */
+  Status: 'Halal' | 'Haram' | 'Unknown' | string;
 }
 
+/**
+ * Product card component for the search results
+ */
 const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
   const navigation = useNavigation();
   const { theme, globalColors } = useTheme();
   const [imageError, setImageError] = useState(false);
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     // Navigate to product details
     console.log(`Pressed on product: ${Name}`);
-  };
+  }, [Name]);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
+  const getStatusColor = useMemo(() => {
+    switch (Status) {
       case 'Halal':
         return globalColors.Halal;
       case 'Haram':
@@ -35,21 +46,20 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
       default:
         return theme.colors.textMuted;
     }
-  };
+  }, [Status, globalColors, theme.colors.textMuted]);
+
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
 
   return (
     <Pressable
       onPress={handlePress}
-      className="mb-3 w-full overflow-hidden rounded-xl "
-      style={({ pressed }) => [
-        {
-          borderWidth: 1,
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.1,
-          shadowRadius: 2,
-          elevation: 2,
-        },
-      ]}>
+      className="mb-3 w-full overflow-hidden rounded-xl border shadow-sm"
+      style={{
+        borderColor: theme.colors.textMuted,
+        shadowColor: theme.colors.textPrimary,
+      }}>
       <View className="flex-row p-3">
         <View className="mr-3 h-20 w-20 items-center justify-center overflow-hidden rounded-lg">
           {!img || imageError ? (
@@ -57,42 +67,38 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
               name="shopping-bag"
               size={30}
               color={theme.colors.textMuted}
-              style={{ opacity: 0.7 }}
+              className="opacity-70"
             />
           ) : (
             <Image
               source={img}
-              style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
-              onError={() => setImageError(true)}
+              className="h-full w-full"
+              contentFit="contain"
+              placeholder={{ blurhash }}
+              transition={200}
+              onError={handleImageError}
+              alt={`${Name} image`}
             />
           )}
         </View>
 
         <View className="flex-1 justify-between">
           <View>
-            <Text
-              className="text-lg font-medium"
-              style={{ color: theme.colors.textPrimary }}
-              numberOfLines={1}>
+            <Text className="text-lg font-medium text-textPrimary" numberOfLines={1}>
               {Name}
             </Text>
-            <Text
-              className="mt-1 text-sm"
-              style={{ color: theme.colors.textMuted }}
-              numberOfLines={1}>
+            <Text className="mt-1 text-sm text-textMuted" numberOfLines={1}>
               {Source}
             </Text>
           </View>
 
-          <View className="mt-2 flex-row items-center" style={{ marginBottom: 2 }}>
+          <View className="mb-0.5 mt-2 flex-row items-center">
             <View
               className="flex-row items-center rounded-full px-3 py-1"
               style={{
-                backgroundColor: `${getStatusColor(Status)}`,
+                backgroundColor: getStatusColor,
               }}>
-              <Text className="text-md font-medium" style={{ color: theme.colors.textSecondary }}>
-                {Status}
-              </Text>
+              <Text className="text-md font-medium text-textSecondary">{Status}</Text>
             </View>
           </View>
         </View>
@@ -101,4 +107,4 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
   );
 };
 
-export default Card;
+export default memo(Card);
