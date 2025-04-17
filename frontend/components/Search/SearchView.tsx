@@ -24,7 +24,6 @@ const SearchView = () => {
         flex: 1,
         backgroundColor: theme.colors.background,
         paddingTop: Platform.OS === 'android' ? 10 : 0,
-        
       }}>
       {/* Header */}
       <View className="px-4 ">

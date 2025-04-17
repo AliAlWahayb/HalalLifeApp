@@ -1,9 +1,8 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import React, { useState, useCallback, memo, useMemo } from 'react';
 import { useTheme } from 'themes/ThemeProvider';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -55,7 +54,7 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
   return (
     <Pressable
       onPress={handlePress}
-      className="mb-3 w-full overflow-hidden rounded-xl border shadow-sm"
+      className="mb-3 w-full overflow-hidden rounded-xl "
       style={{
         borderColor: theme.colors.textMuted,
         shadowColor: theme.colors.textPrimary,
@@ -73,9 +72,9 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
             <Image
               source={img}
               className="h-full w-full"
-              contentFit="contain"
-              placeholder={{ blurhash }}
-              transition={200}
+              style={{
+                resizeMode: 'contain',
+              }}
               onError={handleImageError}
               alt={`${Name} image`}
             />
@@ -84,7 +83,10 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
 
         <View className="flex-1 justify-between">
           <View>
-            <Text className="text-lg font-medium text-textPrimary" numberOfLines={1}>
+            <Text
+              className="text-lg font-medium text-textPrimary"
+              adjustsFontSizeToFit
+              numberOfLines={1}>
               {Name}
             </Text>
             <Text className="mt-1 text-sm text-textMuted" numberOfLines={1}>

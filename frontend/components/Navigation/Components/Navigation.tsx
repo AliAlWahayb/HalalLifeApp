@@ -70,7 +70,7 @@ const BottomTab: React.FC = () => {
         backgroundColor: theme.colors.background,
         borderTopWidth: 1,
         borderTopColor: 'rgba(0,0,0,0.1)',
-        height: Platform.OS === 'ios' ? 88 : 70,
+        height: Platform.OS === 'ios' ? 88 : 75,
         paddingBottom: Platform.OS === 'ios' ? 28 : 5,
         paddingTop: 8,
         shadowColor: '#000',
@@ -78,9 +78,6 @@ const BottomTab: React.FC = () => {
         shadowOpacity: 0.1,
         shadowRadius: 3,
         elevation: 5,
-      },
-      tabBarItemStyle: {
-        paddingTop: 5,
       },
       tabBarLabelStyle: {
         fontSize: 11,
@@ -119,10 +116,20 @@ const BottomTab: React.FC = () => {
   const CameraIcon = useCallback(
     () => (
       <View
-        className="absolute bottom-[-10px] h-[60px] w-[60px] items-center justify-center self-center rounded-full shadow-md"
         style={{
           backgroundColor: theme.colors.accent,
+          width: 60,
+          height: 60,
+          borderRadius: 30,
+          justifyContent: 'center',
+          alignItems: 'center',
+          bottom: Platform.OS === 'ios' ? -8 : -10,
+          alignSelf: 'center',
           shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
+          elevation: 5,
         }}>
         <Feather name="camera" size={32} color={theme.colors.textSecondary} />
       </View>

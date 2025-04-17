@@ -24,7 +24,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({ title, onPress, isChecked = false }
       onPress={handleChange}
       className="flex flex-row items-center rounded-xl bg-background py-2">
       <Checkbox
-        className="mx-5"
+        style={{ marginLeft: 20, marginRight: 10 }}
         value={checked}
         onValueChange={handleChange}
         color={checked ? theme.colors.secondary : undefined}
