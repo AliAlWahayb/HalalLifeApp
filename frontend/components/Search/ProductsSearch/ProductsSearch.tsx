@@ -29,7 +29,7 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
     {
       id: 3,
       Name: 'Vanilla Ice Cream',
-      Source: 'Ben & Jerry\'s',
+      Source: "Ben & Jerry's",
       Status: 'Unknown',
       img: require('../../../assets/Products/image.png'),
     },
@@ -76,35 +76,35 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
       img: require('../../../assets/Products/image.png'),
     },
   ]);
-  
+
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   // Filter statuses
   const filters = ['All', 'Halal', 'Haram', 'Unknown'];
-  
+
   // Apply filters whenever search query or selected filter changes
   useEffect(() => {
     setLoading(true);
-    
+
     // Simulate API call delay
     setTimeout(() => {
       let result = [...products];
-      
+
       // Apply search query filter
       if (searchQuery) {
         result = result.filter(
-          (item) => 
-            item.Name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          (item) =>
+            item.Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             item.Source.toLowerCase().includes(searchQuery.toLowerCase())
         );
       }
-      
+
       // Apply status filter
       if (selectedFilter && selectedFilter !== 'All') {
-        result = result.filter(item => item.Status === selectedFilter);
+        result = result.filter((item) => item.Status === selectedFilter);
       }
-      
+
       setFilteredProducts(result);
       setLoading(false);
     }, 300);
@@ -112,22 +112,21 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
 
   const renderListHeader = () => {
     return (
-      <View className="px-2 m-2">
-        <View className="flex-row justify-between items-center px-2 mb-2">
+      <View className="m-2 px-2">
+        <View className="mb-2 flex-row items-center justify-between px-2">
           <Text style={{ color: theme.colors.textPrimary }} className="text-base">
             {filteredProducts.length} results
           </Text>
-          <TouchableOpacity 
-            className="flex-row items-center" 
-            onPress={() => console.log('Sort pressed')}
-          >
+          <TouchableOpacity
+            className="flex-row items-center"
+            onPress={() => console.log('Sort pressed')}>
             <FontAwesome5 name="sort" size={14} color={theme.colors.primary} />
-            <Text style={{ color: theme.colors.primary }} className="ml-1">
+            <Text style={{ color: theme.colors.accent }} className="ml-1">
               Sort
             </Text>
           </TouchableOpacity>
         </View>
-        
+
         <View className="flex-row pb-2">
           <FlatList
             horizontal
@@ -139,18 +138,15 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
               return (
                 <TouchableOpacity
                   onPress={() => setSelectedFilter(item === 'All' ? null : item)}
-                  className={`px-4 py-2 rounded-full mr-2 border`}
+                  className={`mr-2 rounded-full px-4 py-2 `}
                   style={{
-                    backgroundColor: isSelected ? theme.colors.primary : 'transparent',
-                    borderColor: theme.colors.border,
-                  }}
-                >
+                    backgroundColor: isSelected ? theme.colors.accent : 'transparent',
+                  }}>
                   <Text
                     style={{
                       color: isSelected ? theme.colors.background : theme.colors.textPrimary,
                     }}
-                    className="font-medium"
-                  >
+                    className="font-medium">
                     {item}
                   </Text>
                 </TouchableOpacity>
@@ -163,23 +159,19 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
   };
 
   const renderEmptyList = () => (
-    <View className="flex-1 justify-center items-center py-20">
-      <FontAwesome5 
-        name="search" 
-        size={50} 
-        color={theme.colors.textMuted} 
+    <View className="flex-1 items-center justify-center py-20">
+      <FontAwesome5
+        name="search"
+        size={50}
+        color={theme.colors.textMuted}
         style={{ opacity: 0.5 }}
       />
-      <Text 
-        style={{ color: theme.colors.textMuted }} 
-        className="mt-4 text-lg text-center"
-      >
+      <Text style={{ color: theme.colors.textMuted }} className="mt-4 text-center text-lg">
         No products found
       </Text>
-      <Text 
-        style={{ color: theme.colors.textMuted }} 
-        className="mt-1 text-sm text-center max-w-[250px]"
-      >
+      <Text
+        style={{ color: theme.colors.textMuted }}
+        className="mt-1 max-w-[250px] text-center text-sm">
         Try adjusting your search or filters to find what you're looking for
       </Text>
     </View>
@@ -188,9 +180,9 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
   return (
     <View className="flex-1" style={{ backgroundColor: theme.colors.background }}>
       {renderListHeader()}
-      
+
       {loading ? (
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       ) : (
@@ -198,17 +190,12 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
           data={filteredProducts}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Card 
-              Name={item.Name} 
-              Source={item.Source} 
-              Status={item.Status} 
-              img={item.img} 
-            />
+            <Card Name={item.Name} Source={item.Source} Status={item.Status} img={item.img} />
           )}
-          contentContainerStyle={{ 
+          contentContainerStyle={{
             paddingHorizontal: 12,
             paddingBottom: 20,
-            flexGrow: filteredProducts.length === 0 ? 1 : undefined 
+            flexGrow: filteredProducts.length === 0 ? 1 : undefined,
           }}
           ListEmptyComponent={renderEmptyList}
           initialNumToRender={10}

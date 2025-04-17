@@ -111,17 +111,16 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
 
   const renderListHeader = () => {
     return (
-      <View className="px-2 mb-2">
-        <View className="flex-row justify-between items-center px-2 mb-2">
+      <View className="mb-2 px-2">
+        <View className="mb-2 flex-row items-center justify-between px-2">
           <Text style={{ color: theme.colors.textPrimary }} className="text-base">
             {filteredIngredients.length} results
           </Text>
           <TouchableOpacity
             className="flex-row items-center"
-            onPress={() => setSortBy(sortBy === 'name' ? 'source' : 'name')}
-          >
-            <FontAwesome5 name="sort" size={14} color={theme.colors.primary} />
-            <Text style={{ color: theme.colors.primary }} className="ml-1">
+            onPress={() => setSortBy(sortBy === 'name' ? 'source' : 'name')}>
+            <FontAwesome5 name="sort" size={14} color={theme.colors.accent} />
+            <Text style={{ color: theme.colors.accent }} className="ml-1">
               Sort by {sortBy === 'name' ? 'Source' : 'Name'}
             </Text>
           </TouchableOpacity>
@@ -138,18 +137,15 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
               return (
                 <TouchableOpacity
                   onPress={() => setSelectedFilter(item === 'All' ? null : item)}
-                  className={`px-4 py-2 rounded-full mr-2 border`}
+                  className={`mr-2 rounded-full  px-4 py-2`}
                   style={{
-                    backgroundColor: isSelected ? theme.colors.primary : 'transparent',
-                    borderColor: theme.colors.border,
-                  }}
-                >
+                    backgroundColor: isSelected ? theme.colors.accent : 'transparent',
+                  }}>
                   <Text
                     style={{
                       color: isSelected ? theme.colors.background : theme.colors.textPrimary,
                     }}
-                    className="font-medium"
-                  >
+                    className="font-medium">
                     {item}
                   </Text>
                 </TouchableOpacity>
@@ -162,23 +158,19 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
   };
 
   const renderEmptyList = () => (
-    <View className="flex-1 justify-center items-center py-20">
-      <FontAwesome5 
-        name="flask" 
-        size={50} 
-        color={theme.colors.textMuted} 
+    <View className="flex-1 items-center justify-center py-20">
+      <FontAwesome5
+        name="flask"
+        size={50}
+        color={theme.colors.textMuted}
         style={{ opacity: 0.5 }}
       />
-      <Text 
-        style={{ color: theme.colors.textMuted }} 
-        className="mt-4 text-lg text-center"
-      >
+      <Text style={{ color: theme.colors.textMuted }} className="mt-4 text-center text-lg">
         No ingredients found
       </Text>
-      <Text 
-        style={{ color: theme.colors.textMuted }} 
-        className="mt-1 text-sm text-center max-w-[250px]"
-      >
+      <Text
+        style={{ color: theme.colors.textMuted }}
+        className="mt-1 max-w-[250px] text-center text-sm">
         Try adjusting your search or filters to find what you're looking for
       </Text>
     </View>
@@ -189,7 +181,7 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
       {renderListHeader()}
 
       {loading ? (
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       ) : (
@@ -197,16 +189,12 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
           data={filteredIngredients}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Card 
-              Name={item.Name} 
-              Source={item.Source} 
-              Status={item.Status} 
-            />
+            <Card Name={item.Name} Source={item.Source} Status={item.Status} />
           )}
-          contentContainerStyle={{ 
+          contentContainerStyle={{
             paddingHorizontal: 12,
             paddingBottom: 20,
-            flexGrow: filteredIngredients.length === 0 ? 1 : undefined 
+            flexGrow: filteredIngredients.length === 0 ? 1 : undefined,
           }}
           ListEmptyComponent={renderEmptyList}
           initialNumToRender={10}
