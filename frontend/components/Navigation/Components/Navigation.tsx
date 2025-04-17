@@ -15,11 +15,34 @@ import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
 import comView from 'components/com/comView';
 import mapView from 'components/map/mapView';
-import profile from 'components/Profile/Profile';
 import { useTheme } from 'themes/ThemeProvider';
 import UserSettings from 'components/UserSettings/UserSettings';
 
 const Tab = createBottomTabNavigator();
+
+const ProfileScreen = () => {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background }}>
+      <Text style={{ color: theme.colors.textPrimary, fontSize: 18 }}>Profile Screen</Text>
+      <Text style={{ color: theme.colors.textSecondary, marginTop: 10 }}>
+        This is a placeholder for the user profile screen
+      </Text>
+    </View>
+  );
+};
+
+const NotificationsScreen = () => {
+  const { theme } = useTheme();
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background }}>
+      <Text style={{ color: theme.colors.textPrimary, fontSize: 18 }}>Notifications Screen</Text>
+      <Text style={{ color: theme.colors.textSecondary, marginTop: 10 }}>
+        This is a placeholder for the notifications screen
+      </Text>
+    </View>
+  );
+};
 
 const BottomTab = () => {
   const IconSize = 28;
@@ -39,8 +62,9 @@ const BottomTab = () => {
           headerTitle: () => null,
           headerStyle: {
             minHeight: 100,
-            top: Platform.OS === 'ios' ? 88 : 70,
-            bottom: 0,
+            backgroundColor: theme.colors.background,
+            borderBottomColor: theme.colors.border,
+            borderBottomWidth: 1,
           },
           headerLeft: () => (
             <MaterialCommunityIcons
@@ -194,6 +218,21 @@ const BottomTab = () => {
         <Tab.Screen
           name="Information"
           component={Information}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        {/* Add Profile and Notifications screens */}
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        <Tab.Screen
+          name="Notifications"
+          component={NotificationsScreen}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}

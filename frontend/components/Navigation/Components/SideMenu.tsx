@@ -11,6 +11,7 @@ import {
   Animated,
 } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
+import profile from 'components/Profile/Profile';
 
 const SideMenu = ({
   modalVisible,

@@ -1,6 +1,5 @@
 import { View, Text, Pressable } from 'react-native';
 import React from 'react';
-import { View, Text } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 import { FontAwesome5 } from '@expo/vector-icons';
 

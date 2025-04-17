@@ -62,9 +62,9 @@ const QUICK_ACTION_SIZE = (width - 56) / 2;
 
 // Quick action buttons with icons and labels
 const quickActions = [
-  { id: 'scanner', name: 'Scanner', icon: 'barcode-scan', screen: 'Camera' },
+  { id: 'scanner', name: 'Scanner', icon: 'scan-outline', screen: 'Camera' },
   { id: 'search', name: 'Search', icon: 'search', screen: 'Search' },
-  { id: 'map', name: 'Map', icon: 'map-marker', screen: 'Map' },
+  { id: 'map', name: 'Map', icon: 'location-outline', screen: 'Map' },
   { id: 'favorites', name: 'Favorites', icon: 'heart', screen: 'Favorites' },
 ];
 
