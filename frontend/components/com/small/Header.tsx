@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
   View,
@@ -7,10 +6,10 @@ import {
   StyleSheet,
   StatusBar,
   Platform,
-  SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useTheme } from 'themes/ThemeProvider';
+import { useNavigation } from '@react-navigation/native';
 
 interface HeaderProps {
   title?: string;
@@ -23,7 +22,6 @@ interface HeaderProps {
   onSearchPress?: () => void;
   onNotificationPress?: () => void;
   onProfilePress?: () => void;
-  onBackPress?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -37,17 +35,12 @@ const Header: React.FC<HeaderProps> = ({
   onSearchPress,
   onNotificationPress,
   onProfilePress,
-  onBackPress,
 }) => {
   const { theme } = useTheme();
   const navigation = useNavigation();
 
   const handleBackPress = () => {
-    if (onBackPress) {
-      onBackPress();
-    } else {
-      navigation.goBack();
-    }
+    navigation.goBack();
   };
 
   const handleProfilePress = () => {
@@ -60,84 +53,119 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]}>
-      <StatusBar
+    <View 
+      style={[
+        styles.header, 
+        { 
+          backgroundColor: theme.colors.background,
+          borderBottomColor: 'rgba(0,0,0,0.05)',
+        }
+      ]}
+    >
+      <StatusBar 
         backgroundColor={theme.colors.background}
-        barStyle="dark-content"
+        barStyle={theme.dark ? 'light-content' : 'dark-content'}
       />
 
-      <View
-        style={[
-          styles.header,
-          { backgroundColor: theme.colors.background, borderBottomColor: 'rgba(0,0,0,0.05)' },
-        ]}>
-        {/* Left Side */}
-        <View style={styles.leftContainer}>
-          {customLeftComponent || (
-            <>
-              {showBack ? (
-                <TouchableOpacity style={styles.iconButton} onPress={handleBackPress}>
-                  <Icon name="arrow-left" size={18} color={theme.colors.textPrimary} />
-                </TouchableOpacity>
-              ) : (
-                <View style={styles.titleContainer}>
-                  <Text style={[styles.titleText, { color: theme.colors.primary }]}>
-                    Halal<Text style={{ color: theme.colors.textPrimary }}>Life</Text>
-                  </Text>
-                </View>
-              )}
-            </>
-          )}
-        </View>
-
-        {/* Center/Title */}
-        {title && showBack && (
-          <Text style={[styles.headerTitle, { color: theme.colors.textPrimary }]} numberOfLines={1}>
-            {title}
-          </Text>
+      {/* Left Side */}
+      <View style={styles.leftContainer}>
+        {customLeftComponent || (
+          <>
+            {showBack ? (
+              <TouchableOpacity 
+                style={styles.iconButton} 
+                onPress={handleBackPress}
+              >
+                <Icon 
+                  name="arrow-left" 
+                  size={18} 
+                  color={theme.colors.textPrimary} 
+                />
+              </TouchableOpacity>
+            ) : (
+              <View style={styles.titleContainer}>
+                <Text 
+                  style={[styles.titleText, { color: theme.colors.primary }]}
+                >
+                  Halal<Text style={{ color: theme.colors.textPrimary }}>Life</Text>
+                </Text>
+              </View>
+            )}
+          </>
         )}
-
-        {/* Right Side */}
-        <View style={styles.rightContainer}>
-          {customRightComponent || (
-            <>
-              {showSearch && (
-                <TouchableOpacity style={styles.iconButton} onPress={onSearchPress}>
-                  <Icon name="search" size={18} color={theme.colors.textPrimary} />
-                </TouchableOpacity>
-              )}
-
-              {showNotification && (
-                <TouchableOpacity style={styles.iconButton} onPress={onNotificationPress}>
-                  <Icon name="bell" size={18} color={theme.colors.textPrimary} />
-                </TouchableOpacity>
-              )}
-
-              {showProfile && (
-                <TouchableOpacity style={styles.iconButton} onPress={handleProfilePress}>
-                  <Icon name="user" size={18} color={theme.colors.textPrimary} />
-                </TouchableOpacity>
-              )}
-            </>
-          )}
-        </View>
       </View>
-    </SafeAreaView>
+
+      {/* Center/Title */}
+      {title && showBack && (
+        <Text 
+          style={[
+            styles.headerTitle, 
+            { color: theme.colors.textPrimary }
+          ]}
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
+      )}
+
+      {/* Right Side */}
+      <View style={styles.rightContainer}>
+        {customRightComponent || (
+          <>
+            {showSearch && (
+              <TouchableOpacity 
+                style={styles.iconButton} 
+                onPress={onSearchPress}
+              >
+                <Icon 
+                  name="search" 
+                  size={18} 
+                  color={theme.colors.textPrimary} 
+                />
+              </TouchableOpacity>
+            )}
+
+            {showNotification && (
+              <TouchableOpacity 
+                style={styles.iconButton} 
+                onPress={onNotificationPress}
+              >
+                <Icon 
+                  name="bell" 
+                  size={18} 
+                  color={theme.colors.textPrimary} 
+                />
+              </TouchableOpacity>
+            )}
+
+            {showProfile && (
+              <TouchableOpacity 
+                style={styles.iconButton} 
+                onPress={handleProfilePress}
+              >
+                <Icon 
+                  name="user" 
+                  size={18} 
+                  color={theme.colors.textPrimary} 
+                />
+              </TouchableOpacity>
+            )}
+          </>
+        )}
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    width: '100%',
-  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: Platform.OS === 'ios' ? 44 : 56,
+    height: Platform.OS === 'ios' ? 90 : 60,
+    paddingTop: Platform.OS === 'ios' ? 40 : 0,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    margin: 5,
   },
   leftContainer: {
     flex: 1,
@@ -173,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header;
+export default Header; 

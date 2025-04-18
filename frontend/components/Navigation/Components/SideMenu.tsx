@@ -1,6 +1,6 @@
 import { FontAwesome5, Fontisto, MaterialIcons, Octicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,190 +8,79 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   SafeAreaView,
-  Animated,
 } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
-interface SideMenuItem {
-  id: string;
-  icon: (isActive: boolean) => React.ReactNode;
-  label: string;
-}
-
-interface SideMenuProps {
-  /** Whether the side menu modal is visible */
+const SideMenu = ({
+  modalVisible,
+  setModalVisible,
+}: {
   modalVisible: boolean;
-  /** Function to toggle the visibility of the side menu */
   setModalVisible: (visible: boolean) => void;
-}
-
-/**
- * SideMenu component for application navigation
- */
-const SideMenu: React.FC<SideMenuProps> = ({ modalVisible, setModalVisible }) => {
-  const [selectedItem, setSelectedItem] = useState<string>('');
+}) => {
+  const [selectedItem, setSelectedItem] = useState('');
   const navigation = useNavigation();
   const state = navigation.getState();
   const { theme } = useTheme();
-  const slideAnim = useState(new Animated.Value(-300))[0];
-  const fadeAnim = useState(new Animated.Value(0))[0];
 
-  const IconSize = 24;
-  const activeColor = theme.colors.primary;
-  const inactiveColor = theme.colors.textSecondary;
+  const IconSize = 32;
+  const color = theme.colors.textSecondary;
 
-  // Animate menu when visibility changes
-  useEffect(() => {
-    if (modalVisible) {
-      Animated.parallel([
-        Animated.timing(slideAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    } else {
-      Animated.timing(slideAnim, {
-        toValue: -300,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [modalVisible, slideAnim, fadeAnim]);
-
-  // Set initial selection based on current route
-  useEffect(() => {
-    if (state?.routes && state.index >= 0) {
-      setSelectedItem(state.routes[state.index].name);
-    }
-  }, [state]);
-
-  const items: SideMenuItem[] = [
+  const items = [
     {
       id: 'History',
-      icon: (isActive) => (
-        <Octicons name="history" size={IconSize} color={isActive ? activeColor : inactiveColor} />
-      ),
-      label: 'History',
+      icon: <Octicons name="history" size={IconSize} color={color} />,
     },
     {
       id: 'Preferences',
-      icon: (isActive) => (
-        <FontAwesome5
-          name="allergies"
-          size={IconSize}
-          color={isActive ? activeColor : inactiveColor}
-        />
-      ),
-      label: 'Preferences',
+      icon: <FontAwesome5 name="allergies" size={IconSize} color={color} />,
     },
     {
       id: 'Favorites',
-      icon: (isActive) => (
-        <Fontisto name="favorite" size={IconSize} color={isActive ? activeColor : inactiveColor} />
-      ),
-      label: 'Favorites',
+      icon: <Fontisto name="favorite" size={IconSize} color={color} className="ms-2" />,
     },
     {
-      id: 'Profile',
-      icon: (isActive) => (
-        <FontAwesome5
-          name="user-alt"
-          size={IconSize}
-          color={isActive ? activeColor : inactiveColor}
-        />
-      ),
-      label: 'Profile',
+      id: 'UserSettings',
+      icon: <FontAwesome5 name="user-alt" size={IconSize} color={color} />,
     },
     {
       id: 'Theme',
-      icon: (isActive) => (
-        <MaterialIcons
-          name="color-lens"
-          size={IconSize}
-          color={isActive ? activeColor : inactiveColor}
-        />
-      ),
-      label: 'Theme',
+      icon: <MaterialIcons name="color-lens" size={IconSize} color={color} />,
     },
   ];
 
-  const isItemActive = useCallback(
-    (itemId: string) => selectedItem === itemId && state?.routes[state.index].name === itemId,
-    [selectedItem, state]
-  );
-
-  const handleItemPress = useCallback(
-    (itemId: string) => {
-      setSelectedItem(itemId);
-      // @ts-ignore
-      navigation.navigate('Navigation', { screen: itemId });
-      setModalVisible(false);
-    },
-    [navigation, setModalVisible]
-  );
-
-  const handleCloseMenu = useCallback(() => {
-    setModalVisible(false);
-  }, [setModalVisible]);
-
   return (
-    <Modal animationType="none" transparent visible={modalVisible} onRequestClose={handleCloseMenu}>
+    <Modal
+      animationType="fade"
+      transparent
+      visible={modalVisible}
+      onRequestClose={() => setModalVisible(false)}>
       <SafeAreaView className="flex-1">
-        <TouchableWithoutFeedback onPress={handleCloseMenu}>
-          <Animated.View className="flex-1 bg-black/50" style={{ opacity: fadeAnim }}>
-            <Animated.View
-              className="h-full w-[70%] flex-col justify-start rounded-br-3xl rounded-tr-3xl bg-accent shadow-xl"
-              style={{
-                transform: [{ translateX: slideAnim }],
-              }}>
-              <View className="border-b border-gray-200/20 px-5 py-8">
-                <Text className="text-2xl font-bold color-slate-200">HalalLife</Text>
-              </View>
-
-              <View className="flex-1 py-6">
-                {items.map((item) => {
-                  const active = isItemActive(item.id);
-                  return (
-                    <TouchableOpacity
-                      key={item.id}
-                      className={`mx-3 mb-2 flex flex-row items-center rounded-xl px-4 py-3 ${active ? 'bg-primary/10' : ''}`}
-                      onPress={() => handleItemPress(item.id)}
-                      activeOpacity={0.7}>
-                      {item.icon(active)}
-                      <Text
-                        className={`ml-4 text-base font-medium ${active ? 'font-bold text-primary' : 'text-textSecondary'}`}>
-                        {item.label}
-                      </Text>
-                      {active && (
-                        <View className="ml-auto">
-                          <View className="h-2 w-2 rounded-full bg-primary" />
-                        </View>
-                      )}
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-
-              <View className="border-t border-gray-200/20 px-5 pb-8 pt-4">
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View className="flex-1 items-end bg-black/50">
+            <View className="flex h-1/3 w-3/5 flex-col items-start justify-evenly  rounded-bl-3xl rounded-tl-3xl bg-accent px-5 py-2 ">
+              {items.map((item) => (
                 <TouchableOpacity
-                  className="flex flex-row items-center rounded-xl px-4 py-3"
-                  onPress={handleCloseMenu}>
-                  <Octicons name="sign-out" size={IconSize} color={inactiveColor} />
-                  <Text className="ml-4 text-base font-medium text-textSecondary">Close Menu</Text>
+                  key={item.id}
+                  className={`flex w-full flex-row gap-3 rounded-full px-3 py-2 ${selectedItem === item.id && state?.routes[state.index].name === item.id ? 'bg-secondary' : 'bg-accent'}`}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  onPress={() => {
+                    setSelectedItem(item.id);
+                    // @ts-ignore
+                    navigation.navigate('Navigation', { screen: item.id });
+                    setModalVisible(false);
+                  }}
+                  activeOpacity={1}>
+                  {item.icon}
+                  <Text className="align-middle font-bold text-textSecondary">{item.id}</Text>
                 </TouchableOpacity>
-              </View>
-            </Animated.View>
-          </Animated.View>
+              ))}
+            </View>
+          </View>
         </TouchableWithoutFeedback>
       </SafeAreaView>
     </Modal>
   );
 };
 
-export default memo(SideMenu);
+export default SideMenu;
