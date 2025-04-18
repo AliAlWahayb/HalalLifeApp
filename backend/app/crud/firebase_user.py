@@ -4,6 +4,7 @@ from datetime import datetime
 from app.db.firebase import FirestoreDB, create_firebase_user, get_firebase_user
 from app.schemas.user import UserCreate, UserUpdate
 
+#ai gnerater not me abdullah
 
 class FirebaseUserCRUD:
     """Firebase User CRUD operations"""

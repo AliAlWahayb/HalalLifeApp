@@ -4,7 +4,7 @@ from typing import Optional, Dict, Any, List
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from app.core.config import settings
-
+#ai gnerater not me abdullah
 # Global variables to store Firebase app and db instances
 firebase_app = None
 firebase_db = None

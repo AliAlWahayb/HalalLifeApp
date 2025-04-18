@@ -1,7 +1,8 @@
-import os
+import os 
 from pydantic_settings import BaseSettings
 from typing import Optional
 
+#ai gnerater not me abdullah
 
 class Settings(BaseSettings):
     # App Settings

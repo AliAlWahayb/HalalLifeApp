@@ -3,7 +3,7 @@ import aiosqlite
 from typing import List, Dict, Any, Optional
 from app.core.config import settings
 
-
+#ai gnerater not me abdullah
 class SQLiteDB:
     """Async SQLite Database Manager for local storage"""
 
