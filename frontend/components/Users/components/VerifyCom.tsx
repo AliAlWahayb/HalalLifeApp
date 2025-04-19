@@ -34,7 +34,7 @@ const VerifyCom = () => {
       const user = result.user;
   
      
-      await axios.post('http://172.20.10.2:8000/api/phone-auth', { //this is my device ip you must replace with your device ip
+      await axios.post('http://localhost:8000/api/phone-auth', { //this is my device ip you must replace with your device ip
         uid: user.uid,
         phone_number: user.phoneNumber,
         created_at: new Date().toISOString(),

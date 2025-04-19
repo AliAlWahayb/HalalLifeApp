@@ -62,7 +62,8 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "react-phone-input-2": "^2.15.1",
-    "undefined": "expo-auth-session/providers/google"
+    "undefined": "expo-auth-session/providers/google",
+    "expo-linear-gradient": "~14.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
