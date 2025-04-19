@@ -1,8 +1,8 @@
-# Entry point for API
 from fastapi import FastAPI
+from app.controllers import users, phone_auth
+import app.firebase  
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello, HalalLife API!"}
+app.include_router(users.router, prefix="/api/users", tags=["users"])
+app.include_router(phone_auth.router, prefix="/api", tags=["phone-auth"])
