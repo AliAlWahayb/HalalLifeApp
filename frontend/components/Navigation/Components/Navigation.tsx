@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
 import Information from 'components/Information/Information';
-import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
@@ -15,6 +14,7 @@ import comView from 'components/com/comView';
 import mapView from 'components/map/mapView';
 import { useTheme } from 'themes/ThemeProvider';
 import UserSettings from 'components/UserSettings/UserSettings';
+import CameraView from 'components/Camera/CameraView';
 
 const Tab = createBottomTabNavigator();
 
@@ -160,7 +160,7 @@ const BottomTab: React.FC = () => {
         />
         <Tab.Screen
           name="Camera"
-          component={Scanner}
+          component={CameraView}
           options={{
             tabBarLabel: '',
             tabBarIcon: CameraIcon,
