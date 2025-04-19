@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "newArchEnabled": true,
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/IconAndSplash/Light.png"
     },
     "experiments": {
       "tsconfigPaths": true
@@ -18,26 +18,36 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/IconAndSplash/splash-icon-light.png",
+          "dark": {
+            "image": "./assets/IconAndSplash/splash-icon-dark.png",
+            "backgroundColor": "#ffffff"
+          },
+          "imageWidth": 200
+        }
       ]
     ],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/IconAndSplash/Light.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/IconAndSplash/splash-icon-light.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#058F40"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/IconAndSplash/adaptive-icon.png",
+        "backgroundColor": "#058F40"
       },
       "permissions": [
         "android.permission.CAMERA",

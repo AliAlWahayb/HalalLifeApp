@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, View } from 'react-native';
-import DropdownMenu from './Components/DropdownMenu';
-import PreferenceButtons from './Components/PreferenceButtons';
+import { View } from 'react-native';
+
+import TwoButtons from '../Shared/Buttons/TwoButtons';
+import DropdownMenu from '../Shared/DropdownMenu';
 
 const ParentPage = () => {
   const [selectedValues1, setSelectedValues1] = useState<string[]>([]);
@@ -48,7 +49,7 @@ const ParentPage = () => {
   };
 
   return (
-    <View className="flex-1 items-center justify-between bg-white py-5">
+    <View className="bg-background flex-1 items-center justify-between py-5">
       <View className="flex flex-col  gap-5">
         <DropdownMenu
           zIndex={4000}
@@ -79,7 +80,7 @@ const ParentPage = () => {
           setValue={setSelectedValues4}
         />
       </View>
-      <PreferenceButtons handleSubmit={handleSubmit} handleReset={handleReset} />
+      <TwoButtons title1="Reset" title2="Save" handle1={handleSubmit} handle2={handleReset} />
     </View>
   );
 };

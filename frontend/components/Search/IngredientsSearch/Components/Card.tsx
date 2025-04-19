@@ -1,37 +1,77 @@
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import React from 'react';
+import { useTheme } from 'themes/ThemeProvider';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-const dynamicFontSize = (text: string) => {
-  const length = text.length;
-  if (length < 8) {
-    return 'text-xl';
-  } else if (length >= 8 && length < 21) {
-    return 'text-md';
-  } else {
-    return 'text-md';
-  }
-};
+interface CardProps {
+  Name: string;
+  Source: string;
+  Status: string;
+}
 
-const statusColor = (status: string) => {
-  if (status === 'Halal') return '#77C273';
-  if (status === 'Haram') return '#F76666';
-  if (status === 'Unknown') return '#F7B766';
-  return '#6B7280';
-};
+const Card: React.FC<CardProps> = ({ Name, Source, Status }) => {
+  const { theme, globalColors } = useTheme();
 
-const Card = ({ Name, Source, Status }: { Name: string; Source: string; Status: string }) => {
+  const handlePress = () => {
+    // Navigate to ingredient details
+    console.log(`Pressed on ingredient: ${Name}`);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Halal':
+        return globalColors.Halal;
+      case 'Haram':
+        return globalColors.Haram;
+      case 'Unknown':
+        return globalColors.Unknown;
+      default:
+        return theme.colors.textMuted;
+    }
+  };
+
   return (
-    <View className="m-3 max-w-lg flex-row justify-between rounded-2xl bg-white p-4 shadow-2xl shadow-black">
-      <View className="flex flex-shrink flex-col px-2">
-        <Text className={`text-black ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
-        <Text className={`text-gray-500 ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
+    <Pressable
+      onPress={handlePress}
+      className="mb-3 w-full overflow-hidden rounded-xl"
+      style={({ pressed }) => [
+        {
+          borderWidth: 1,
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.1,
+          shadowRadius: 2,
+          elevation: 2,
+        },
+      ]}>
+      <View className="p-3">
+        <View className="flex-row items-start justify-between ">
+          <Text className="flex-1 text-lg font-medium" style={{ color: theme.colors.textPrimary }}>
+            {Name}
+          </Text>
+          <View
+            className="flex-row items-center rounded-full px-3 py-1"
+            style={{
+              backgroundColor: `${getStatusColor(Status)}`,
+            }}>
+            <Text className="text-sm font-medium" style={{ color: theme.colors.textSecondary }}>
+              {Status}
+            </Text>
+          </View>
+        </View>
+
+        <View className="mt-2 flex-row items-center">
+          <FontAwesome5
+            name="info-circle"
+            size={14}
+            color={theme.colors.textMuted}
+            style={{ marginRight: 6, opacity: 0.8 }}
+          />
+          <Text className="text-sm" style={{ color: theme.colors.textMuted }}>
+            {Source}
+          </Text>
+        </View>
       </View>
-      <View
-        style={{ backgroundColor: statusColor(Status), height: 40 }}
-        className="w-1/3 items-center justify-center rounded-2xl">
-        <Text className="text-lg font-semibold text-white">{Status}</Text>
-      </View>
-    </View>
+    </Pressable>
   );
 };
 

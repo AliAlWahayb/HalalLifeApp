@@ -1,3 +1,70 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Global colors */
+  --color-Halal: #77C273;
+  --color-Haram: #F76666;
+  --color-Unknown: #F7B766;
+}
+
+.theme-light {
+    --color-primary: #5FCE59;
+    --color-secondary: #61A55D;
+    --color-background: #ffffff;
+    --color-textPrimary: #000000;
+    --color-textSecondary: #ffffff;
+    --color-textMuted: #6b7280;
+    --color-accent: #77C273;
+  }
+  
+  .theme-forest {
+    --color-primary: #A5D6A7;
+    --color-secondary: #8BC34A;
+    --color-background: #F1F8E9;
+    --color-textPrimary: #2E2E2E;
+    --color-textSecondary: #689F38;
+    --color-textMuted: #757575;
+    --color-accent: #7CB342;
+  }
+
+  .theme-ocean-dark {
+    --color-primary: #4A90E2;
+    --color-secondary: #1976D2;
+    --color-background: #1C1C1E;
+    --color-textPrimary: #E0E0E0;
+    --color-textSecondary: #BBDEFB;
+    --color-textMuted: #9E9E9E;
+    --color-accent: #2196F3;
+  }
+  
+  .theme-vintage {
+    --color-primary: #8E7B68;
+    --color-secondary: #6D4C41;
+    --color-background: #F4ECE4;
+    --color-textPrimary: #303030;
+    --color-textSecondary: #5D4037;
+    --color-textMuted: #795548;
+    --color-accent: #A1887F;
+  }
+
+  .theme-coral-light {
+    --color-primary: #FF6347;
+    --color-secondary: #FF5252;
+    --color-background: #FAFAFA;
+    --color-textPrimary: #2D2D2D;
+    --color-textSecondary: #FF867C;
+    --color-textMuted: #BDBDBD;
+    --color-accent: #FF7043;
+  }
+
+  .theme-royal-light {
+    --color-primary: #8853C8;
+    --color-secondary: #673AB7;
+    --color-background: #ffffff;
+    --color-textPrimary: #000000;
+    --color-textSecondary: #9575CD;
+    --color-textMuted: #9E9E9E;
+    --color-accent: #7E57C2;
+  }

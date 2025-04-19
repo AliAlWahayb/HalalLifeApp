@@ -2,12 +2,14 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Entypo, Feather, Octicons } from '@expo/vector-icons';
+import { useTheme } from 'themes/ThemeProvider';
 
 const Tab = createBottomTabNavigator();
 
 const FakeView = () => <View />;
 
 const BottomTabShowcase = () => {
+  const { theme } = useTheme();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -20,7 +22,7 @@ const BottomTabShowcase = () => {
           <Entypo
             name="info-with-circle"
             size={30}
-            color="black"
+            color={theme.colors.textPrimary}
             style={{ paddingLeft: 15 }}
             onPress={() => alert('This is a showcase app.')}
           />
@@ -29,16 +31,16 @@ const BottomTabShowcase = () => {
           <Entypo
             name="menu"
             size={30}
-            color="black"
+            color={theme.colors.textPrimary}
             style={{ paddingRight: 15 }}
             onPress={() => alert('This is a showcase app.')}
           />
         ),
-        tabBarActiveTintColor: '#77C273',
-        tabBarInactiveTintColor: '#0C0C0C',
+        tabBarActiveTintColor: theme.colors.accent,
+        tabBarInactiveTintColor: theme.colors.textPrimary,
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: theme.colors.background,
           borderTopWidth: 1,
           height: 70,
           paddingBottom: 5,
@@ -72,7 +74,7 @@ const BottomTabShowcase = () => {
           tabBarIcon: ({ color }) => (
             <View
               style={{
-                backgroundColor: '#77C273',
+                backgroundColor: theme.colors.accent,
                 width: 60,
                 height: 60,
                 borderRadius: 30,
@@ -86,7 +88,7 @@ const BottomTabShowcase = () => {
                 shadowRadius: 4,
                 elevation: 5,
               }}>
-              <Feather name="camera" size={32} color="white" />
+              <Feather name="camera" size={32} color={theme.colors.textSecondary} />
             </View>
           ),
           tabBarItemStyle: {

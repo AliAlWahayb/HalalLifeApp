@@ -1,73 +1,112 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { Image } from 'expo-image';
-
-const dynamicFontSize = (text: string) => {
-  const length = text.length;
-  if (length < 8) {
-    return 'text-xl'; // Large font for short text
-  } else if (length >= 8 && length < 21) {
-    return 'text-md'; // Medium font for medium-length text
-  } else {
-    return 'text-sm'; // Smaller font for long text
-  }
-};
-
-const statusColor = (status: string) => {
-  if (status === 'Halal') return '#77C273';
-  if (status === 'Haram') return '#F76666';
-  if (status === 'Unknown') return '#F7B766';
-  return '#6B7280';
-};
+import { View, Text, Pressable, Image } from 'react-native';
+import React, { useState, useCallback, memo, useMemo } from 'react';
+import { useTheme } from 'themes/ThemeProvider';
+import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-const Card = ({
-  Name,
-  img,
-  Source,
-  Status,
-}: {
+/**
+ * Product card props interface
+ */
+interface CardProps {
+  /** Product name */
   Name: string;
-  img: string;
+  /** Product image source */
+  img: any;
+  /** Source of the product data */
   Source: string;
-  Status: string;
-}) => {
-  const handlePress = () => {
-    console.log(Name);
-  };
+  /** Halal status of the product */
+  Status: 'Halal' | 'Haram' | 'Unknown' | string;
+}
+
+/**
+ * Product card component for the search results
+ */
+const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
+  const navigation = useNavigation();
+  const { theme, globalColors } = useTheme();
+  const [imageError, setImageError] = useState(false);
+
+  const handlePress = useCallback(() => {
+    // Navigate to product details
+    console.log(`Pressed on product: ${Name}`);
+  }, [Name]);
+
+  const getStatusColor = useMemo(() => {
+    switch (Status) {
+      case 'Halal':
+        return globalColors.Halal;
+      case 'Haram':
+        return globalColors.Haram;
+      case 'Unknown':
+        return globalColors.Unknown;
+      default:
+        return theme.colors.textMuted;
+    }
+  }, [Status, globalColors, theme.colors.textMuted]);
+
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
+    <Pressable
       onPress={handlePress}
-      className="m-3 flex flex-row rounded-2xl bg-white p-4 shadow-2xl shadow-black">
-      <View className="flex min-w-[50%] flex-col gap-2 p-2">
-        <Text className={`text-black ${dynamicFontSize(Name)} text-wrap`}>{Name}</Text>
-        <Text className={`text-gray-500 ${dynamicFontSize(Source)} text-wrap`}>{Source}</Text>
-        <View
-          style={{ backgroundColor: statusColor(Status), height: 40, width: '66%' }}
-          className=" items-center justify-center rounded-2xl">
-          <Text className="text-lg font-semibold text-white">{Status}</Text>
+      className="mb-3 w-full overflow-hidden rounded-xl "
+      style={{
+        borderColor: theme.colors.textMuted,
+        shadowColor: theme.colors.textPrimary,
+      }}>
+      <View className="flex-row p-3">
+        <View className="mr-3 h-20 w-20 items-center justify-center overflow-hidden rounded-lg">
+          {!img || imageError ? (
+            <FontAwesome5
+              name="shopping-bag"
+              size={30}
+              color={theme.colors.textMuted}
+              className="opacity-70"
+            />
+          ) : (
+            <Image
+              source={img}
+              className="h-full w-full"
+              style={{
+                resizeMode: 'contain',
+              }}
+              onError={handleImageError}
+              alt={`${Name} image`}
+            />
+          )}
+        </View>
+
+        <View className="flex-1 justify-between">
+          <View>
+            <Text
+              className="text-lg font-medium text-textPrimary"
+              adjustsFontSizeToFit
+              numberOfLines={1}>
+              {Name}
+            </Text>
+            <Text className="mt-1 text-sm text-textMuted" numberOfLines={1}>
+              {Source}
+            </Text>
+          </View>
+
+          <View className="mb-0.5 mt-2 flex-row items-center">
+            <View
+              className="flex-row items-center rounded-full px-3 py-1"
+              style={{
+                backgroundColor: getStatusColor,
+              }}>
+              <Text className="text-md font-medium text-textSecondary">{Status}</Text>
+            </View>
+          </View>
         </View>
       </View>
-      <View className="items-center justify-center rounded-xl px-2">
-        <Image
-          source={img}
-          placeholder={{ blurhash }}
-          contentFit="contain"
-          transition={1000}
-          style={{
-            width: '100%',
-            height: 60,
-            aspectRatio: 2,
-          }}
-          alt={Name}
-        />
-      </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
-export default Card;
+export default memo(Card);
