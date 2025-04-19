@@ -5,7 +5,8 @@
     "version": "1.0.0",
     "newArchEnabled": true,
     "web": {
-      "favicon": "./assets/IconAndSplash/Light.png"
+      "favicon": "./assets/IconAndSplash/Light.png",
+      "bundler": "metro"
     },
     "experiments": {
       "tsconfigPaths": true
@@ -30,7 +31,9 @@
           },
           "imageWidth": 200
         }
-      ]
+      ],
+      "expo-facebook",
+      "expo-secure-store"
     ],
     "orientation": "portrait",
     "icon": "./assets/IconAndSplash/Light.png",
@@ -40,7 +43,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#058F40"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -56,6 +61,10 @@
         "android.permission.RECORD_AUDIO"
       ],
       "package": "com.anonymous.HalalLifeApp"
-    }
+    },
+    "scheme": [
+      "HalalLifeApp",
+      "fb1070907185073532"
+    ]
   }
 }
