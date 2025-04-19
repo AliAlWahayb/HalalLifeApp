@@ -6,6 +6,7 @@ import { AuthContext } from '../../context/Auth-context';
 import { useForm } from '../../hooks/form-hooks';
 import { VALIDATOR_REQUIRE } from '../../util/Validators';
 import VerifyCom from '../../components/Users/components/VerifyCom';
+import VerifyCom3 from './com/VerifyCom3';
 
 
 const ChangeUnami = ({ goBack }) => {
@@ -43,7 +44,7 @@ const ChangeUnami = ({ goBack }) => {
         className="mb-4 rounded-lg border border-primary p-4"
       />
 
-      <VerifyCom onVerify={(code) => console.log('Verified Code:', code)} />
+      <VerifyCom3 onVerify={(code) => console.log('Verified Code:', code)} />
 
       <View className="mt-12 items-center">
         <Buttons
