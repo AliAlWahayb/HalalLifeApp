@@ -11,6 +11,7 @@ const Scanner = () => {
   useEffect(() => {
     requestPermission();
   }, []);
+  
 
   const isPermissionGranted = permissions?.granted;
 

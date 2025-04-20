@@ -72,7 +72,7 @@ const Halal: React.FC = () => {
             source={data[0].img}
             placeholder={{ blurhash }}
             contentFit="contain"
-            className="aspect-[1.5] h-[150px] w-1/2"
+            style={{ width: '50%', height: 150, aspectRatio: 1.5 }}
             alt="product image"
           />
         </View>

@@ -25,7 +25,7 @@ const Accordion = ({ title, number, children }: AccordionProps) => {
         className="flex flex-row items-center justify-between px-2 py-3 ">
         <View className="flex flex-row items-center gap-2">
           <Text className="text-2xl font-bold">{title}</Text>
-          {number && <Text className="text-2xl font-bold">{number}</Text>}
+          {number && <Text className="text-xl">{number}</Text>}
         </View>
         <MaterialIcons
           name={collapsed ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
