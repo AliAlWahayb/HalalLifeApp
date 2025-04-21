@@ -63,8 +63,8 @@ const NutritionRow = ({
   unit: string;
 }) => (
   <View className="flex-row justify-between border-b border-gray-200 py-1">
-    <Text className="text-base font-medium">{label}</Text>
-    <Text className="text-base">
+    <Text className="text-base font-medium text-textPrimary">{label}</Text>
+    <Text className="text-base text-textPrimary">
       {value} {unit}
     </Text>
   </View>
@@ -73,9 +73,13 @@ const NutritionRow = ({
 // Helper component for details row
 const DetailRow = ({ label, value }: { label: string; value: React.ReactNode }) => (
   <View className="flex-row justify-between py-1">
-    <Text className="font-bold">{label}:</Text>
+    <Text className="font-bold text-textPrimary">{label}:</Text>
     <View className="ml-2 flex-1 items-end">
-      {typeof value === 'string' ? <Text className="text-right">{value}</Text> : value}
+      {typeof value === 'string' ? (
+        <Text className="text-right text-textPrimary">{value}</Text>
+      ) : (
+        value
+      )}
     </View>
   </View>
 );
@@ -386,17 +390,25 @@ const ProductInfo: React.FC<{ productData: ProductData }> = ({ productData }) =>
           <Accordion key="nutrition" title="Nutritional Facts" number={nutrients.length}>
             <View className="">
               <Text className="mb-2 text-lg font-bold">Per Serving</Text>
-              {nutrients.map(
-                (nutrient, index) =>
-                  nutrient.value !== '0' && (
-                    <NutritionRow
-                      key={index}
-                      label={nutrient.name}
-                      value={nutrient.value}
-                      unit={nutrient.unit}
-                    />
-                  )
-              )}
+              {nutrients
+                .filter((nutrient) => nutrient.value !== '0')
+                .sort((a, b) => {
+                  const valueA = typeof a.value === 'string' ? parseFloat(a.value) : a.value;
+                  const valueB = typeof b.value === 'string' ? parseFloat(b.value) : b.value;
+
+                  const numA = Number.isNaN(valueA) ? -Infinity : valueA;
+                  const numB = Number.isNaN(valueB) ? -Infinity : valueB;
+
+                  return numB - numA;
+                })
+                .map((nutrient, index) => (
+                  <NutritionRow
+                    key={`${nutrient.name}-${index}`}
+                    label={nutrient.name.charAt(0).toUpperCase() + nutrient.name.slice(1)}
+                    value={nutrient.value}
+                    unit={nutrient.name === 'energy' ? 'kj' : nutrient.unit}
+                  />
+                ))}
             </View>
           </Accordion>
         </View>
