@@ -1,35 +1,31 @@
 from fastapi import APIRouter, HTTPException, status
+from app.Functions.HalalCheck import get_status, get_status_id
 from app.database.database import SessionDep
-from typing import Optional
-from sqlmodel import SQLModel, Field, select
+from sqlmodel import select
 
-class status_code(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    status_nm: str = Field(index=True)
+from app.schemas.HalalCheck import the_status
+
 
 
 
 router = APIRouter()
 
 
-@router.get("/" , status_code=status.HTTP_200_OK , response_model=list[status_code])
-def get_status(
+@router.get("/" , status_code=status.HTTP_200_OK , response_model=list[the_status], summary="Get all status" ,description="Get all status from the sqlite database")
+def get_status_endpoint(
     session: SessionDep,
 ): 
-    statement = select(status_code)
-    query = session.exec(statement).all()
-    if query is None:
+    status_list = get_status(session)
+    if not status_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Status not found")
-    return query
+    return status_list
 
-@router.get("/{status_name}", status_code=status.HTTP_200_OK , response_model=status_code)
-def get_status_id(
+@router.get("/{status_name}", status_code=status.HTTP_200_OK , response_model=the_status, summary="Get status by name" ,description="Get status by name from the sqlite database")
+def get_status_id_endpoint(
     session: SessionDep,
     status_name: str
 ): 
-    statement = select(status_code).where(status_code.status_nm.ilike(status_name))
-    query = session.exec(statement).first()
-    if query is None:
+    status_id = get_status_id(session, status_name)
+    if not status_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Status not found")
-    return query
-
+    return status_id

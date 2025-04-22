@@ -1,6 +1,6 @@
 # database.py
-from typing import Optional, Annotated
-from sqlmodel import SQLModel, Field, create_engine, Session
+from typing import Annotated
+from sqlmodel import SQLModel, create_engine, Session
 from fastapi import Depends
 
 

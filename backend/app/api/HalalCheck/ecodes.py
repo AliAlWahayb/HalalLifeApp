@@ -1,68 +1,47 @@
 from fastapi import APIRouter, HTTPException, Query, status
-from app.api.HalalCheck.status import status_code
+from app.Functions.HalalCheck import *
 from app.database.database import SessionDep
-from typing import Optional, Annotated
-from sqlmodel import SQLModel, Field, or_, select
+from typing import Annotated
 
+from app.schemas.HalalCheck import ecodes
 
-
-class ecodes(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    ecode: str = Field(index=True)
-    ingredient_name: str = Field(index=True)
-    category: str = Field(index=True)
-    id_status: int = Field(index=True)
-    desc: str = Field(index=True)
 
 router = APIRouter()
 
-@router.get("/" , status_code=status.HTTP_200_OK , response_model=list[ecodes])
-def get_ecodes(
+@router.get("/" , status_code=status.HTTP_200_OK , response_model=list[ecodes] ,summary="Get all ecodes" ,description="Get all ecodes from the sqlite database")
+def get_ecodes_endpoint(
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 100,
-): 
-    statement = select(ecodes).offset(offset).limit(limit)
-    query = session.exec(statement).all()
-    if query is None:
+    limit: Annotated[int, Query()] = 100
+) -> list[ecodes]:
+    ecodes_list = get_ecodes_from_db(session, offset, limit)
+    if not ecodes_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ecodes not found")
-    return query
+    return ecodes_list
 
-@router.get("/halal", status_code=status.HTTP_200_OK , response_model=list[ecodes])
-def get_halal_ecodes(
+@router.get("/halal", status_code=status.HTTP_200_OK , response_model=list[ecodes] ,summary="Get all halal ecodes" ,description="Get all halal ecodes from the sqlite database")
+def get_halal_ecodes_endpoint(
     session: SessionDep,
 ): 
-    halal_status = select(status_code).where(status_code.status_nm.ilike("halal"))
-    query = session.exec(halal_status).first()
-    statement = select(ecodes).where(ecodes.id_status == query.id)
-    query = session.exec(statement).all()
-    if query is None:
+    halal_list = get_halal_ecodes(session)
+    if not halal_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ecodes not found")
-    return query
+    return halal_list
 
-@router.get("/haram", status_code=status.HTTP_200_OK , response_model=list[ecodes])
-def get_haram_ecodes(
+@router.get("/haram", status_code=status.HTTP_200_OK , response_model=list[ecodes], summary="Get all haram ecodes" ,description="Get all haram ecodes from the sqlite database")
+def get_haram_ecodes_endpoint(
     session: SessionDep,
 ): 
-    haram_status = select(status_code).where(status_code.status_nm.ilike("haram"))
-    query = session.exec(haram_status).first()
-    statement = select(ecodes).where(ecodes.id_status == query.id)
-    query = session.exec(statement).all()
-    if query is None:
+    haram_list = get_haram_ecodes(session)
+    if not haram_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ecodes not found")
-    return query
+    return haram_list
 
-@router.get("/unknown", status_code=status.HTTP_200_OK , response_model=list[ecodes])
-def get_unknown_ecodes(
+@router.get("/unknown", status_code=status.HTTP_200_OK , response_model=list[ecodes], summary="Get all unknown ecodes" ,description="Get all unknown ecodes from the sqlite database")
+def get_unknown_ecodes_endpoint(
     session: SessionDep,
-): 
-    unknown_status = select(status_code).where(or_(
-        status_code.status_nm.ilike("Mushbooh"),
-        status_code.status_nm.ilike("Depends")
-    ))
-    query = session.exec(unknown_status).all()
-    statement = select(ecodes).where(ecodes.id_status.in_([status.id for status in query]))
-    query = session.exec(statement).all()
-    if query is None:
+) -> list[ecodes]: 
+    unknown_list = get_unknown_ecodes(session)
+    if not unknown_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ecodes not found")
-    return query
+    return unknown_list
