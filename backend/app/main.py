@@ -3,14 +3,22 @@ from app.api.HalalCheck import ecodes, ingredients, status
 from app.api.Products import Products
 from app.api.controllers import phone_auth, users
 from app.database.database import create_db_and_tables
+
+
 import app.firebase
 
 
-app = FastAPI()
+app = FastAPI(
+    title="HalalLife API",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    version="1.0.0",
+)
 
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
+
 
 
 

@@ -1,6 +1,9 @@
+import json
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import HTTPException, Query, logger , status
+import httpx
 from sqlmodel import or_, select
 from app.database.database import SessionDep
 from app.schemas.HalalCheck import ecodes, ingredient, the_status
@@ -107,3 +110,171 @@ def get_status_id(
     result = session.exec(statement).first()
     
     return result
+
+
+# async def get_from_openfoodfacts(barcode):
+#     try:
+#         # Step 1: Call external API
+#         async with httpx.AsyncClient() as client:
+#             response = await client.get(f"https://world.openfoodfacts.org/api/v3/product/{barcode}.json")
+            
+#             # Step 2: Check for successful response
+#             if response.status_code != 200:
+#                 raise HTTPException(
+#                     status_code=response.status_code,
+#                     detail="External API request failed"
+#                 )
+            
+#             # Step 3: Process the data
+#             external_data = response.json()
+#             processed_data = {
+#                 **external_data,
+#                 "processed": True,
+#                 "new_field": "additional_info"
+#             }
+            
+#             # Step 4: Return modified data
+#             return processed_data
+            
+#     except httpx.RequestError as e:
+#         # Handle connection errors
+#         raise HTTPException(
+#             status_code=503,
+#             detail="Service unavailable: Could not connect to external API"
+#         )
+
+
+def check_halal(data):
+    
+    # Clean and prepare ingredients list
+    ingredients_tags = [
+        tag.lower() for tag in data.get("_keywords", [])
+    ]
+    
+    halal_keywords = [
+        "vegan","halal-certified", "halal"
+    ]  
+    
+    # Prepare result
+    result = {
+        "halal_status": "halal",
+        "total_ingredients_checked": len(ingredients_tags)
+    }
+
+    # Check against both lists
+    for ingredient in ingredients_tags:
+        if ingredient in halal_keywords :
+            return result
+    
+    return None
+
+def check_haram(data, session: SessionDep):
+    haram_ingredients = []
+    
+    # Clean and prepare ingredients list
+    ingredients_tags = [
+        tag.split(":")[1].lower() 
+        for tag in data.get("ingredients_original_tags", [])
+    ]
+    
+    # Get haram lists from database
+    haram_ingredients_list = [item.lower() for item in get_haram_ingredients(session)]
+    haram_ecodes_list = [item.lower() for item in get_haram_ecodes(session)]
+    
+    # Check against both lists
+    for ingredient in ingredients_tags:
+        if ingredient in haram_ingredients_list or ingredient in haram_ecodes_list:
+            haram_ingredients.append(ingredient)
+    
+    # Prepare result
+    result = {
+        "halal_status": "haram",
+        "haram_ingredients_found": haram_ingredients,
+        "total_ingredients_checked": len(ingredients_tags)
+    }
+    
+    if haram_ingredients:
+        return result
+    
+    return None
+
+def check_unknown(data, session: SessionDep ):
+    unknown_ingredients = []
+    
+    # Clean and prepare ingredients list
+    ingredients_tags = [
+        tag.split(":")[1].lower() 
+        for tag in data.get("ingredients_original_tags", [])
+    ]
+    
+    # Get unknown lists from database
+    unknown_ingredients_list = [item.lower() for item in get_unknown_ingredients(session)]
+    unknown_ecodes_list = [item.lower() for item in get_unknown_ecodes(session)]
+    
+    # Check against both lists
+    for ingredient in ingredients_tags:
+        if ingredient in unknown_ingredients_list or ingredient in unknown_ecodes_list:
+            unknown_ingredients.append(ingredient)
+    
+    # Prepare result
+    result = {
+        "halal_status": "unknown",
+        "unknown_ingredients_found": unknown_ingredients,
+        "total_ingredients_checked": len(ingredients_tags)
+    }
+    
+    if unknown_ingredients:
+        return result
+    
+    return None
+
+
+def check_all(data, session: SessionDep):
+    halal_result = check_halal(data)
+    haram_result = check_haram(data, session)
+    unknown_result = check_unknown(data, session)
+    
+    if halal_result:
+        return halal_result
+    
+    if haram_result:
+        return haram_result
+    
+    if unknown_result:
+        return unknown_result
+    
+
+
+def get_from_openfoodfacts_offline(session: SessionDep):
+    file_path = "app/Functions/737628064502.json"
+    try:
+        # Step 1: Read the file
+        file_path = Path(file_path)
+        if not file_path.exists():
+            raise HTTPException(status_code=404, detail="File not found")
+
+        # Step 2: Load JSON content
+        with open(file_path, 'r', encoding='utf-8') as f:
+            local_data = json.load(f)
+
+
+        analysis_result = check_all(local_data, session)
+
+
+        # Step 3: Process the data (same as API example)
+        processed_data = {
+            **local_data,
+            "processed": True,
+            "halal_analysis": analysis_result
+        }
+
+        # Optional: Write back modified data
+        # with open(file_path, 'w', encoding='utf-8') as f:
+        #     json.dump(processed_data, f, indent=2)
+
+        return processed_data
+
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON format")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
