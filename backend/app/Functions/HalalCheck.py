@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Iterable, List, Set
 
 from fastapi import HTTPException, Query, logger , status
 import httpx
@@ -10,7 +10,42 @@ from app.schemas.HalalCheck import ecodes, ingredient, the_status
 
 #to get a specific column
 def extract_column_values(column_name: str, results: list[SQLModel]) -> list[str]:
-    return [getattr(item, column_name) for item in results]
+    return [getattr(item, column_name).lower() for item in results]
+
+# def find_matching_items(items_to_check: Iterable[str],
+#                         *reference_lists: Iterable[str]) -> list[str]:
+  
+#     combined_reference_set: Set[str] = set()
+#     for ref_list in reference_lists:
+#         combined_reference_set.update(ref_list)
+
+#     return [item for item in items_to_check if item in combined_reference_set]
+
+def find_matching_items(
+    items_to_check: Iterable[str],
+    *reference_lists: Iterable[str]
+) -> List[str]:
+
+    combined_reference_set_lower: Set[str] = set()
+    for ref_list in reference_lists:
+        for item in ref_list:
+            if item and isinstance(item, str):
+                 combined_reference_set_lower.add(item.lower())
+            # Optionally handle non-string items or None if necessary
+            # else:
+            #    print(f"Warning: Skipping non-string item in reference list: {item}")
+
+    matched_items: List[str] = []
+    for item in items_to_check:
+        if item and isinstance(item, str):
+            if item.lower() in combined_reference_set_lower:
+                matched_items.append(item)
+        # Optionally handle non-string items or None in items_to_check
+        # else:
+        #    print(f"Warning: Skipping non-string item in items_to_check: {item}")
+
+    return matched_items
+
 
 
 def get_ecodes_from_db(
@@ -72,6 +107,7 @@ def get_halal_ingredients(
     result = session.exec(halal_status).first()
     statement = select(ingredient).where(ingredient.id_status == result.id)
     result = session.exec(statement).all()
+
 
     return result
 
@@ -166,15 +202,13 @@ def check_halal(data):
         "total_ingredients_checked": len(ingredients_tags)
     }
 
-    # Check against both lists
-    for ingredient in ingredients_tags:
-        if ingredient in halal_keywords :
-            return result
+    Match = find_matching_items(ingredients_tags, halal_keywords)
+    if Match:
+        return result
     
     return None
 
 def check_haram(data, session: SessionDep):
-    haram_ingredients = []
     
     # Clean and prepare ingredients list
     ingredients_tags = [
@@ -183,28 +217,24 @@ def check_haram(data, session: SessionDep):
     ]
     
     # Get haram lists from database
-    haram_ingredients_list = [item.lower() for item in get_haram_ingredients(session)]
-    haram_ecodes_list = [item.lower() for item in get_haram_ecodes(session)]
+    haram_ingredients_list = extract_column_values("ingredient_name", get_haram_ingredients(session))
+    haram_ecodes_list = extract_column_values("ecode", get_haram_ecodes(session))
     
-    # Check against both lists
-    for ingredient in ingredients_tags:
-        if ingredient in haram_ingredients_list or ingredient in haram_ecodes_list:
-            haram_ingredients.append(ingredient)
+    Match = find_matching_items(ingredients_tags, haram_ingredients_list, haram_ecodes_list)
     
     # Prepare result
     result = {
         "halal_status": "haram",
-        "haram_ingredients_found": haram_ingredients,
+        "haram_ingredients_found": Match,
         "total_ingredients_checked": len(ingredients_tags)
     }
     
-    if haram_ingredients:
+    if Match:
         return result
     
     return None
 
 def check_unknown(data, session: SessionDep ):
-    unknown_ingredients = []
     
     # Clean and prepare ingredients list
     ingredients_tags = [
@@ -213,22 +243,21 @@ def check_unknown(data, session: SessionDep ):
     ]
     
     # Get unknown lists from database
-    unknown_ingredients_list = [item.lower() for item in get_unknown_ingredients(session)]
-    unknown_ecodes_list = [item.lower() for item in get_unknown_ecodes(session)]
+    unknown_ingredients_list = extract_column_values("ingredient_name", get_unknown_ingredients(session))
+    unknown_ecodes_list = extract_column_values("ecode", get_unknown_ecodes(session))
+
+
     
-    # Check against both lists
-    for ingredient in ingredients_tags:
-        if ingredient in unknown_ingredients_list or ingredient in unknown_ecodes_list:
-            unknown_ingredients.append(ingredient)
+    Match = find_matching_items(ingredients_tags, unknown_ingredients_list, unknown_ecodes_list)
     
     # Prepare result
     result = {
         "halal_status": "unknown",
-        "unknown_ingredients_found": unknown_ingredients,
+        "unknown_ingredients_found": Match,
         "total_ingredients_checked": len(ingredients_tags)
     }
     
-    if unknown_ingredients:
+    if Match:
         return result
     
     return None
