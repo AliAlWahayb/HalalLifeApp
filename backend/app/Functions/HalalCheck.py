@@ -211,6 +211,8 @@ def check_all(data, session: SessionDep):
     ingredients_tags = extract_json_list_values(data, ["product", "ingredients_original_tags"])
     ingredients_tags = clean_data(ingredients_tags)
 
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found" ,headers={"X-Error": "Product not found"})
     return {
         "halal_status": "Failed",
         "halal_analysis": ingredients_tags
@@ -219,7 +221,7 @@ def check_all(data, session: SessionDep):
 
 
 def get_from_openfoodfacts_offline(session: SessionDep):
-    file_path = "app/Functions/0037600104029.json"
+    file_path = "./0850020783786.json"
     try:
         # Step 1: Read the file
         file_path = Path(file_path)

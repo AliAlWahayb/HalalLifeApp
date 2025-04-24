@@ -61,21 +61,6 @@ def find_matching_items(
 from typing import Dict, Any, List
 
 def extract_json_list_values(data: Dict[str, Any], path: List[str]) -> List[str]:
-    """
-    Extract list values from a nested JSON structure using a specified path
-    
-    Args:
-        data: The JSON data dictionary
-        path: List of keys representing the nested path (e.g., ["product", "additives_original_tags"])
-    
-    Returns:
-        List of lowercase string values from the specified nested list
-    
-    Example:
-        >>> data = {"product": {"additives_original_tags": ["en:e301", "en:e250"]}}
-        >>> extract_nested_json_list_values(data, ["product", "additives_original_tags"])
-        ["en:e301", "en:e250"]
-    """
     current_level = data
     try:
         # Traverse the path except the last element
