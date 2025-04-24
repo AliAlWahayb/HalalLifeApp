@@ -22,3 +22,7 @@ class ingredient(SQLModel, table=True):
     ingredient_name: str = Field(index=True)
     id_status: int = Field(index=True)
     desc: str = Field(index=True)
+
+#response model to only return the ingredient name
+# class IngredientNameResponse(SQLModel):
+#     ingredient_name: str

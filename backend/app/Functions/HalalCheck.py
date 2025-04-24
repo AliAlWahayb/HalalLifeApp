@@ -4,9 +4,13 @@ from typing import Annotated
 
 from fastapi import HTTPException, Query, logger , status
 import httpx
-from sqlmodel import or_, select
+from sqlmodel import SQLModel, or_, select
 from app.database.database import SessionDep
 from app.schemas.HalalCheck import ecodes, ingredient, the_status
+
+#to get a specific column
+def extract_column_values(column_name: str, results: list[SQLModel]) -> list[str]:
+    return [getattr(item, column_name) for item in results]
 
 
 def get_ecodes_from_db(
@@ -78,6 +82,7 @@ def get_haram_ingredients(
     result = session.exec(haram_status).first()
     statement = select(ingredient).where(ingredient.id_status == result.id)
     result = session.exec(statement).all()
+
     
     return result
 
