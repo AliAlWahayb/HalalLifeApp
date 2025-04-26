@@ -42,7 +42,7 @@ type RootStackParamList = {
   PostDetail: { post: any };
   Feed: undefined;
   EditProfile: undefined;
-  AccountSettings: undefined;
+  UserSettings: undefined; // Change AccountSettings to UserSettings
   Preferences: undefined;
 };
 
@@ -116,7 +116,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ route, navigation }) => {
   const showProfileOptions = () => {
     // In a real app, you might show an action sheet or modal here
     // For now, navigate directly to account settings
-    navigation.navigate('AccountSettings');
+    navigation.navigate('UserSettings');
   };
   
   const navigateToEditProfile = () => {
@@ -537,4 +537,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserProfile; 
+export default UserProfile;

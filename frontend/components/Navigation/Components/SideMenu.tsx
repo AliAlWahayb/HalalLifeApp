@@ -99,6 +99,17 @@ const SideMenu: React.FC<SideMenuProps> = ({ modalVisible, setModalVisible }) =>
       label: 'Favorites',
     },
     {
+      id: 'UserSettings',
+      icon: (isActive) => (
+        <FontAwesome5
+          name="cog"
+          size={IconSize}
+          color={isActive ? activeColor : inactiveColor}
+        />
+      ),
+      label: 'Account Settings',
+    },
+    {
       id: 'Profile',
       icon: (isActive) => (
         <FontAwesome5
