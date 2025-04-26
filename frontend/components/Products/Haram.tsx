@@ -11,6 +11,7 @@ import Details from './Components/Details';
 import Hero from './Components/Hero';
 import AlternativeCarousel from 'components/Shared/Carousel/AlternativeCarousel';
 import Why from './Components/Why';
+import { useRoute } from '@react-navigation/native';
 
 // Interfaces
 interface ProductData {
@@ -51,9 +52,16 @@ interface ProductData {
   };
 }
 
-const Haram: React.FC<{ productData: ProductData }> = ({ productData }) => {
+interface Props {
+  productData: ProductData;
+  halalStatus: string;
+  haram_ingredients_found: string[];
+}
+
+const Haram = () => {
   const { theme } = useTheme();
-  const { product } = productData;
+  const route = useRoute();
+  const { productData, haram_ingredients_found } = route.params as Props;
 
   const alternatives = [
     {
@@ -87,17 +95,17 @@ const Haram: React.FC<{ productData: ProductData }> = ({ productData }) => {
         <Text className="text-3xl font-bold text-Haram">Haram</Text>
       </View>
       <View className="w-5/6 py-2">
-        <Hero product={product} />
+        <Hero product={productData} />
         <View className="flex flex-col py-5">
-          <Details product={product} />
+          <Details product={productData} />
 
-          <Ingredients product={product} />
+          <Ingredients product={productData} />
 
-          <Additives product={product} />
+          <Additives product={productData} />
 
-          <Nutritional product={product} />
+          <Nutritional product={productData} />
 
-          <Why product={product} />
+          {/* <Why product={haram_ingredients_found} /> */}
         </View>
       </View>
       <View className="mb-5 flex h-36 w-full flex-col gap-3 ">

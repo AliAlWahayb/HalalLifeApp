@@ -16,18 +16,9 @@ const CameraView = () => {
     <View className="flex-1">
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Scanner">
         <Stack.Screen name="Scanner" component={Scanner} />
-        <Stack.Screen
-          name="Halal"
-          children={(props) => <Halal {...props} productData={Default} />}
-        />
-        <Stack.Screen
-          name="Haram"
-          children={(props) => <Haram {...props} productData={Default} />}
-        />
-        <Stack.Screen
-          name="Unknown"
-          children={(props) => <Unknown {...props} productData={Default} />}
-        />
+        <Stack.Screen name="Halal" component={Halal} />
+        <Stack.Screen name="Haram" component={Haram} />
+        <Stack.Screen name="Unknown" component={Unknown} />
         <Stack.Screen name="NotFound" component={NotFound} />
       </Stack.Navigator>
     </View>

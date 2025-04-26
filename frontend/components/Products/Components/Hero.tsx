@@ -5,8 +5,8 @@ import { Image } from 'expo-image';
 const Hero = ({ product }: { product: any }) => {
   // Get the front image URL
   const frontImageUrl = useMemo(() => {
-    return product.selected_images?.front?.display?.en || null;
-  }, [product.selected_images]);
+    return product.image_url || null;
+  }, [product.image_url]);
 
   // Define the blurhash value for image placeholder
   const blurhash =
@@ -33,7 +33,7 @@ const Hero = ({ product }: { product: any }) => {
         <Text
           className="flex-wrap pt-2 text-center text-2xl font-bold text-textPrimary"
           adjustsFontSizeToFit>
-          {product.product_name_en}
+          {product.product_name}
         </Text>
       </View>
     </>

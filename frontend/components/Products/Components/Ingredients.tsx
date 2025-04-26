@@ -8,7 +8,7 @@ const Ingredients = ({ product }: { product: any }) => {
   const { theme } = useTheme();
   // Recursive ingredient formatter
   type Ingredient = {
-    text: string;
+    id: string;
     percent_estimate?: number;
     ingredients?: Ingredient[];
   };
@@ -30,7 +30,7 @@ const Ingredients = ({ product }: { product: any }) => {
           const hasNested = !!item.ingredients?.length;
 
           acc.push({
-            name: item.text,
+            name: item.id.split(':')[1],
             estimation: item.percent_estimate
               ? `${Math.round(item.percent_estimate * 100) / 100}%`
               : 'Unknown%',

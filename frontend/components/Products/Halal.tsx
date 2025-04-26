@@ -1,14 +1,15 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useRoute } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
-import ProductButtons from './Components/ProductButtons';
-import Nutritional from './Components/Nutritional';
 import Additives from './Components/Additives';
-import Ingredients from './Components/Ingredients';
 import Details from './Components/Details';
 import Hero from './Components/Hero';
+import Ingredients from './Components/Ingredients';
+import Nutritional from './Components/Nutritional';
+import ProductButtons from './Components/ProductButtons';
 
 // Interfaces
 interface ProductData {
@@ -49,9 +50,15 @@ interface ProductData {
   };
 }
 
-const Halal: React.FC<{ productData: ProductData }> = ({ productData }) => {
+interface Props {
+  productData: ProductData;
+  halalStatus: string;
+}
+
+const Halal = () => {
   const { theme, globalColors } = useTheme();
-  const { product } = productData;
+  const route = useRoute();
+  const { productData } = route.params as Props;
 
   return (
     <ScrollView className="flex-1 bg-background py-5" contentContainerClassName="items-center">
@@ -66,15 +73,15 @@ const Halal: React.FC<{ productData: ProductData }> = ({ productData }) => {
         </Text>
       </View>
       <View className="w-5/6 py-2">
-        <Hero product={product} />
+        <Hero product={productData} />
         <View className="flex flex-col py-5">
-          <Details product={product} />
+          <Details product={productData} />
 
-          <Ingredients product={product} />
+          <Ingredients product={productData} />
 
-          <Additives product={product} />
+          <Additives product={productData} />
 
-          <Nutritional product={product} />
+          <Nutritional product={productData} />
         </View>
       </View>
       <ProductButtons />

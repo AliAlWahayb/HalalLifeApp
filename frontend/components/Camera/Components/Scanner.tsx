@@ -1,4 +1,6 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import { useNavigation } from '@react-navigation/native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import React, { useEffect, useState } from 'react';
 import {
@@ -10,11 +12,11 @@ import {
   TextInput,
 } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
+
 import { useProduct } from '../../../hooks/useProduct';
-import Buttons from 'components/Shared/Buttons/ButtonsSmall';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Scanner = () => {
+  const navigation = useNavigation();
   const [permissions, requestPermission] = useCameraPermissions();
   const [isScanning, setIsScanning] = useState(true); // Renamed for clarity
   const [barcode, setBarcode] = useState('');
@@ -23,7 +25,7 @@ const Scanner = () => {
   const [isManualInputVisible, setIsManualInputVisible] = useState(false);
 
   // Use proper typing for React Query hooks
-  const { data, isLoading, isError, error, refetch } = useProduct(barcode);
+  const { data, isLoading, isError, error, isSuccess, refetch } = useProduct(barcode);
 
   useEffect(() => {
     requestPermission();
@@ -39,7 +41,7 @@ const Scanner = () => {
     // Reset scanner after 8 seconds
     setTimeout(() => {
       setIsScanning(true);
-    }, 2000);
+    }, 20);
   };
 
   const handleManualSubmit = () => {
@@ -57,17 +59,45 @@ const Scanner = () => {
     }
   }, [barcode]);
 
-  const redirectToProduct = (CheckData: any) => {
-    if (CheckData.halal_analysis.halal_status === 'halal') {
-      console.log('Product is halal');
+  useEffect(() => {
+    if (isSuccess) {
+      redirectToProduct();
+    }
+  }, [isSuccess]);
+
+  const redirectToProduct = () => {
+    if (data.halal_analysis.halal_status === 'halal') {
+      console.log(data.halal_analysis.halal_status);
+      console.log(data.product);
+      (navigation.navigate as any)('Halal', {
+        productData: data.product,
+        halalStatus: data.halal_analysis.halal_status,
+        haram_ingredients_found: data.halal_analysis.haram_ingredients_found,
+      });
     }
 
-    if (CheckData.halal_analysis.halal_status === 'haram') {
-      console.log('Product is haram');
+    if (data.halal_analysis.halal_status === 'haram') {
+      console.log(data.halal_analysis.halal_status);
+      console.log(data.product);
+      (navigation.navigate as any)('Haram', {
+        productData: data.product,
+        halalStatus: data.halal_analysis.halal_status,
+        haram_ingredients_found: data.halal_analysis.haram_ingredients_found,
+      });
     }
 
-    if (CheckData.halal_analysis.halal_status === 'unknown') {
-      console.log('Product is unknown');
+    if (data.halal_analysis.halal_status === 'unknown') {
+      console.log(data.halal_analysis.halal_status);
+      console.log(data.product);
+      (navigation.navigate as any)('Unknown', {
+        productData: data.product,
+        halalStatus: data.halal_analysis.halal_status,
+        haram_ingredients_found: data.halal_analysis.haram_ingredients_found,
+      });
+    }
+    if (data.halal_analysis.halal_status === 'not found') {
+      console.log('Product is not found');
+      (navigation.navigate as any)('NotFound');
     }
   };
 
@@ -142,12 +172,12 @@ const Scanner = () => {
           </View>
         </View>
 
-        {data?.product && (
+        {/* {data?.product && (
           <View className="absolute bottom-0 w-full bg-white/80 p-4">
-            <Text className="text-lg font-bold">{data.product.halal_analysis}</Text>
+            <Text className="text-lg font-bold">{data.halal_analysis.halal_status}</Text>
             <Text className="text-sm">{data.product.brands}</Text>
           </View>
-        )}
+        )} */}
 
         {isError && (
           <View className="absolute bottom-0 w-full bg-red-100 p-4">

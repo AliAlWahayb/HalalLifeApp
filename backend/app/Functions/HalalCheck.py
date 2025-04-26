@@ -154,15 +154,31 @@ def check_haram(data, session: SessionDep):
     haram_ecodes_list = extract_column_values("ecode", get_haram_ecodes(session))
     
     Match = find_matching_items(ingredients_tags, haram_ingredients_list, haram_ecodes_list)
+
+
+    keywords_tags = extract_json_list_values(data, ["product", "_keywords"])
+
+    keywords_haram = [
+        "alcohol", "alcoholic", "alcoholica",
+        "pork", "pig", "swine",
+        "wine", "beer", "liquor",
+        "grape wine", "pig meat",
+    ]
     
+    Match2 = find_matching_items(keywords_tags, keywords_haram)
+
+    ingredients_found = Match + Match2
+
+    ingredients_checked = len(ingredients_tags) + len(keywords_tags)
+
     # Prepare result
     result = {
         "halal_status": "haram",
-        "haram_ingredients_found": Match,
-        "total_ingredients_checked": len(ingredients_tags)
+        "haram_ingredients_found": ingredients_found,
+        "total_ingredients_checked": ingredients_checked
     }
     
-    if Match:
+    if Match or Match2:
         return result
     
     return None
@@ -195,12 +211,29 @@ def check_unknown(data, session: SessionDep ):
     return None
 
 
+def Not_found(data):
+
+    ingredients_tags = extract_json_list_values(data, ["product", "ingredients_original_tags"])
+
+    # Prepare result
+    result = {
+        "halal_status": "not found",
+    }
+
+    if len(ingredients_tags) == 0:
+            return result
+    
+    return None
+
+
 def check_all(data, session: SessionDep):
     halal_result = check_halal(data)
     haram_result = check_haram(data, session)
     unknown_result = check_unknown(data, session)
+    Not_found_result = Not_found(data)
     
-    
+    if Not_found_result:
+        return Not_found_result
     
     if haram_result:
         return haram_result
@@ -215,10 +248,9 @@ def check_all(data, session: SessionDep):
     ingredients_tags = clean_data(ingredients_tags)
 
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found" )
+    # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found" )
     return {
-        "halal_status": "Failed",
-        "halal_analysis": ingredients_tags
+        "halal_status": "not found",
     }
     
 
