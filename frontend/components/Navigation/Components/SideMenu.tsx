@@ -1,5 +1,6 @@
 import { FontAwesome5, Fontisto, MaterialIcons, Octicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+// import profile from 'components/Profile/Profile';
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import {
   View,
@@ -96,6 +97,13 @@ const SideMenu: React.FC<SideMenuProps> = ({ modalVisible, setModalVisible }) =>
         <Fontisto name="favorite" size={IconSize} color={isActive ? activeColor : inactiveColor} />
       ),
       label: 'Favorites',
+    },
+    {
+      id: 'UserSettings',
+      icon: (isActive) => (
+        <FontAwesome5 name="cog" size={IconSize} color={isActive ? activeColor : inactiveColor} />
+      ),
+      label: 'Account Settings',
     },
     {
       id: 'Profile',

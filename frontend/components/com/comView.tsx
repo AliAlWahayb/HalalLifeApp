@@ -60,7 +60,7 @@ export type RootStackParamList = {
   Notifications: undefined;
   Search: undefined;
   EditProfile: undefined;
-  AccountSettings: undefined;
+  UserSettings: undefined; // Changed from AccountSettings to UserSettings
   Preferences: undefined;
 };
 
@@ -102,7 +102,7 @@ const ComView: React.FC = () => {
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
-        <Stack.Screen name="AccountSettings" component={AccountSettings} />
+        <Stack.Screen name="UserSettings" component={AccountSettings} />
         <Stack.Screen name="Preferences" component={Preferences} />
       </Stack.Navigator>
     </SafeAreaView>
