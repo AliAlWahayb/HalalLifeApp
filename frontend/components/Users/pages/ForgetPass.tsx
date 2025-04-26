@@ -8,6 +8,7 @@ import { VALIDATOR_EMAIL } from 'util/Validators';
 import Buttons from '../../Shared/components/FormElements/Buttons';
 import InputForm from '../../Shared/components/FormElements/InputForm';
 import Header from '../components/Header';
+import { API_BASE } from 'hooks/useProduct';
 
 const ForgetPass = () => {
   const navigation = useNavigation();
@@ -23,15 +24,37 @@ const ForgetPass = () => {
     false
   );
 
-  const authSubmitHandler = (event: any) => {
+  const authSubmitHandler = async () => {
     if (!formState.isValid) {
       Alert.alert('Invalid Input', 'Please enter a valid email address.', [{ text: 'OK' }]);
       return;
     }
-    Alert.alert('password Reset', `A reset link has been sent to ${formState.inputs.email.value}`, [
-      { text: 'OK', onPress: () => navigation.navigate('Auth' as never) },
-    ]);
+  
+    try {
+      const response = await fetch(`${API_BASE}/users/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formState.inputs.email.value,
+        }),
+      });
+  
+      const resData = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(resData.detail || 'Something went wrong!');
+      }
+  
+      Alert.alert('Password Reset', resData.message, [
+        { text: 'OK', onPress: () => navigation.navigate('Auth' as never) },
+      ]);
+    } catch (err) {
+      Alert.alert('Error', err.message);
+    }
   };
+  
 
   return (
     <View className="flex-1 items-center justify-center bg-white px-8">

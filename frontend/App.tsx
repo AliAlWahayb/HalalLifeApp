@@ -5,16 +5,22 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { ThemeProvider } from 'themes/ThemeProvider';
 import { withTheme } from 'util/withTheme';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+// Create a client
+const queryClient = new QueryClient();
 
 // Wrap your Navigation component with theme HOC
 const ThemedNavigation = withTheme(NavigationView);
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <NavigationContainer>
-        <ThemedNavigation />
-      </NavigationContainer>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <NavigationContainer>
+          <ThemedNavigation />
+        </NavigationContainer>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

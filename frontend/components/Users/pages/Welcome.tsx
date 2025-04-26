@@ -1,13 +1,61 @@
+import * as Google from 'expo-auth-session/providers/google';
+import * as Facebook from 'expo-auth-session/providers/facebook';
+import * as WebBrowser from 'expo-web-browser';
+import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, ImageBackground, TouchableOpacity, Image } from 'react-native';
-
 import FacebookImage from '../../../assets/Social/FacebookImge.png';
 import GoogleImage from '../../../assets/Social/GoogleImge.png';
 import WelcomeImge from '../../../assets/Welcome/WelcomeImge.png';
-import Buttons from '../../Shared/components/FormElements/Buttons';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const Welcome = () => {
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
+
+  // Facebook Login
+  const [fbRequest, fbResponse, fbPromptAsync] = Facebook.useAuthRequest({
+    clientId: '1070907185073532',
+  });
+
+  // Google Login
+  const [googleRequest, googleResponse, googlePromptAsync] = Google.useAuthRequest({
+    clientId: '497137676414-lvkl90tf2eqjoscbm9us0qo2oetc234l.apps.googleusercontent.com',
+  });
+
+  // Handle Facebook login response
+  useEffect(() => {
+    if (fbResponse?.type === 'success' && fbResponse.authentication) {
+      (async () => {
+        const userInfoResponse = await fetch(
+          `https://graph.facebook.com/me?access_token=${fbResponse.authentication.accessToken}&fields=id,name,picture.type(large)`
+        );
+        const userInfo = await userInfoResponse.json();
+        setUser(userInfo);
+      })();
+    }
+  }, [fbResponse]);
+
+  // Handle Google login response
+  useEffect(() => {
+    if (googleResponse?.type === 'success' && googleResponse.authentication) {
+      fetch('http://127.0.0.1:8000/auth/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: googleResponse.authentication.accessToken }),
+      });
+    }
+  }, [googleResponse]);
+
+  // Facebook login press
+  const handleFacebookLogin = async () => {
+    const result = await fbPromptAsync();
+    if (result.type !== 'success') {
+      alert('Uh oh, something went wrong');
+      return;
+    }
+  };
 
   return (
     <ImageBackground
@@ -18,34 +66,38 @@ const Welcome = () => {
 
       <TouchableOpacity
         onPress={() => navigation.getParent()?.navigate('Navigation')}
-        className="absolute right-8 top-12  rounded-full bg-[#77C273] px-4 py-2">
-        <Text className="text-1xl  font-bold text-white ">skip</Text>
+        className="absolute right-8 top-12 rounded-full bg-[#77C273] px-4 py-2">
+        <Text className="text-1xl font-bold text-white">skip</Text>
       </TouchableOpacity>
 
       <View className="items-left fixed mb-28 flex flex-col">
         <Text className="text-6xl font-bold text-white">Welcome to </Text>
         <Text className="text-5xl font-bold text-green-500">HalalLife</Text>
-        <Text className="ml-4 text-lg  font-bold text-gray-200">Your favourite Halal</Text>
+        <Text className="ml-4 text-lg font-bold text-gray-200">Your favourite Halal</Text>
         <Text className="mb-40 ml-4 text-lg font-bold text-gray-200">Community</Text>
       </View>
 
-      <View className="flex flex-col items-center ">
-        <Text className="text-1xl font-bold text-gray-400 ">Sign in with</Text>
+      <View className="flex flex-col items-center">
+        <Text className="text-1xl font-bold text-gray-400">Sign in with</Text>
       </View>
 
-      <View className=" mt-4  flex-row">
-        <TouchableOpacity className="flex flex-row items-center rounded-full bg-white px-6 py-4  ">
+      <View className="mt-4 flex-row">
+        <TouchableOpacity
+          onPress={handleFacebookLogin}
+          className="flex flex-row items-center rounded-full bg-white px-6 py-4">
           <Image source={FacebookImage} className="mr-2 h-6 w-6" />
           <Text className="font-semibold text-black">Facebook</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="ml-20 flex flex-row items-center rounded-full bg-white px-6 py-4">
+        <TouchableOpacity
+          onPress={() => googlePromptAsync()}
+          className="ml-20 flex flex-row items-center rounded-full bg-white px-6 py-4">
           <Image source={GoogleImage} className="mr-2 h-6 w-6" />
           <Text className="font-semibold text-black">Google</Text>
         </TouchableOpacity>
       </View>
 
-      <View className="">
+      <View>
         <TouchableOpacity
           onPress={() => navigation.navigate('Registration', { isLogin: false })}
           className="m-4 rounded-full bg-black px-8 py-4">
@@ -53,11 +105,10 @@ const Welcome = () => {
         </TouchableOpacity>
       </View>
 
-      <Text className="mt-4 text-gray-300 ">
-        {' '}
-        Already have an account?
+      <Text className="mt-4 text-gray-300">
+        Already have an account?{' '}
         <TouchableOpacity onPress={() => navigation.navigate('Auth')}>
-          <Text className="text-gray-400 underline ">Log In</Text>
+          <Text className="text-gray-400 underline">Log In</Text>
         </TouchableOpacity>
       </Text>
     </ImageBackground>

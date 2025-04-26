@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
 import Information from 'components/Information/Information';
-import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
@@ -16,6 +15,7 @@ import mapView from 'components/map/mapView';
 import { useTheme } from 'themes/ThemeProvider';
 import UserSettings from 'components/UserSettings/UserSettings';
 import UserProfile from 'components/com/small/UserProfile';
+import CameraView from 'components/Camera/CameraView';
 
 const Tab = createBottomTabNavigator();
 
@@ -159,7 +159,7 @@ const BottomTab: React.FC = () => {
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
-      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
+      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Camera">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -177,7 +177,7 @@ const BottomTab: React.FC = () => {
         />
         <Tab.Screen
           name="Camera"
-          component={Scanner}
+          component={CameraView}
           options={{
             tabBarLabel: '',
             tabBarIcon: CameraIcon,
