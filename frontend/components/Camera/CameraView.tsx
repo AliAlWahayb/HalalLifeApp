@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import data2 from 'components/Products/0037600104029.json';
-import data1 from 'components/Products/737628064502.json';
+import Default from 'components/Products/737628064502.json';
 import Halal from 'components/Products/Halal';
 import Haram from 'components/Products/Haram';
 import NotFound from 'components/Products/NotFound';
@@ -15,13 +14,19 @@ const CameraView = () => {
 
   return (
     <View className="flex-1">
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Unknown">
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Scanner">
         <Stack.Screen name="Scanner" component={Scanner} />
-        <Stack.Screen name="Halal" children={(props) => <Halal {...props} productData={data1} />} />
-        <Stack.Screen name="Haram" children={(props) => <Haram {...props} productData={data2} />} />
+        <Stack.Screen
+          name="Halal"
+          children={(props) => <Halal {...props} productData={Default} />}
+        />
+        <Stack.Screen
+          name="Haram"
+          children={(props) => <Haram {...props} productData={Default} />}
+        />
         <Stack.Screen
           name="Unknown"
-          children={(props) => <Unknown {...props} productData={data2} />}
+          children={(props) => <Unknown {...props} productData={Default} />}
         />
         <Stack.Screen name="NotFound" component={NotFound} />
       </Stack.Navigator>

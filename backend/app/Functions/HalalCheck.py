@@ -123,12 +123,13 @@ def get_status_id(
 def check_halal(data):
     
     # Clean and prepare ingredients list
-    ingredients_tags = extract_json_list_values(data, ["product", "_keywords"])
+    # ingredients_tags = extract_json_list_values(data, ["product", "_keywords"])
+    ingredients_tags = extract_json_list_values(data, ["product", "ingredients_original_tags"])
 
     
-    halal_keywords = [
-        "vegan","halal-certified", "halal"
-    ]  
+    # halal_keywords = [
+    #     "vegan","halal-certified", "halal"
+    # ]  
     
     # Prepare result
     result = {
@@ -136,11 +137,11 @@ def check_halal(data):
         "total_ingredients_checked": len(ingredients_tags)
     }
 
-    Match = find_matching_items(ingredients_tags, halal_keywords)
-    if Match:
-        return result
+    # Match = find_matching_items(ingredients_tags, halal_keywords)
+    # if Match:
+    #     return result
     
-    return None
+    return result
 
 def check_haram(data, session: SessionDep):
     
@@ -195,12 +196,11 @@ def check_unknown(data, session: SessionDep ):
 
 
 def check_all(data, session: SessionDep):
-    # halal_result = check_halal(data)
+    halal_result = check_halal(data)
     haram_result = check_haram(data, session)
     unknown_result = check_unknown(data, session)
     
-    # if halal_result:
-    #     return halal_result
+    
     
     if haram_result:
         return haram_result
@@ -208,11 +208,14 @@ def check_all(data, session: SessionDep):
     if unknown_result:
         return unknown_result
     
+    if halal_result:
+        return halal_result
+    
     ingredients_tags = extract_json_list_values(data, ["product", "ingredients_original_tags"])
     ingredients_tags = clean_data(ingredients_tags)
 
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found" ,headers={"X-Error": "Product not found"})
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found" )
     return {
         "halal_status": "Failed",
         "halal_analysis": ingredients_tags

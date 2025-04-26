@@ -22,8 +22,9 @@
     "@react-navigation/material-top-tabs": "^7.1.1",
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/stack": "^7.1.1",
+    "@tanstack/react-query": "^5.74.4",
     "@types/react-native-snap-carousel": "^3.8.11",
-    "axios": "^1.8.4",
+    "axios": "^1.9.0",
     "expo": "^52.0.37",
     "expo-auth-session": "~6.0.3",
     "expo-camera": "~16.0.17",
@@ -32,6 +33,7 @@
     "expo-facebook": "^12.2.0",
     "expo-firebase-recaptcha": "^2.3.1",
     "expo-image": "~2.0.6",
+    "expo-linear-gradient": "~14.0.2",
     "expo-location": "^18.0.10",
     "expo-permissions": "^14.4.0",
     "expo-random": "^14.0.1",
@@ -62,8 +64,7 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "react-phone-input-2": "^2.15.1",
-    "undefined": "expo-auth-session/providers/google",
-    "expo-linear-gradient": "~14.0.2"
+    "undefined": "expo-auth-session/providers/google"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -142,7 +142,7 @@ const BottomTab: React.FC = () => {
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
-      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
+      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Camera">
         <Tab.Screen
           name="Chat"
           component={comView}

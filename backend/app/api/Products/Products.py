@@ -13,7 +13,7 @@ async def get_product_endpoint(barcode: int, session: SessionDep):
     result = await get_from_openfoodfacts(barcode, session)
 
     if not result:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found at get_product_endpoint")
     return result
 
 
