@@ -1,36 +1,33 @@
 import { View, Text } from 'react-native';
 import React, { useMemo } from 'react';
 import Accordion from 'components/Shared/Accordion';
-import { formatadditive } from 'util/productDataFormatters';
 
 interface why {
-  reason: string;
+  desc: string | null;
   name: string;
 }
 
-const Why = ({ product }: { product: any }) => {
-  // Format Why for display
-  const Why = useMemo(() => {
-    if (!product.Why_tags?.length) return [];
-    return product.Why_tags.map((why: string) => ({
-      reason: why,
-      name: formatadditive(why),
-    }));
-  }, [product.Why_tags]);
+const Why = ({ product }: { product: why[] }) => {
+  const whyData = useMemo(() => {
+    return product || [];
+  }, [product]);
 
   return (
     <>
-      {/* Why Accordion */}
-      <Accordion key="Why" title="Why" number={String(Why.length)}>
+      <Accordion key="Why" title="Why" number={String(whyData.length)}>
         <View className="">
-          {Why.length > 0 ? (
-            Why.map((why: why, index: number) => (
+          {whyData.length > 0 ? (
+            whyData.map((why: why, index: number) => (
               <View key={index} className="flex-row  border-b border-gray-300 ">
                 <Text className="mr-4 text-base font-bold text-textPrimary">
-                  {why.name.charAt(0).toUpperCase() + why.name.slice(1)}
+                  {why.name && typeof why.name === 'string'
+                    ? why.name.charAt(0).toUpperCase() + why.name.slice(1)
+                    : ''}
                 </Text>
                 <Text className="flex-1 text-textPrimary" adjustsFontSizeToFit>
-                  {why.reason.charAt(0).toUpperCase() + why.reason.slice(1)}
+                  {why.desc && typeof why.desc === 'string'
+                    ? why.desc.charAt(0).toUpperCase() + why.desc.slice(1)
+                    : 'No description available'}
                 </Text>
               </View>
             ))

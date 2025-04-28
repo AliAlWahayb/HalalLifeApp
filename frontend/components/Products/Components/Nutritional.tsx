@@ -13,7 +13,7 @@ const NutritionRow = ({
   unit: string;
 }) => (
   <View className="flex-row justify-between border-b border-gray-200 py-1">
-    <Text className="text-base font-medium text-textPrimary">{label}</Text>
+    <Text className="text-base font-medium text-textPrimary">{label.replace(/-/g, ' ')}</Text>
     <Text className="text-base text-textPrimary">
       {value} {unit}
     </Text>
@@ -44,8 +44,8 @@ const Nutritional = ({ product }: { product: any }) => {
         });
     };
 
-    return product.nutriments ? formatNutrients(product.nutriments) : [];
-  }, [product.nutriments]);
+    return product ? formatNutrients(product) : [];
+  }, [product]);
 
   return (
     <>

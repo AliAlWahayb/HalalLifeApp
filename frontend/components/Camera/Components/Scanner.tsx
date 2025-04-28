@@ -38,10 +38,10 @@ const Scanner = () => {
     setIsScanning(false);
     setBarcode(scannedBarcode);
 
-    // Reset scanner after 8 seconds
+    // Reset scanner after 2 seconds
     setTimeout(() => {
       setIsScanning(true);
-    }, 20);
+    }, 2000);
   };
 
   const handleManualSubmit = () => {
@@ -67,32 +67,35 @@ const Scanner = () => {
 
   const redirectToProduct = () => {
     if (data.halal_analysis.halal_status === 'halal') {
-      console.log(data.halal_analysis.halal_status);
-      console.log(data.product);
+      console.log(data);
       (navigation.navigate as any)('Halal', {
         productData: data.product,
         halalStatus: data.halal_analysis.halal_status,
-        haram_ingredients_found: data.halal_analysis.haram_ingredients_found,
+        why: data.halal_analysis.why,
+        additives: data.halal_analysis.additives,
+        nutriments: data.halal_analysis.nutriments,
       });
     }
 
     if (data.halal_analysis.halal_status === 'haram') {
-      console.log(data.halal_analysis.halal_status);
-      console.log(data.product);
+      console.log(data);
       (navigation.navigate as any)('Haram', {
         productData: data.product,
         halalStatus: data.halal_analysis.halal_status,
-        haram_ingredients_found: data.halal_analysis.haram_ingredients_found,
+        why: data.halal_analysis.why,
+        additives: data.halal_analysis.additives,
+        nutriments: data.halal_analysis.nutriments,
       });
     }
 
     if (data.halal_analysis.halal_status === 'unknown') {
-      console.log(data.halal_analysis.halal_status);
-      console.log(data.product);
+      console.log(data);
       (navigation.navigate as any)('Unknown', {
         productData: data.product,
         halalStatus: data.halal_analysis.halal_status,
-        haram_ingredients_found: data.halal_analysis.haram_ingredients_found,
+        why: data.halal_analysis.why,
+        additives: data.halal_analysis.additives,
+        nutriments: data.halal_analysis.nutriments,
       });
     }
     if (data.halal_analysis.halal_status === 'not found') {
@@ -130,7 +133,7 @@ const Scanner = () => {
             <SimpleLineIcons
               name="frame"
               size={250}
-              color={isScanning ? theme.colors.background : 'transparent'}
+              color={isScanning ? theme.colors.background : theme.colors.accent}
             />
           )}
         </View>
