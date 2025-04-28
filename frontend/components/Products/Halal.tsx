@@ -53,12 +53,13 @@ interface ProductData {
 interface Props {
   productData: ProductData;
   halalStatus: string;
+  additives: string[];
 }
 
 const Halal = () => {
   const { theme, globalColors } = useTheme();
   const route = useRoute();
-  const { productData } = route.params as Props;
+  const { productData , additives } = route.params as Props;
 
   return (
     <ScrollView className="flex-1 bg-background py-5" contentContainerClassName="items-center">
@@ -79,7 +80,7 @@ const Halal = () => {
 
           <Ingredients product={productData} />
 
-          <Additives product={productData} />
+          <Additives product={additives} />
 
           <Nutritional product={productData} />
         </View>
