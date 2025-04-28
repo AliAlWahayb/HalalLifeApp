@@ -10,17 +10,18 @@ const ProtectedScreen = ({ children }: { children: React.ReactNode }) => {
   const [accessAllowed, setAccessAllowed] = useState(true);
 
   useEffect(() => {
-
-    if (!auth.isLoggedIn) {
+    if (!auth.isLoggedIn || auth.authType === 'anonymous') {
       Alert.alert('Unauthorized', 'You must be logged in to access this screen.');
       navigation.goBack();
       setAccessAllowed(false);
       return;
     }
 
-    
     if (auth.authType === 'phone' && route.name === 'UserSettings') {
-      Alert.alert('Access Restricted', 'You must upgrade your account to access this settings screen.');
+      Alert.alert(
+        'Access Restricted',
+        'You must upgrade your account to access this settings screen.'
+      );
       navigation.goBack();
       setAccessAllowed(false);
       return;

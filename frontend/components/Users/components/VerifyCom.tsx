@@ -1,14 +1,9 @@
-import React, { useRef, useState,useContext } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { AuthContext } from '../../context/Auth-context';
-import axios from 'axios'; 
 import { useRoute, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { AuthContext } from 'components/context/Auth-context';
 import { API_BASE } from 'hooks/useProduct';
-import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-
+import { useRef, useState, useContext } from 'react';
+import { Alert, View, TextInput, TouchableOpacity } from 'react-native';
 
 const VerifyCom = () => {
   const inputRefs = useRef([]);
