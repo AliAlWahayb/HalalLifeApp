@@ -1,8 +1,14 @@
+import React, { useRef, useState,useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../../context/Auth-context';
+import axios from 'axios'; 
 import { useRoute, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_BASE } from 'hooks/useProduct';
 import React, { useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+
 
 const VerifyCom = () => {
   const inputRefs = useRef([]);
@@ -28,11 +34,15 @@ const VerifyCom = () => {
       handleVerify(finalCode);
     }
   };
-
+  const auth = useContext(AuthContext);
   const handleVerify = async (finalCode) => {
     try {
       const result = await confirmResult.confirm(finalCode);
       const user = result.user;
+
+
+      auth.login(user.uid, 'phone-token','phone');
+      console.log(" Verification Done ✅");
 
       await axios.post(`${API_BASE}/phone-auth`, {
         //this is my device ip you must replace with your device ip

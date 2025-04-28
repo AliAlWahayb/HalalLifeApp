@@ -10,7 +10,7 @@ import InputForm from 'components/Shared/components/FormElements/InputForm';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_MAXLENGTH, VALIDATOR_PHONE } from 'util/Validators';
 import { auth, firebaseConfig } from '../../firebase/firebase-config';
 import { useForm } from 'hooks/form-hooks';
-import { AuthContext } from 'context/Auth-context';
+import { AuthContext } from '../../context/Auth-context'
 
 const Registration = () => {
   const navigation = useNavigation();

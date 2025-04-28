@@ -1,6 +1,6 @@
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import Header from 'components/Users/components/Header';
-import { AuthContext } from 'context/Auth-context';
+import { AuthContext } from '../../context/Auth-context'
 import { useForm } from 'hooks/form-hooks';
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
@@ -63,7 +63,6 @@ const Auth = () => {
     const url = isLoginMode
       ? `${API_BASE}/users/login` //this is my device ip you must replace with your device ip
       : `${API_BASE}/users/signup`; //this is my device ip you must replace with your device ip
-
     const body = {
       email: formState.inputs.email.value,
       password: formState.inputs.password.value,
@@ -85,8 +84,11 @@ const Auth = () => {
         throw new Error(resData.detail || 'Something went wrong!');
       }
 
-      // إذا عندك نظام مصادقة، سجل المستخدم
-      auth.login(resData.userId, resData.token);
+    
+      auth.login(resData.userId, resData.token, 'email', resData.name, resData.email);
+      console.log("LogIn Done ✅");
+      console.log("User ID:", resData.userId);
+      console.log("Token:", resData.token);
       navigation.getParent()?.navigate('Navigation');
     } catch (err) {
       alert(err.message);
@@ -102,13 +104,13 @@ const Auth = () => {
       </Text>
       {!isLoginMode && (
         <InputForm
-          label="Name"
+          label="UserName"
           element="input"
           id="name"
           type="text"
-          placeholder="Enter your Full Name"
+          placeholder="Enter your UserName"
           validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a name."
+          errorText="Please enter a valid UserName."
           onInput={inputHandler}
         />
       )}

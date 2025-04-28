@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import { AuthContext } from 'context/Auth-context';
+import { AuthContext } from '../../context/Auth-context';
 import { useForm } from 'hooks/form-hooks';
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Text, View, Alert } from 'react-native';
 import { VALIDATOR_EMAIL } from 'util/Validators';
 
@@ -29,7 +29,7 @@ const ForgetPass = () => {
       Alert.alert('Invalid Input', 'Please enter a valid email address.', [{ text: 'OK' }]);
       return;
     }
-  
+
     try {
       const response = await fetch(`${API_BASE}/users/forgot-password`, {
         method: 'POST',
@@ -40,31 +40,31 @@ const ForgetPass = () => {
           email: formState.inputs.email.value,
         }),
       });
-  
+
       const resData = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(resData.detail || 'Something went wrong!');
       }
-  
-      Alert.alert('Password Reset', resData.message, [
-        { text: 'OK', onPress: () => navigation.navigate('Auth' as never) },
-      ]);
+
+     
+      navigation.navigate('VerifyCom3', {
+        email: formState.inputs.email.value,
+      });
     } catch (err) {
-      Alert.alert('Error', err.message);
+      Alert.alert('Error', err.message || 'Something went wrong!');
     }
   };
-  
 
   return (
-    <View className="flex-1 items-center justify-center bg-white px-8">
+    <View className="flex-1 justify-center items-center px-8 bg-white">
       <Header />
-      <Text className="m-2 mr-14 text-4xl font-bold text-[#77C273]">Resset Password</Text>
-      <Text className="mr-24 text-sm font-bold text-gray-400">
-        please enter your email address to request a Password rest
+      <Text className="text-[#77C273] font-bold text-4xl m-2 mr-14">Reset Password</Text>
+      <Text className="text-gray-400 font-bold text-sm mr-24">
+        Please enter your email address to request a password reset
       </Text>
 
-      <View className="w-full  items-center ">
+      <View className="w-full items-center">
         <InputForm
           element="input"
           id="email"
@@ -75,8 +75,8 @@ const ForgetPass = () => {
         />
       </View>
 
-      <View className="mt-4 w-full flex-col  items-center">
-        <Buttons onPress={authSubmitHandler}>Send New Password</Buttons>
+      <View className="flex-col items-center mt-4 w-full">
+        <Buttons onPress={authSubmitHandler}>Send OTP Code</Buttons>
       </View>
     </View>
   );
