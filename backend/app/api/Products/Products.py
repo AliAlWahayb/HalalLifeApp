@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from app.Functions.HalalCheck import *
+from app.database.database import get_session
+from app.schemas.HalalCheck import WhyResponse
 
 
 
@@ -17,12 +19,21 @@ async def get_product_endpoint(barcode: int, session: SessionDep):
     return result
 
 
-@router.get("/offline" , status_code=status.HTTP_200_OK , summary="Get product by barcode" ,description="Get product by id from the local files for testing")
-def get_product_endpoint(
-    session: SessionDep,
+@router.get("/ecodes/", 
+           response_model=List[EcodesResponse],
+           status_code=status.HTTP_200_OK,
+           summary="Get all why",
+           description="Get all why from the local database")
+async def get_presses_why_endpoint(
+    session: SessionDep ,
+    reasons: List[str] = Query(..., description="List of search terms"),
 ):
-    result = get_from_openfoodfacts_offline(session)
-
-    if not result:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
-    return result
+    results = process_Ecodes(reasons, session)  
+    
+    if not results:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="No matching entries found"
+        )
+    
+    return results

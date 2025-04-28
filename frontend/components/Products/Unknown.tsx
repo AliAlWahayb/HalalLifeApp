@@ -1,15 +1,16 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useRoute } from '@react-navigation/native';
+import AlternativeCarousel from 'components/Shared/Carousel/AlternativeCarousel';
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
-import ProductButtons from './Components/ProductButtons';
-import Nutritional from './Components/Nutritional';
 import Additives from './Components/Additives';
-import Ingredients from './Components/Ingredients';
 import Details from './Components/Details';
 import Hero from './Components/Hero';
-import AlternativeCarousel from 'components/Shared/Carousel/AlternativeCarousel';
+import Ingredients from './Components/Ingredients';
+import Nutritional from './Components/Nutritional';
+import ProductButtons from './Components/ProductButtons';
 import Why from './Components/Why';
 
 // Interfaces
@@ -51,32 +52,55 @@ interface ProductData {
   };
 }
 
-const Unknown: React.FC<{ productData: ProductData }> = ({ productData }) => {
-  const { theme } = useTheme();
-  const { product } = productData;
+interface why {
+  desc: string | null;
+  name: string;
+}
+interface additive {
+  name: string;
+  ingredient_name: string | null;
+}
+interface nutriments {
+  name: string;
+  value: string;
+  unit: string;
+}
 
-  const alternatives = [
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-  ];
+interface Props {
+  productData: ProductData;
+  halalStatus: string;
+  why: why[];
+  additives: additive[];
+  nutriments: nutriments[];
+}
+
+const Unknown = () => {
+  const { theme } = useTheme();
+  const route = useRoute();
+  const { productData, halalStatus, why, additives, nutriments } = route.params as Props;
+
+  // const alternatives = [
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  // ];
 
   return (
     <ScrollView className="flex-1 bg-background py-5" contentContainerClassName="items-center">
@@ -87,23 +111,23 @@ const Unknown: React.FC<{ productData: ProductData }> = ({ productData }) => {
         <Text className="text-3xl font-bold text-Unknown">Unknown</Text>
       </View>
       <View className="w-5/6 py-2">
-        <Hero product={product} />
+        <Hero product={productData} />
         <View className="flex flex-col py-5">
-          <Details product={product} />
+          <Details product={productData} />
 
-          <Ingredients product={product} />
+          <Ingredients product={productData} />
 
-          <Additives product={product} />
+          <Additives product={additives} />
 
-          <Nutritional product={product} />
+          <Nutritional product={nutriments} />
 
-          <Why product={product} />
+          <Why product={why} />
         </View>
       </View>
-      <View className="mb-5 flex h-36 w-full flex-col gap-3 ">
+      {/* <View className="mb-5 flex h-36 w-full flex-col gap-3 ">
         <Text className="text-center text-2xl font-bold">Alternatives</Text>
         <AlternativeCarousel carouselItems={alternatives} />
-      </View>
+      </View> */}
       <ProductButtons />
     </ScrollView>
   );

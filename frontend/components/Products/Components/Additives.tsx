@@ -4,19 +4,14 @@ import Accordion from 'components/Shared/Accordion';
 import { formatAdditive } from 'util/productDataFormatters';
 
 interface additive {
-  code: string;
   name: string;
+  ingredient_name: string | null;
 }
 
 const Additives = ({ product }: { product: any }) => {
-  // Format additives for display
   const additives = useMemo(() => {
-    if (!product.additives_tags?.length) return [];
-    return product.additives_tags.map((additive: string) => ({
-      code: additive,
-      name: formatAdditive(additive),
-    }));
-  }, [product.additives_tags]);
+    return product || [];
+  }, [product]);
 
   return (
     <>
@@ -25,9 +20,18 @@ const Additives = ({ product }: { product: any }) => {
         <View className="">
           {additives.length > 0 ? (
             additives.map((additive: additive, index: number) => (
-              <View key={index} className="flex-row justify-between border-b border-gray-200 py-1">
-                <Text className="font-bold">{additive.code.replace('en:', '').toUpperCase()}</Text>
-                <Text>{additive.name}</Text>
+              <View key={index} className="flex-row  border-b border-gray-300 ">
+                <Text className="mr-4 text-base font-bold text-textPrimary">
+                  {additive.name && typeof additive.name === 'string'
+                    ? additive.name.charAt(0).toUpperCase() + additive.name.slice(1)
+                    : ''}
+                </Text>
+                <Text className="flex-1 text-textPrimary" adjustsFontSizeToFit>
+                  {additive.ingredient_name && typeof additive.ingredient_name === 'string'
+                    ? additive.ingredient_name.charAt(0).toUpperCase() +
+                      additive.ingredient_name.slice(1)
+                    : 'No description available'}
+                </Text>
               </View>
             ))
           ) : (
