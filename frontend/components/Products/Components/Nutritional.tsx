@@ -23,7 +23,7 @@ const NutritionRow = ({
 const Nutritional = ({ product }: { product: any }) => {
   // Recursive nutrient formatter
   const nutrients = useMemo(() => {
-    const formatNutrients = (
+    const formatNutrients_serving = (
       nutriments: Record<string, any>
     ): {
       name: string;
@@ -43,9 +43,37 @@ const Nutritional = ({ product }: { product: any }) => {
           };
         });
     };
+    const formatNutrients_100g = (
+      nutriments: Record<string, any>
+    ): {
+      name: string;
+      value: string;
+      unit: string;
+    }[] => {
+      return Object.entries(nutriments)
+        .filter(([key]) => key.endsWith('_100g') && nutriments[`${key.replace('_100g', '_unit')}`])
+        .map(([key, value]) => {
+          const unitKey = `${key.replace('_100g', '_unit')}`;
+          return {
+            name: key.replace('_100g', ''),
+            value: `${value}`,
+            unit: nutriments[unitKey],
+          };
+        });
+    };
 
-    return product ? formatNutrients(product) : [];
-  }, [product]);
+    if (product.nutriments) {
+      const per_serving = formatNutrients_serving(product.nutriments);
+      const per_100g = formatNutrients_100g(product.nutriments);
+      if (per_serving.length > 0) {
+        return per_serving;
+      }
+      if (per_100g.length > 0) {
+        return per_100g;
+      }
+    }
+    return [];
+  }, [product.nutriments]);
 
   return (
     <>
@@ -56,7 +84,7 @@ const Nutritional = ({ product }: { product: any }) => {
             <View>
               <Text className="mb-2 text-lg font-bold">Per Serving</Text>
               {nutrients
-                .filter((nutrient) => nutrient.value !== '0')
+                .filter((nutrient) => nutrient.value)
                 .sort((a, b) => {
                   const valueA = typeof a.value === 'string' ? parseFloat(a.value) : a.value;
                   const valueB = typeof b.value === 'string' ? parseFloat(b.value) : b.value;

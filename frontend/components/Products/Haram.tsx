@@ -66,14 +66,13 @@ interface Props {
   halalStatus: string;
   why: why[];
   additives: additive[];
-  nutriments: string[];
 
 }
 
 const Haram = () => {
   const { theme } = useTheme();
   const route = useRoute();
-  const { productData, halalStatus, why, additives , nutriments } = route.params as Props;
+  const { productData, halalStatus, why, additives  } = route.params as Props;
 
   // const alternatives = [
   //   {
@@ -115,7 +114,7 @@ const Haram = () => {
 
           <Additives product={additives} />
 
-          <Nutritional product={nutriments} />
+          <Nutritional product={productData} />
 
           <Why product={why} />
         </View>

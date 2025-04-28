@@ -184,10 +184,13 @@ def check_halal(data, session: SessionDep):
     additives_tags = clean_data(additives_tags)
     additives = process_Ecodes(additives_tags, session)
     
+    nutriments = extract_json_list_values(data, ["product", "nutriments"])
+
     # Prepare result
     result = {
         "halal_status": "halal",
         "additives": additives,
+        "nutriments":nutriments,
         "total_ingredients_checked": len(ingredients_tags)
     }
 
@@ -231,11 +234,14 @@ def check_haram(data, session: SessionDep):
     additives_tags = clean_data(additives_tags)
     additives = process_Ecodes(additives_tags, session)
 
+    nutriments = extract_json_list_values(data, ["product", "nutriments"])
+
     # Prepare result
     result = {
         "halal_status": "haram",
         "why": why,
         "additives": additives,
+        "nutriments": nutriments,
         "total_ingredients_checked": ingredients_checked
     }
     

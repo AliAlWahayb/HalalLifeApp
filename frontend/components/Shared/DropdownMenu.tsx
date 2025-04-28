@@ -64,7 +64,7 @@ const DropdownMenu = ({
         fontWeight: 'bold',
       }}
       TickIconComponent={() => (
-        <View className="bg-accent rounded-full p-1">
+        <View className="rounded-full bg-accent p-1">
           <FontAwesome name="check" size={16} color={theme.colors.textSecondary} />
         </View>
       )}

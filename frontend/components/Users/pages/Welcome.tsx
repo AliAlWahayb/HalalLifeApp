@@ -7,8 +7,34 @@ import { View, Text, ImageBackground, TouchableOpacity, Image } from 'react-nati
 import FacebookImage from '../../../assets/Social/FacebookImge.png';
 import GoogleImage from '../../../assets/Social/GoogleImge.png';
 import WelcomeImge from '../../../assets/Welcome/WelcomeImge.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+
 
 WebBrowser.maybeCompleteAuthSession();
+
+// Define the key for storing the anonymous ID
+const ANONYMOUS_ID_KEY = 'anonymous_user_id';
+
+// Function to get or generate the anonymous ID
+export const getAnonymousId = async () => {
+  try {
+    let anonymousId = await AsyncStorage.getItem(ANONYMOUS_ID_KEY);
+    if (!anonymousId) {
+      anonymousId = uuidv4();
+      await AsyncStorage.setItem(ANONYMOUS_ID_KEY, anonymousId);
+      console.log('Generated and stored new anonymous ID:', anonymousId);
+    } else {
+      console.log('Retrieved existing anonymous ID:', anonymousId);
+    }
+    return anonymousId;
+  } catch (e) {
+    console.error('Error getting or setting anonymous ID:', e);
+    // Handle error appropriately, maybe return null or throw
+    return null;
+  }
+};
 
 const Welcome = () => {
   const navigation = useNavigation();

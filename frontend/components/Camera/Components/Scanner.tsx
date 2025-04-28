@@ -73,7 +73,6 @@ const Scanner = () => {
         halalStatus: data.halal_analysis.halal_status,
         why: data.halal_analysis.why,
         additives: data.halal_analysis.additives,
-        nutriments: data.halal_analysis.nutriments,
       });
     }
 
@@ -84,7 +83,6 @@ const Scanner = () => {
         halalStatus: data.halal_analysis.halal_status,
         why: data.halal_analysis.why,
         additives: data.halal_analysis.additives,
-        nutriments: data.halal_analysis.nutriments,
       });
     }
 
@@ -95,7 +93,6 @@ const Scanner = () => {
         halalStatus: data.halal_analysis.halal_status,
         why: data.halal_analysis.why,
         additives: data.halal_analysis.additives,
-        nutriments: data.halal_analysis.nutriments,
       });
     }
     if (data.halal_analysis.halal_status === 'not found') {
@@ -118,77 +115,67 @@ const Scanner = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1">
-      <CameraView
-        style={{ flex: 1 }}
-        facing="back"
-        flash="auto"
-        enableTorch={flash}
-        autofocus="off"
-        onBarcodeScanned={isScanning ? ({ data }) => handleBarCodeScanned(data) : undefined}>
-        <View className="flex-1 items-center justify-center">
-          {isLoading ? (
-            <ActivityIndicator size={250} color={theme.colors.accent} />
-          ) : (
-            <SimpleLineIcons
-              name="frame"
-              size={250}
-              color={isScanning ? theme.colors.background : theme.colors.accent}
+    <CameraView
+      style={{ flex: 1 }}
+      facing="back"
+      flash="auto"
+      enableTorch={flash}
+      autofocus="off"
+      onBarcodeScanned={isScanning ? ({ data }) => handleBarCodeScanned(data) : undefined}>
+      <View className="flex-1 items-center justify-center">
+        {isLoading && <ActivityIndicator size={250} color={theme.colors.accent} />}
+      </View>
+      <View className="absolute top-0 w-full pt-4">
+        <View className="mx-auto w-2/3 flex-row items-center">
+          {/* Flash Button */}
+          <TouchableOpacity
+            onPress={() => setFlash(!flash)}
+            style={{
+              backgroundColor: theme.colors.background + '50',
+              padding: 6,
+              borderRadius: 40,
+            }}>
+            <MaterialCommunityIcons
+              name={flash ? 'flash' : 'flash-off'}
+              size={20}
+              color={theme.colors.accent}
             />
-          )}
-        </View>
-        <View className="absolute top-0 w-full pt-4">
-          <View className="mx-auto w-2/3 flex-row items-center">
-            {/* Flash Button */}
-            <TouchableOpacity
-              onPress={() => setFlash(!flash)}
-              style={{
-                backgroundColor: theme.colors.background + '50',
-                padding: 6,
-                borderRadius: 40,
-              }}>
-              <MaterialCommunityIcons
-                name={flash ? 'flash' : 'flash-off'}
-                size={20}
-                color={theme.colors.accent}
-              />
-            </TouchableOpacity>
+          </TouchableOpacity>
 
-            {/* Manual Input Group */}
-            <View className="mx-4 flex-1 flex-row items-center">
-              <TextInput
-                placeholder="Enter barcode"
-                value={manualBarcode}
-                onChangeText={setManualBarcode}
-                onSubmitEditing={handleManualSubmit}
-                keyboardType="number-pad"
-                inputMode="numeric"
-                className="flex-1 rounded-full px-4 py-2"
-                style={{
-                  color: theme.colors.textSecondary,
-                  backgroundColor: theme.colors.background + '50',
-                }}
-                enterKeyHint="send"
-                placeholderTextColor={theme.colors.textSecondary}
-              />
-            </View>
+          {/* Manual Input Group */}
+          <View className="mx-4 flex-1 flex-row items-center">
+            <TextInput
+              placeholder="Enter barcode"
+              value={manualBarcode}
+              onChangeText={setManualBarcode}
+              onSubmitEditing={handleManualSubmit}
+              keyboardType="number-pad"
+              inputMode="numeric"
+              className="flex-1 rounded-full px-4 py-2"
+              style={{
+                color: theme.colors.textSecondary,
+                backgroundColor: theme.colors.background + '50',
+              }}
+              enterKeyHint="send"
+              placeholderTextColor={theme.colors.textSecondary}
+            />
           </View>
         </View>
+      </View>
 
-        {/* {data?.product && (
+      {/* {data?.product && (
           <View className="absolute bottom-0 w-full bg-white/80 p-4">
             <Text className="text-lg font-bold">{data.halal_analysis.halal_status}</Text>
             <Text className="text-sm">{data.product.brands}</Text>
           </View>
         )} */}
 
-        {isError && (
-          <View className="absolute bottom-0 w-full bg-red-100 p-4">
-            <Text className="text-red-600">Error: {error?.message}</Text>
-          </View>
-        )}
-      </CameraView>
-    </SafeAreaView>
+      {isError && (
+        <View className="absolute bottom-0 w-full bg-red-100 p-4">
+          <Text className="text-red-600">Error: {error?.message}</Text>
+        </View>
+      )}
+    </CameraView>
   );
 };
 

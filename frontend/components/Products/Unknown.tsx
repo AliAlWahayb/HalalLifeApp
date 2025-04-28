@@ -60,24 +60,19 @@ interface additive {
   name: string;
   ingredient_name: string | null;
 }
-interface nutriments {
-  name: string;
-  value: string;
-  unit: string;
-}
+
 
 interface Props {
   productData: ProductData;
   halalStatus: string;
   why: why[];
   additives: additive[];
-  nutriments: nutriments[];
 }
 
 const Unknown = () => {
   const { theme } = useTheme();
   const route = useRoute();
-  const { productData, halalStatus, why, additives, nutriments } = route.params as Props;
+  const { productData, halalStatus, why, additives } = route.params as Props;
 
   // const alternatives = [
   //   {
@@ -119,7 +114,7 @@ const Unknown = () => {
 
           <Additives product={additives} />
 
-          <Nutritional product={nutriments} />
+          <Nutritional product={productData} />
 
           <Why product={why} />
         </View>

@@ -70,7 +70,7 @@ const Details = ({ product }: { product: any }) => {
           {labels && <DetailRow label="Labels" value={labels} />}
           {product.origins && <DetailRow label="Origin" value={product.origins} />}
           {product.countries && <DetailRow label="Sold in" value={product.countries} />}
-          {product.nutriscore_grade && (
+          {product.nutriscore_grade && product.nutriscore_grade !== 'not-applicable' && (
             <DetailRow
               label="Nutri-Score"
               value={
