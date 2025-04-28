@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import HomeView from 'components/Home/HomeView';
 import SideMenu from './SideMenu';
 import Information from 'components/Information/Information';
-import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
@@ -15,10 +14,36 @@ import comView from 'components/com/comView';
 import mapView from 'components/map/mapView';
 import { useTheme } from 'themes/ThemeProvider';
 import UserSettings from 'components/UserSettings/UserSettings';
+import CameraView from 'components/Camera/CameraView';
+import UserProfile from 'components/com/small/UserProfile';
 import ProtectedScreen from 'components/Shared/ProtectedScreen/ProtectedScreen';
 import { AuthContext } from '../../context/Auth-context';
 
 const Tab = createBottomTabNavigator();
+
+
+
+// Create placeholder components for screens that don't exist yet
+const NotificationsScreen = () => {
+  const { theme } = useTheme();
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.colors.background,
+      }}>
+      <Text style={{ color: theme.colors.textPrimary, fontSize: 18 }}>Notifications Screen</Text>
+      <Text style={{ color: theme.colors.textSecondary, marginTop: 10 }}>
+        This is a placeholder for the notifications screen
+      </Text>
+    </View>
+  );
+};
+
+// Use the existing UserProfile component for the Profile screen
+const ProfileScreen = UserProfile;
 
 
 interface TabBarIconProps {
@@ -146,7 +171,7 @@ const BottomTab: React.FC = () => {
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
-      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
+      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Camera">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -164,7 +189,7 @@ const BottomTab: React.FC = () => {
         />
         <Tab.Screen
           name="Camera"
-          component={Scanner}
+          component={CameraView}
           options={{
             tabBarLabel: '',
             tabBarIcon: CameraIcon,
@@ -254,6 +279,21 @@ const BottomTab: React.FC = () => {
         <Tab.Screen
           name="Information"
           component={Information}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        {/* Add Profile and Notifications screens */}
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        <Tab.Screen
+          name="Notifications"
+          component={NotificationsScreen}
           options={{
             tabBarItemStyle: { display: 'none' },
           }}

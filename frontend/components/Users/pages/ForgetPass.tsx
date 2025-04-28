@@ -8,6 +8,7 @@ import { VALIDATOR_EMAIL } from 'util/Validators';
 import Buttons from '../../Shared/components/FormElements/Buttons';
 import InputForm from '../../Shared/components/FormElements/InputForm';
 import Header from '../components/Header';
+import { API_BASE } from 'hooks/useProduct';
 
 const ForgetPass = () => {
   const navigation = useNavigation();
@@ -30,7 +31,7 @@ const ForgetPass = () => {
     }
 
     try {
-      const response = await fetch('http://172.20.10.2:8000/api/users/forgot-password', {
+      const response = await fetch(`${API_BASE}/users/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

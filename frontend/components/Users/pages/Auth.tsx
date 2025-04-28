@@ -9,6 +9,7 @@ import FacebookImage from '../../../assets/Social/FacebookImge.png';
 import GoogleImage from '../../../assets/Social/GoogleImge.png';
 import Buttons from '../../Shared/components/FormElements/Buttons';
 import InputForm from '../../Shared/components/FormElements/InputForm';
+import { API_BASE } from 'hooks/useProduct';
 
 const Auth = () => {
   const navigation = useNavigation();
@@ -60,9 +61,8 @@ const Auth = () => {
 
   const authSubmitHandler = async () => {
     const url = isLoginMode
-      ? 'http://172.20.10.2:8000/api/users/login' //this is my device ip you must replace with your device ip
-      : 'http://172.20.10.2:8000/api/users/signup'; //this is my device ip you must replace with your device ip
-
+      ? `${API_BASE}/users/login` //this is my device ip you must replace with your device ip
+      : `${API_BASE}/users/signup`; //this is my device ip you must replace with your device ip
     const body = {
       email: formState.inputs.email.value,
       password: formState.inputs.password.value,

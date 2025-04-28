@@ -3,6 +3,12 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../context/Auth-context';
 import axios from 'axios'; 
+import { useRoute, useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { API_BASE } from 'hooks/useProduct';
+import React, { useRef, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+
 
 const VerifyCom = () => {
   const inputRefs = useRef([]);
@@ -25,7 +31,7 @@ const VerifyCom = () => {
 
     if (newCode.every((num) => num !== '')) {
       const finalCode = newCode.join('');
-      handleVerify(finalCode); 
+      handleVerify(finalCode);
     }
   };
   const auth = useContext(AuthContext);
@@ -34,16 +40,17 @@ const VerifyCom = () => {
       const result = await confirmResult.confirm(finalCode);
       const user = result.user;
 
+
       auth.login(user.uid, 'phone-token','phone');
       console.log(" Verification Done ✅");
-  
-     
-      await axios.post('http://172.20.10.2:8000/api/users/phone-auth', { //this is my device ip you must replace with your device ip
+
+      await axios.post(`${API_BASE}/phone-auth`, {
+        //this is my device ip you must replace with your device ip
         uid: user.uid,
         phone_number: user.phoneNumber,
         created_at: new Date().toISOString(),
       });
-  
+
       Alert.alert('Success', `Welcome ${user.phoneNumber}`);
       navigation.navigate('Navigation');
     } catch (error) {
@@ -53,11 +60,11 @@ const VerifyCom = () => {
       inputRefs.current[0]?.focus();
     }
   };
-// Please enter the code sent to {phoneNumber}
+  // Please enter the code sent to {phoneNumber}
   return (
     <View className="flex-1 items-center justify-center bg-white px-8">
       <Text className="text-3xl font-bold text-[#77C273]">Verification Code</Text>
-      <Text className="text-sm font-bold text-gray-400 text-center my-2">
+      <Text className="my-2 text-center text-sm font-bold text-gray-400">
         Please enter the code sent to your phone number
       </Text>
 
@@ -80,8 +87,7 @@ const VerifyCom = () => {
 
       <TouchableOpacity onPress={() => Alert.alert('Resending...')}>
         <Text className="text-sm font-bold text-gray-400">
-          Didn’t receive a code?{' '}
-          <Text className="text-sm font-bold text-[#77C273]">Resend</Text>
+          Didn’t receive a code? <Text className="text-sm font-bold text-[#77C273]">Resend</Text>
         </Text>
       </TouchableOpacity>
     </View>
