@@ -98,7 +98,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ modalVisible, setModalVisible }) =>
       label: 'Favorites',
     },
     {
-      id: 'Profile',
+      id: 'UserSettings',
       icon: (isActive) => (
         <FontAwesome5
           name="user-alt"
@@ -106,7 +106,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ modalVisible, setModalVisible }) =>
           color={isActive ? activeColor : inactiveColor}
         />
       ),
-      label: 'Profile',
+      label: 'UserSettings',
     },
     {
       id: 'Theme',

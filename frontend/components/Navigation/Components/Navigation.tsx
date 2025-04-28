@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import { View, Text, Platform } from 'react-native';
-import React, { useState, useMemo, useCallback, memo } from 'react';
+import React, { useState, useMemo, useCallback, memo ,useContext} from 'react';
 import { MaterialCommunityIcons, Feather, Octicons, Entypo } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
@@ -15,8 +15,11 @@ import comView from 'components/com/comView';
 import mapView from 'components/map/mapView';
 import { useTheme } from 'themes/ThemeProvider';
 import UserSettings from 'components/UserSettings/UserSettings';
+import ProtectedScreen from 'components/Shared/ProtectedScreen/ProtectedScreen';
+import { AuthContext } from '../../context/Auth-context';
 
 const Tab = createBottomTabNavigator();
+
 
 interface TabBarIconProps {
   color: string;
@@ -136,7 +139,8 @@ const BottomTab: React.FC = () => {
     ),
     [theme.colors.accent, theme.colors.textSecondary]
   );
-
+  const auth = useContext(AuthContext);
+  const isPhoneOnlyUser = auth.authType === 'phone';
   return (
     <View className={`theme-${themeName} flex-1`}>
       {/* Pass modalVisible and setModalVisible to SideMenu */}
@@ -186,32 +190,59 @@ const BottomTab: React.FC = () => {
         {/* screen for the side menu */}
         <Tab.Screen
           name="History"
-          component={SearchView}
           options={{
-            tabBarItemStyle: { display: 'none' },
+          tabBarItemStyle: { display: 'none' },
           }}
-        />
-        <Tab.Screen
-          name="Preferences"
-          component={Preference}
-          options={{
-            tabBarItemStyle: { display: 'none' },
-          }}
-        />
-        <Tab.Screen
-          name="Favorites"
-          component={SearchView}
-          options={{
-            tabBarItemStyle: { display: 'none' },
-          }}
-        />
-        <Tab.Screen
+          >
+         {() => (
+           <ProtectedScreen>
+              <SearchView />
+          </ProtectedScreen>
+             )}
+           </Tab.Screen>
+
+           <Tab.Screen
+            name="Preferences"
+            options={{
+           tabBarItemStyle: { display: 'none' },
+           }}
+          >
+           {() => (
+            <ProtectedScreen>
+            <Preference />
+           </ProtectedScreen>
+           )}
+          </Tab.Screen>
+
+           <Tab.Screen
+             name="Favorites"
+             options={{
+             tabBarItemStyle: { display: 'none' },
+             }}
+          >
+          {() => (
+          <ProtectedScreen>
+           <SearchView />
+         </ProtectedScreen>
+          )}
+         </Tab.Screen>
+
+        
+         <Tab.Screen
           name="UserSettings"
-          component={UserSettings}
           options={{
-            tabBarItemStyle: { display: 'none' },
-          }}
-        />
+          tabBarItemStyle: { display: 'none' },
+           }}
+          >
+         {() => (
+         <ProtectedScreen>
+         <UserSettings />
+         </ProtectedScreen>
+           )}
+         </Tab.Screen>
+         
+
+        
         <Tab.Screen
           name="Theme"
           component={Theme}

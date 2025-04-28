@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import { View , Text , TouchableOpacity} from 'react-native';
 import CheckBox from 'components/Shared/CheckBox/CheckBox';
 import TwoButtons from '../Shared/Buttons/TwoButtons';
@@ -7,6 +7,8 @@ import DropdownAdvanceSettings from './com/DropdownAdvanceSettings';
 import ChangeUnami from './ChangeUnami';
 import ChangePass from './ChangePass';
 import DeleteAccount from './DeleteAccount';
+import { AuthContext } from '../context/Auth-context';
+
 
 const UserSettings = () => {
 
@@ -71,13 +73,18 @@ const UserSettings = () => {
       setPrivacy(false);
     };
 
+    const auth = useContext(AuthContext);
+
+
+
+
   return (
     <View className='flex-1 bg-background px-4 py-6 '>
          {currentScreen === 'main' && (
           <>
-        <Text className='text-xl font-bold '>UserName</Text>
-        <Text className='text-xl font-bold'>Email@Email.com</Text>
-        <Text className='text-xl text-textMuted font-bold'>Date Created</Text>
+        <Text className='text-xl font-bold'>{auth.name || 'No name available'}</Text>
+        <Text className='text-xl font-bold'>{auth.email || 'No email available'}</Text>
+        
 
         <CheckBox 
         title='Allow Notification'
