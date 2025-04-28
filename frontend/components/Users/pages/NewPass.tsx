@@ -12,6 +12,7 @@ import Header from '../components/Header';
 import InputForm from 'components/Shared/FormElements/InputForm';
 import { useForm } from '../../../hooks/form-hooks';
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../../util/Validators'
+import { API_BASE } from 'hooks/useProduct';
 
 const NewPassword = () => {
   const navigation = useNavigation();
@@ -46,7 +47,7 @@ const NewPassword = () => {
     }
 
     try {
-      const response = await fetch('http://172.20.10.2:8000/api/users/reset-password', {
+      const response = await fetch(`${API_BASE}/users/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -5,6 +5,7 @@ import InputForm from '../Shared/FormElements/InputForm';
 import { AuthContext } from '../context/Auth-context';
 import { useForm } from '../../hooks/form-hooks';
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../util/Validators';
+import { API_BASE } from 'hooks/useProduct';
 
 const ChangePass = ({ goBack }) => {
   const auth = useContext(AuthContext);
@@ -34,7 +35,7 @@ const ChangePass = ({ goBack }) => {
     }
 
     try {
-      const response = await fetch('http://172.20.10.2:8000/api/users/change-password', {
+      const response = await fetch(`${API_BASE}/users/change-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

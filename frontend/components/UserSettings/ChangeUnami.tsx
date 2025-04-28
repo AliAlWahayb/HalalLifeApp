@@ -5,6 +5,7 @@ import InputForm from '../Shared/FormElements/InputForm';
 import { AuthContext } from '../context/Auth-context';
 import { useForm } from '../../hooks/form-hooks';
 import { VALIDATOR_REQUIRE } from '../../util/Validators';
+import { API_BASE } from 'hooks/useProduct';
 
 const ChangeUnami = ({ goBack }) => {
   const auth = useContext(AuthContext);
@@ -30,7 +31,7 @@ const ChangeUnami = ({ goBack }) => {
     }
 
     try {
-      const res = await fetch('http://172.20.10.2:8000/api/users/change-name', {
+      const res = await fetch(`${API_BASE}/users/change-name`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

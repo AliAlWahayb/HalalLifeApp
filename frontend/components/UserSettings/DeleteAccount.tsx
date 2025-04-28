@@ -7,6 +7,7 @@ import { useForm } from '../../hooks/form-hooks';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../util/Validators';
 import CheckBox from 'components/Shared/CheckBox/CheckBox';
 import { useNavigation } from '@react-navigation/native';
+import { API_BASE } from 'hooks/useProduct';
 
 const DeleteAccount = ({ goBack }) => {
   const auth = useContext(AuthContext);
@@ -38,7 +39,7 @@ const DeleteAccount = ({ goBack }) => {
     }
 
     try {
-      const response = await fetch(`http://172.20.10.2:8000/api/users/login`, {
+      const response = await fetch(`${API_BASE}/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: auth.email, password: passwordInput }),
@@ -51,10 +52,9 @@ const DeleteAccount = ({ goBack }) => {
       }
 
       // Password correct, proceed with account deletion
-      const delResponse = await fetch(
-        `http://172.20.10.2:8000/api/users/delete-account/${auth.userId}`,
-        { method: 'DELETE' }
-      );
+      const delResponse = await fetch(`${API_BASE}/users/delete-account/${auth.userId}`, {
+        method: 'DELETE',
+      });
 
       const delData = await delResponse.json();
       if (!delResponse.ok) throw new Error(delData.detail || 'Failed to delete account');
@@ -102,17 +102,11 @@ const DeleteAccount = ({ goBack }) => {
         className="mb-8 rounded-lg border border-primary p-4"
       />
 
-      <TouchableOpacity
-        className="mb-4 w-full rounded-full bg-red-600 py-4"
-        onPress={handleDelete}
-      >
+      <TouchableOpacity className="mb-4 w-full rounded-full bg-red-600 py-4" onPress={handleDelete}>
         <Text className="text-center text-lg font-bold text-white">Delete Account</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        className="w-full rounded-full bg-gray-300 py-4"
-        onPress={goBack}
-      >
+      <TouchableOpacity className="w-full rounded-full bg-gray-300 py-4" onPress={goBack}>
         <Text className="text-center text-lg font-bold text-black">Back</Text>
       </TouchableOpacity>
     </View>
