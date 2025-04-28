@@ -10,6 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { API_BASE } from 'hooks/useProduct';
 
 const VerifyCom3 = () => {
   const navigation = useNavigation();
@@ -36,7 +37,7 @@ const VerifyCom3 = () => {
       console.log('Verification Code:', finalCode);
 
       try {
-        const response = await fetch('http://172.20.10.2:8000/api/users/verify-code', {
+        const response = await fetch(`${API_BASE}/users/verify-code`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ const VerifyCom3 = () => {
 
   const handleResend = async () => {
     try {
-      const response = await fetch('http://172.20.10.2:8000/api/users/forgot-password', {
+      const response = await fetch(`${API_BASE}/users/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
