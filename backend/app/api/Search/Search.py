@@ -3,7 +3,8 @@ from fastapi import APIRouter, Depends
 from app.Functions.HalalCheck import *
 from app.Functions.Search import get_all_search
 from app.database.database import get_session
-from app.schemas.HalalCheck import WhyResponse, searchResponse
+from app.schemas.HalalCheck import WhyResponse
+from app.schemas.Search import searchResponse
 
 
 

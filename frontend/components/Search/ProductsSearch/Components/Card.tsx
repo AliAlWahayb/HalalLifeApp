@@ -1,8 +1,9 @@
-import { View, Text, Pressable, Image } from 'react-native';
-import React, { useState, useCallback, memo, useMemo } from 'react';
-import { useTheme } from 'themes/ThemeProvider';
-import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Image } from 'expo-image';
+import React, { useState, useCallback, memo, useMemo } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { useTheme } from 'themes/ThemeProvider';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -30,7 +31,6 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
   const [imageError, setImageError] = useState(false);
 
   const handlePress = useCallback(() => {
-    // Navigate to product details
   }, [Name]);
 
   const getStatusColor = useMemo(() => {
@@ -61,20 +61,18 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
       <View className="flex-row p-3">
         <View className="mr-3 h-20 w-20 items-center justify-center overflow-hidden rounded-lg">
           {!img || imageError ? (
-            <FontAwesome5
-              name="shopping-bag"
-              size={30}
-              color={theme.colors.textMuted}
-              className="opacity-70"
+            <Image
+              source={{ blurhash }}
+              contentFit="contain"
+              style={{ width: '100%', height: '100%' }}
+              alt={`${Name} image`}
             />
           ) : (
             <Image
               source={img}
-              className="h-full w-full"
-              style={{
-                resizeMode: 'contain',
-              }}
-              onError={handleImageError}
+              placeholder={{ blurhash }}
+              contentFit="contain"
+              style={{ width: '100%', height: '100%' }}
               alt={`${Name} image`}
             />
           )}

@@ -111,7 +111,6 @@ const BottomTab: React.FC = () => {
         marginTop: 3,
         marginBottom: Platform.OS === 'ios' ? 5 : 3,
       },
-
       // Custom tabBarButton to remove feedback
       tabBarButton: (props: any ) => (
         <Pressable

@@ -1,7 +1,7 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { View, Text, SafeAreaView, StatusBar, Platform, Pressable } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 import IngredientsSearch from './IngredientsSearch/IngredientsSearch';
@@ -71,7 +71,9 @@ const SearchView = () => {
           },
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.textMuted,
-          swipeEnabled: true,
+          swipeEnabled: false,
+          lazy: true,
+          tabBarPressColor: 'transparent', // to remove feedback
         }}>
         <Tab.Screen
           name="Products"

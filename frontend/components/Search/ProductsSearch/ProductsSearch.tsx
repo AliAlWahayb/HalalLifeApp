@@ -13,69 +13,28 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([
     {
-      id: 1,
-      Name: 'Organic Almond Milk',
-      Source: 'Silk',
+      countries_en: 'United States,World',
+      code: 727806011220,
+      image_url: null,
+      product_name: 'Eggplant Cutlets',
+      brands: 'Dominex, Dominex Natural Foods',
       Status: 'Halal',
-      img: require('../../../assets/Products/image.png'),
     },
     {
-      id: 2,
-      Name: 'BBQ Potato Chips',
-      Source: 'Lays',
-      Status: 'Haram',
-      img: require('../../../assets/Products/image.png'),
-    },
-    {
-      id: 3,
-      Name: 'Vanilla Ice Cream',
-      Source: "Ben & Jerry's",
-      Status: 'Unknown',
-      img: require('../../../assets/Products/image.png'),
-    },
-    {
-      id: 4,
-      Name: 'Vegan Protein Bar',
-      Source: 'RXBAR',
+      countries_en: 'United States',
+      code: 78354703915,
+      image_url:
+        'https://images.openfoodfacts.org/images/products/007/835/470/3915/front_en.3.400.jpg',
+      product_name: 'Lite 50 sharp cheddar shredded cheese',
+      brands: null,
       Status: 'Halal',
-      img: require('../../../assets/Products/image.png'),
-    },
-    {
-      id: 5,
-      Name: 'Chocolate Cookies',
-      Source: 'Nabisco',
-      Status: 'Haram',
-      img: require('../../../assets/Products/image.png'),
-    },
-    {
-      id: 6,
-      Name: 'Coconut Water',
-      Source: 'Vita Coco',
-      Status: 'Halal',
-      img: require('../../../assets/Products/image.png'),
-    },
-    {
-      id: 7,
-      Name: 'Strawberry Yogurt',
-      Source: 'Chobani',
-      Status: 'Unknown',
-      img: require('../../../assets/Products/image.png'),
-    },
-    {
-      id: 8,
-      Name: 'Wheat Bread',
-      Source: 'Wonder',
-      Status: 'Halal',
-      img: require('../../../assets/Products/image.png'),
-    },
-    {
-      id: 9,
-      Name: 'Cola Drink',
-      Source: 'Coca-Cola',
-      Status: 'Halal',
-      img: require('../../../assets/Products/image.png'),
     },
   ]);
+
+  const subtext = (text1: string, text2: string) => {
+    if (!text1) return text2;
+    return text1 + ', ' + text2;
+  };
 
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
@@ -95,8 +54,10 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
       if (searchQuery) {
         result = result.filter(
           (item) =>
-            item.Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.Source.toLowerCase().includes(searchQuery.toLowerCase())
+            item.product_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            subtext(item.brands || '', item.countries_en || '')
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())
         );
       }
 
@@ -188,9 +149,14 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
       ) : (
         <FlatList
           data={filteredProducts}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <Card Name={item.Name} Source={item.Source} Status={item.Status} img={item.img} />
+            <Card
+              Name={item.product_name}
+              Source={subtext(item.brands || '', item.countries_en || '')}
+              Status={item.Status}
+              img={item.image_url}
+            />
           )}
           contentContainerStyle={{
             paddingHorizontal: 12,

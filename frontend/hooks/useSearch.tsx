@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'; // Assuming you are using @tanstack/react-query
+import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query'; // Assuming you are using @tanstack/react-query
 
 import { API_BASE } from './useProduct';
 
@@ -35,3 +35,51 @@ export const useIngredientss = () => {
   });
 };
 
+export interface Product {
+  code: string;
+  product_name: string;
+  brands?: string;
+  image_url?: string;
+}
+
+type ProductsPage = Product[];
+
+const INFINITE_PRODUCTS_QUERY_KEY = ['infiniteProducts'];
+
+const fetchProductsPage = async ({
+  pageParam = 1,
+}: {
+  pageParam?: number;
+}): Promise<ProductsPage> => {
+  const response = await fetch(`${API_BASE}/products?page=${pageParam}&limit=20`);
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => 'N/A');
+    throw new Error(
+      `Failed to fetch products: ${response.status} ${response.statusText} - ${errorBody}`
+    );
+  }
+  return response.json();
+};
+
+export const useInfiniteProducts = () => {
+  return useInfiniteQuery<
+    ProductsPage,
+    Error,
+    InfiniteData<ProductsPage, number | undefined>,
+    typeof INFINITE_PRODUCTS_QUERY_KEY,
+    number | undefined
+  >({
+    queryKey: INFINITE_PRODUCTS_QUERY_KEY,
+    queryFn: fetchProductsPage,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) {
+        return undefined;
+      }
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
+    retry: 2,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+  });
+};

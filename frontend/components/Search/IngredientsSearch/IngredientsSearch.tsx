@@ -1,11 +1,12 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useIngredientss, Ingredients } from 'hooks/useSearch';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 import { GLOBAL_COLORS } from 'themes/themes';
 
 import Card from './Components/Card';
+const MemoizedCard = memo(Card); // Create a memoized version of your Card component
 
 interface IngredientsSearchProps {
   searchQuery: string;
@@ -30,6 +31,20 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
       return 'Haram';
     } else {
       return 'Unknown';
+    }
+  };
+
+  const handleFilterColor = (filter: string) => {
+    if (filter === 'All') {
+      return theme.colors.primary;
+    } else if (filter === 'Halal') {
+      return GLOBAL_COLORS.Halal;
+    } else if (filter === 'Haram') {
+      return GLOBAL_COLORS.Haram;
+    } else if (filter === 'Unknown') {
+      return GLOBAL_COLORS.Unknown;
+    } else {
+      return theme.colors.textMuted;
     }
   };
 
@@ -96,9 +111,9 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
               return (
                 <TouchableOpacity
                   onPress={() => setSelectedFilter(item === 'All' ? null : item)}
-                  className={` px-4 mr-2 rounded-full py-2`}
+                  className="mr-2 rounded-full px-4 py-2"
                   style={{
-                    backgroundColor: isSelected ? theme.colors.accent : 'transparent',
+                    backgroundColor: isSelected ? handleFilterColor(item) : 'transparent',
                   }}>
                   <Text
                     style={{
@@ -175,7 +190,11 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
           data={filteredIngredients}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <Card Name={item.name} Source={item.category} Status={handleStatus(item.id_status)} />
+            <MemoizedCard
+              Name={item.name}
+              Source={item.category}
+              Status={handleStatus(item.id_status)}
+            />
           )}
           contentContainerStyle={{
             paddingHorizontal: 12,

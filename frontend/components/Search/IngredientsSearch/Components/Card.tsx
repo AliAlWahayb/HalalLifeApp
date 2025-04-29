@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 interface CardProps {
   Name: string;
-  Source: string;
+  Source: string | null;
   Status: string;
 }
 
@@ -66,7 +66,7 @@ const Card: React.FC<CardProps> = ({ Name, Source, Status }) => {
             style={{ marginRight: 6, opacity: 0.8 }}
           />
           <Text className="text-sm" style={{ color: theme.colors.textMuted }}>
-            {Source}
+            {Source || 'N/A'}
           </Text>
         </View>
       </View>
