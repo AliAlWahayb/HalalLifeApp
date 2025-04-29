@@ -11,11 +11,11 @@ import Scanner from 'components/Camera/Scanner';
 import SearchView from 'components/Search/SearchView';
 import Preference from 'components/Preference/Preference';
 import Theme from 'components/Theme/ThemeView';
-import comView from 'components/com/comView';
 import mapView from 'components/map/mapView';
 import { useTheme } from 'themes/ThemeProvider';
 import UserSettings from 'components/UserSettings/UserSettings';
 import UserProfile from 'components/com/small/UserProfile';
+import ModernChatView from 'components/chatBot/modern/ModernChatView';
 
 const Tab = createBottomTabNavigator();
 
@@ -162,10 +162,9 @@ const BottomTab: React.FC = () => {
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
         <Tab.Screen
           name="Chat"
-          component={comView}
+          component={ModernChatView}
           options={{
             tabBarIcon: ChatIcon,
-            tabBarBadge: 3,
           }}
         />
         <Tab.Screen
