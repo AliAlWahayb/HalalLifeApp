@@ -1,4 +1,3 @@
-
 #main.py
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -52,3 +51,7 @@ app.include_router(Products.router, prefix="/api/products", tags=["products"])
 app.include_router(ingredients.router, prefix="/api/ingredients", tags=["ingredients"])
 app.include_router(ecodes.router, prefix="/api/ecodes", tags=["ecodes"])
 app.include_router(status.router, prefix="/api/status", tags=["status"])
+
+# Import chatbot controller and register routes
+from app.api.controllers import chatbot
+app.include_router(chatbot.router, prefix="/api/chatbot", tags=["chatbot"])

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Image } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../../../themes/ThemeProvider';
 import { Message } from './ModernChatView';
@@ -14,6 +14,7 @@ const ModernChatMessage: React.FC<ChatMessageProps> = ({ message, isLastAssistan
   const isUser = message.role === 'user';
   const [copied, setCopied] = useState(false);
   const [showActions, setShowActions] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   // Format timestamp
   const formatTime = (date: Date): string => {
@@ -45,8 +46,35 @@ const ModernChatMessage: React.FC<ChatMessageProps> = ({ message, isLastAssistan
     ? 'rgba(255, 255, 255, 0.12)' // Slightly more opaque in dark mode
     : 'rgba(0, 0, 0, 0.06)';      // Slightly darker in light mode
 
-  // Render message content as plain text
+  // Render message content as plain text or image
   const renderMessageContent = () => {
+    // If message contains an image
+    if (message.contentType === 'image' && message.imageUri) {
+      return (
+        <View style={styles.imageMessageContainer}>
+          <Image 
+            source={{ uri: message.imageUri }} 
+            style={styles.messageImage}
+            resizeMode="cover"
+            onError={() => setImageError(true)}
+          />
+          {imageError && (
+            <Text style={[styles.errorText, { color: theme.colors.error || '#D32F2F' }]}>
+              Failed to load image
+            </Text>
+          )}
+          <Text
+            style={[
+              styles.messageText,
+              { color: isUser ? userBubbleTextColor : theme.colors.textPrimary, marginTop: 8 },
+            ]}>
+            {message.content}
+          </Text>
+        </View>
+      );
+    }
+    
+    // Default text content
     return (
       <Text
         style={[
@@ -66,10 +94,7 @@ const ModernChatMessage: React.FC<ChatMessageProps> = ({ message, isLastAssistan
       {!isUser && (
         <View style={styles.avatarContainer}>
           <View
-            style={[
-              styles.avatar,
-              { backgroundColor: theme.colors.primary }
-            ]}>
+            style={[styles.avatar, { backgroundColor: theme.colors.primary }]}>
             <Ionicons name="chatbubble" size={18} color="#fff" />
           </View>
         </View>
@@ -131,10 +156,7 @@ const ModernChatMessage: React.FC<ChatMessageProps> = ({ message, isLastAssistan
       {isUser && (
         <View style={styles.avatarContainer}>
           <View
-            style={[
-              styles.avatar,
-              { backgroundColor: theme.colors.accent }
-            ]}>
+            style={[styles.avatar, { backgroundColor: theme.colors.accent }]}>
             <Ionicons name="person" size={18} color="#fff" />
           </View>
         </View>
@@ -197,6 +219,18 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  imageMessageContainer: {
+    marginBottom: 8,
+  },
+  messageImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 16,
+  },
+  errorText: {
+    fontSize: 12,
+    textAlign: 'center',
   },
 });
 

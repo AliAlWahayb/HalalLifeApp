@@ -18,6 +18,7 @@ import CameraView from 'components/Camera/CameraView';
 import UserProfile from 'components/com/small/UserProfile';
 import ProtectedScreen from 'components/Shared/ProtectedScreen/ProtectedScreen';
 import { AuthContext } from '../../context/Auth-context';
+import ChatNavigator from 'components/chatBot/ChatNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,7 +43,6 @@ const NotificationsScreen = () => {
   );
 };
 
-// Use the existing UserProfile component for the Profile screen
 const ProfileScreen = UserProfile;
 
 
@@ -174,7 +174,7 @@ const BottomTab: React.FC = () => {
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Camera">
         <Tab.Screen
           name="Chat"
-          component={comView}
+          component={ChatNavigator}
           options={{
             tabBarIcon: ChatIcon,
             tabBarBadge: 3,

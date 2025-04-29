@@ -1,681 +1,530 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { Camera } from 'expo-camera';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
+  StyleSheet,
+  FlatList,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  StyleSheet,
-  Keyboard,
-  Animated,
-  Modal,
+  Text,
+  Image,
+  Alert,
 } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from 'themes/ThemeProvider';
+
+// Import components and types
+import ChatAPI, { Message, ChatRequest } from './ChatAPI';
 import ChatMessage from './ChatMessage';
 import WelcomeScreen from './WelcomeScreen';
-
-// Define message types
-export type MessageRole = 'user' | 'assistant' | 'system';
-
-export interface Message {
-  id: string;
-  content: string;
-  role: MessageRole;
-  timestamp: Date;
-}
-
-// Options for voice, clarity, etc.
-type ModelOption = 'standard' | 'concise' | 'detailed';
+import { useTheme } from '../../themes/ThemeProvider';
 
 const ChatView: React.FC = () => {
-  const { theme, themeName } = useTheme();
+  const { theme } = useTheme();
+  const insets = useSafeAreaInsets(); // Keep this for future use
+  const navigation = useNavigation();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputText, setInputText] = useState('');
+  const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationId, setConversationId] = useState<string | undefined>(undefined);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showWelcome, setShowWelcome] = useState(true);
-  const [model, setModel] = useState<ModelOption>('standard');
-  const [showSettings, setShowSettings] = useState(false);
-  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  const [currentImageData, setCurrentImageData] = useState<string | null>(null);
+  const flatListRef = useRef<FlatList>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [imageProcessingStatus, setImageProcessingStatus] = useState<'idle' | 'processing' | 'ready'>('idle');
   
-  const scrollViewRef = useRef<ScrollView>(null);
-  const inputRef = useRef<TextInput>(null);
-  const scrollY = useRef(new Animated.Value(0)).current;
-  
-  // Define high contrast colors
-  const headerIconColor = themeName === 'dark' 
-    ? 'rgba(255, 255, 255, 0.9)' 
-    : 'rgba(0, 0, 0, 0.7)';
-  
-  const inputPlaceholderColor = themeName === 'dark'
-    ? 'rgba(255, 255, 255, 0.5)'
-    : 'rgba(0, 0, 0, 0.4)';
-  
-  const modalOverlayColor = 'rgba(0, 0, 0, 0.7)'; // Darker overlay for better contrast
+  // Use a default user ID for now
+  const userId = 'anonymous';
 
-  // Auto-scroll to bottom when new messages arrive
+  // Request camera permissions on mount
   useEffect(() => {
-    if (messages.length > 0) {
-      setTimeout(() => {
-        scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 100);
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasCameraPermission(status === 'granted');
+    })();
+  }, []);
+
+  useEffect(() => {
+    // Auto-scroll to bottom when messages change
+    if (flatListRef.current && messages.length > 0) {
+      flatListRef.current.scrollToEnd({ animated: true });
     }
   }, [messages]);
 
-  // Monitor scroll position to show/hide scroll to bottom button
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { 
-      useNativeDriver: false,
-      listener: (event: any) => {
-        const scrollPosition = event.nativeEvent.contentOffset.y;
-        const scrollViewHeight = event.nativeEvent.layoutMeasurement.height;
-        const contentHeight = event.nativeEvent.contentSize.height;
-        
-        // Show button if we're not at the bottom and have enough content
-        const isNotAtBottom = scrollPosition + scrollViewHeight < contentHeight - 100;
-        const hasEnoughContent = contentHeight > scrollViewHeight * 1.5;
-        
-        setShowScrollToBottom(isNotAtBottom && hasEnoughContent);
-      }
-    }
-  );
+  const handleSend = async () => {
+    if (!input.trim() && !currentImageData) return;
 
-  const scrollToBottom = () => {
-    scrollViewRef.current?.scrollToEnd({ animated: true });
-  };
-
-  // Send message function - implemented to fix the sendMessage reference error
-  const sendMessage = (messageText?: string) => {
-    // Use either the provided messageText or the current inputText
-    const messageContent = messageText || inputText;
-    
-    if (!messageContent.trim()) return;
-    
-    // Create a new user message
     const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      content: messageContent,
+      content: input,
       role: 'user',
-      timestamp: new Date()
+      timestamp: new Date(),
+      image_data: currentImageData || undefined,
     };
-    
-    // Hide welcome screen and update messages
-    setShowWelcome(false);
-    setMessages(prev => [...prev, userMessage]);
-    
-    // Clear input if we're using the input field text
-    if (!messageText) {
-      setInputText('');
-    }
-    
-    // Show loading state
+
+    // Add user message to the UI immediately
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setInput('');
     setIsLoading(true);
-    
-    // Simulate API delay
-    setTimeout(() => {
-      // Generate AI response
-      const responseText = getSimulatedResponse(messageContent, model);
-      
-      // Create assistant message
-      const assistantMessage: Message = {
-        id: `assistant-${Date.now()}`,
-        content: responseText,
-        role: 'assistant',
-        timestamp: new Date()
+    setShowWelcome(false);
+    setImageProcessingStatus('idle');
+
+    try {
+      // Prepare the request
+      const request: ChatRequest = {
+        message: input || 'Analyze this image for halal ingredients',
+        conversation_id: conversationId,
+        image_data: currentImageData || undefined,
       };
+
+      // Clear the image data after preparing the request
+      setCurrentImageData(null);
+
+      // Send to backend
+      const response = await ChatAPI.sendMessage(request, userId);
       
-      // Update messages with assistant response
-      setMessages(prev => [...prev, assistantMessage]);
+      // Save conversation ID for future messages
+      if (response.conversation_id) {
+        setConversationId(response.conversation_id);
+      }
+      
+      // Add AI response to messages
+      setMessages((prevMessages) => [...prevMessages, response.message]);
+      
+      // Update suggestions
+      setSuggestions(response.suggestions || []);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      
+      // Add error message
+      const errorMessage: Message = {
+        content: 'Sorry, I encountered an error while processing your request. Please try again later.',
+        role: 'assistant',
+        timestamp: new Date(),
+      };
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
-  };
-
-  // Handle suggestion clicks from welcome screen
-  const handleSuggestion = (message: string) => {
-    sendMessage(message);
-  };
-
-  // Simulate responses based on model choice
-  const getSimulatedResponse = (userInput: string, modelType: ModelOption): string => {
-    const userInputLower = userInput.toLowerCase();
-    
-    // Generate different responses based on model choice
-    if (userInputLower.includes('gelatin') || userInputLower.includes('e471')) {
-      if (modelType === 'concise') {
-        return "Gelatin is typically haram unless from halal sources. Look for plant-based alternatives like agar-agar. E471 can be from plant or animal sources - check for halal certification.";
-      } else if (modelType === 'detailed') {
-        return "Gelatin is a protein derived from animal collagen, typically from pigs or cattle. In Islamic dietary law:\n\n- Gelatin from pork is always haram (forbidden)\n- Gelatin from cattle is only halal if the animal was slaughtered according to Islamic law\n- Many scholars consider all conventional gelatin to be haram due to uncertainty\n\nHalal alternatives include:\n- Agar-agar (seaweed extract)\n- Carrageenan (seaweed extract)\n- Pectin (fruit-based)\n- Fish gelatin (if from halal-slaughtered fish)\n- Certified halal bovine gelatin\n\nRegarding E471 (mono and diglycerides), it can be derived from either plant or animal sources. Only purchase products with E471 if they have reliable halal certification.";
-      } else {
-        return "Gelatin is typically derived from animal sources and is considered haram unless it comes from a halal source. Look for products that specifically mention 'halal gelatin' or 'plant-based gelatin alternatives' like agar-agar or carrageenan. E471 can be derived from both plant and animal sources, so check for halal certification to be sure.";
-      }
-    } else if (userInputLower.includes('scan') || userInputLower.includes('barcode')) {
-      if (modelType === 'concise') {
-        return "Tap the Camera icon at the bottom of your screen to scan product barcodes. We'll check if it's halal certified.";
-      } else if (modelType === 'detailed') {
-        return "Using the Halal Life Scanner:\n\n1. Tap the Camera icon in the center of the bottom navigation bar\n2. Allow camera permissions if prompted\n3. Position the product barcode within the scanning frame\n4. Hold the phone steady until the scan completes\n5. View the detailed halal status with ingredient analysis\n\nThe scanner checks against our database of:\n- Known halal certified products\n- Ingredient analysis for uncertified products\n- Community-reported information\n\nYou can also save scan results and report inaccuracies to help improve our database.";
-      } else {
-        return "You can use our built-in scanner feature to check if a product is halal. Simply tap the Camera icon in the bottom navigation bar and scan the product's barcode. We'll check our database for halal certification information and provide ingredient analysis.";
-      }
-    } else if (userInputLower.includes('restaurant') || userInputLower.includes('nearby')) {
-      return "You can find halal restaurants nearby by using our Map feature. Tap the Map icon in the bottom navigation bar and enable location services. The map will show halal-certified restaurants in your area with ratings from other Halal Life users.";
-    } else if (userInputLower.includes('certification') || userInputLower.includes('certified')) {
-      return "Look for recognized halal certification symbols like HMC, IFANCA, JAKIM, or MUI. These certifications ensure that products meet Islamic dietary requirements. Our app can help you verify certifications when you scan products.";
-    } else if (userInputLower.includes('halal') || userInputLower.includes('haram')) {
-      return "I can help you determine if a product is halal or haram. You can ask me about specific ingredients or products, and I'll provide information based on Islamic dietary guidelines.";
-    } else if (userInputLower.includes('hello') || userInputLower.includes('hi')) {
-      return "Hello! I'm the Halal Life Assistant. How can I help you today?";
-    } else if (userInputLower.includes('ingredient')) {
-      return "If you want to know about specific ingredients, you can ask me directly or use our product scanner feature to check products while shopping.";
-    } else {
-      return "Thank you for your message. I'm here to help with questions about halal products, ingredients, and Islamic dietary guidelines. What specific information are you looking for?";
     }
   };
 
-  const clearChat = () => {
+  const handleSuggestionPress = (suggestion: string) => {
+    setInput(suggestion);
+    // Auto-send if it's a suggestion
+    setTimeout(() => {
+      handleSend();
+    }, 100);
+  };
+
+  const startNewChat = () => {
     setMessages([]);
+    setConversationId(undefined);
     setShowWelcome(true);
+    setSuggestions([]);
   };
 
-  const handleInputSubmit = () => {
-    if (inputText.trim()) {
-      sendMessage();
+  const pickImage = async () => {
+    // Request permissions if not already granted
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (status !== 'granted') {
+      Alert.alert(
+        'Permission Required',
+        'Please grant access to your photo library to upload images.'
+      );
+      return;
+    }
+    
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5, // Lower quality for smaller file size
+        base64: true,
+      });
+      
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
+        if (asset.base64) {
+          // Format as data URL with compressed quality
+          setCurrentImageData(`data:image/jpeg;base64,${asset.base64}`);
+          console.log('Image picked with size:', asset.base64.length);
+          setImageProcessingStatus('ready');
+          
+          // Add a default message to prompt the user
+          setInput('Please analyze these ingredients for halal status');
+        }
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      Alert.alert('Error', 'Failed to pick image. Please try again.');
     }
   };
 
-  const toggleSettings = () => {
-    setShowSettings(!showSettings);
+  const captureImage = async () => {
+    if (!hasCameraPermission) {
+      Alert.alert(
+        'Permission Required',
+        'Please grant camera access to capture images.'
+      );
+      return;
+    }
+
+    // Navigate to a camera component or launch camera
+    try {
+      // Using expo-image-picker's camera option with compression
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5, // Reduce quality to decrease file size
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
+        if (asset.base64) {
+          setCurrentImageData(`data:image/jpeg;base64,${asset.base64}`);
+          console.log('Camera image captured with size:', asset.base64.length);
+          setImageProcessingStatus('ready');
+          
+          // Add a default message to prompt the user
+          setInput('Please analyze these ingredients for halal status');
+        }
+      }
+    } catch (error) {
+      console.error('Error capturing image:', error);
+      Alert.alert('Error', 'Failed to capture image. Please try again.');
+    }
   };
 
-  // Render model option buttons
-  const renderModelButtons = () => {
-    const options: { label: string; value: ModelOption }[] = [
-      { label: 'Standard', value: 'standard' },
-      { label: 'Concise', value: 'concise' },
-      { label: 'Detailed', value: 'detailed' },
-    ];
+  const clearImageData = () => {
+    setCurrentImageData(null);
+    setImageProcessingStatus('idle');
+  };
 
+  const renderImagePreview = () => {
+    if (!currentImageData) return null;
+    
     return (
-      <View style={styles.modelOptionsContainer}>
-        {options.map((option) => (
-          <TouchableOpacity
-            key={option.value}
-            style={[
-              styles.modelOptionButton,
-              model === option.value && styles.modelOptionButtonActive,
-              { 
-                borderColor: theme.colors.border,
-                backgroundColor: model === option.value 
-                  ? theme.colors.primary + '30'  // 30% opacity for better contrast
-                  : 'transparent',
-              }
-            ]}
-            onPress={() => {
-              setModel(option.value);
-            }}
-          >
-            <Text
-              style={[
-                styles.modelOptionText,
-                { 
-                  color: model === option.value 
-                    ? themeName === 'dark' ? '#A5D6A7' : '#2E7D32' // Higher contrast colors
-                    : themeName === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
-                  fontWeight: model === option.value ? '600' : 'normal',
-                }
-              ]}
-            >
-              {option.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+      <View style={styles.imagePreviewContainer}>
+        <Image 
+          source={{ uri: currentImageData }} 
+          style={styles.imagePreview}
+          resizeMode="cover"
+        />
+        <TouchableOpacity 
+          style={styles.clearImageButton}
+          onPress={clearImageData}
+        >
+          <Ionicons name="close-circle" size={24} color="white" />
+        </TouchableOpacity>
       </View>
     );
   };
 
-  // Settings modal content
-  const renderSettingsModal = () => {
-    if (!showSettings) return null;
-    
+  const renderImageStatus = () => {
+    if (imageProcessingStatus === 'idle' || !currentImageData) return null;
+
     return (
-      <Modal
-        visible={showSettings}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={toggleSettings}
-      >
-        <View 
-          style={[
-            styles.settingsModalContainer,
-            { backgroundColor: modalOverlayColor }
-          ]}
-        >
-          <TouchableOpacity
-            style={styles.settingsModalOverlay}
-            activeOpacity={1}
-            onPress={toggleSettings}
-          />
-          
-          <Animated.View 
-            style={[
-              styles.settingsModalContent,
-              { 
-                backgroundColor: theme.colors.cardBackground || theme.colors.background,
-                borderColor: theme.colors.border,
-              }
-            ]}
-          >
-            <View style={styles.settingsModalHeader}>
-              <Text style={[styles.settingsModalTitle, { color: theme.colors.textPrimary }]}>
-                Assistant Settings
-              </Text>
-              <TouchableOpacity onPress={toggleSettings}>
-                <Ionicons name="close" size={24} color={headerIconColor} />
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.settingsSection}>
-              <Text style={[styles.settingsSectionTitle, { color: theme.colors.textPrimary }]}>
-                Response Style
-              </Text>
-              <Text style={[
-                styles.settingsSectionDescription, 
-                { color: themeName === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)' }
-              ]}>
-                Choose how detailed you want the assistant's responses to be
-              </Text>
-              {renderModelButtons()}
-            </View>
-            
-            <View style={[styles.settingsDivider, { backgroundColor: theme.colors.border }]} />
-            
-            <View style={styles.settingsSection}>
-              <TouchableOpacity 
-                style={styles.settingsClearButton} 
-                onPress={() => {
-                  clearChat();
-                  toggleSettings();
-                }}
-              >
-                <MaterialIcons name="delete-outline" size={20} color="#D32F2F" />
-                <Text style={[styles.settingsClearButtonText, { color: "#D32F2F" }]}>
-                  Clear conversation
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        </View>
-      </Modal>
+      <View style={styles.imageStatusContainer}>
+        {imageProcessingStatus === 'processing' && (
+          <View style={styles.imageStatusRow}>
+            <ActivityIndicator size="small" color="#4CAF50" />
+            <Text style={styles.imageStatusText}>Preparing image...</Text>
+          </View>
+        )}
+        {imageProcessingStatus === 'ready' && (
+          <View style={styles.imageStatusRow}>
+            <Ionicons name="checkmark-circle" size={18} color="#4CAF50" />
+            <Text style={styles.imageStatusText}>
+              Image ready to send. Edit message if needed and press send.
+            </Text>
+          </View>
+        )}
+      </View>
     );
   };
 
-  return (
-    <View style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.keyboardAvoidingView}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
-        
-        {/* Actions Bar */}
-        <View style={[styles.actionsBar, { borderBottomColor: theme.colors.border }]}>
-          <View style={styles.actionButtons}>
-            {messages.length > 0 && (
-              <TouchableOpacity onPress={clearChat} style={styles.actionButton}>
-                <Ionicons name="refresh" size={22} color={headerIconColor} />
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity onPress={toggleSettings} style={styles.actionButton}>
-              <Ionicons name="settings-outline" size={22} color={headerIconColor} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        
-        {showWelcome ? (
-          <WelcomeScreen onSuggestionPress={handleSuggestion} />
-        ) : (
-          <View style={styles.chatContainer}>
-            <Animated.ScrollView
-              ref={scrollViewRef}
-              style={styles.messagesContainer}
-              contentContainerStyle={styles.messagesContent}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}
-            >
-              {messages.map((message, index) => (
-                <ChatMessage 
-                  key={message.id} 
-                  message={message}
-                  isLastAssistantMessage={
-                    message.role === 'assistant' && 
-                    index === messages.length - 1
-                  }
-                />
-              ))}
-              {isLoading && (
-                <View style={styles.typingContainer}>
-                  <View style={styles.avatarContainer}>
-                    <View
-                      style={[
-                        styles.avatar,
-                        { backgroundColor: theme.colors.primary }
-                      ]}>
-                      <Ionicons name="chatbubble" size={18} color="#fff" />
-                    </View>
-                  </View>
-                  <View 
-                    style={[
-                      styles.typingBubble,
-                      { 
-                        backgroundColor: themeName === 'dark' 
-                          ? 'rgba(255, 255, 255, 0.12)' 
-                          : 'rgba(0, 0, 0, 0.06)',
-                      }
-                    ]}
-                  >
-                    <View style={styles.typingAnimation}>
-                      <View 
-                        style={[
-                          styles.typingDot, 
-                          { 
-                            backgroundColor: themeName === 'dark' 
-                              ? 'rgba(255, 255, 255, 0.9)' 
-                              : 'rgba(0, 0, 0, 0.7)' 
-                          }
-                        ]} 
-                      />
-                      <View 
-                        style={[
-                          styles.typingDot, 
-                          { 
-                            backgroundColor: themeName === 'dark' 
-                              ? 'rgba(255, 255, 255, 0.9)' 
-                              : 'rgba(0, 0, 0, 0.7)' 
-                          }
-                        ]} 
-                      />
-                      <View 
-                        style={[
-                          styles.typingDot, 
-                          { 
-                            backgroundColor: themeName === 'dark' 
-                              ? 'rgba(255, 255, 255, 0.9)' 
-                              : 'rgba(0, 0, 0, 0.7)' 
-                          }
-                        ]} 
-                      />
-                    </View>
-                  </View>
-                </View>
-              )}
-            </Animated.ScrollView>
-            
-            {showScrollToBottom && (
-              <TouchableOpacity 
-                style={[
-                  styles.scrollToBottomButton,
-                  { 
-                    backgroundColor: theme.colors.background,
-                    borderColor: theme.colors.border,
-                    borderWidth: 1, // Add border for better contrast
-                  }
-                ]}
-                onPress={scrollToBottom}
-              >
-                <Ionicons 
-                  name="chevron-down" 
-                  size={22} 
-                  color={themeName === 'dark' ? '#A5D6A7' : '#2E7D32'} 
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
+  // Add input ref for focusing
+  const inputRef = useRef<TextInput>(null);
 
-        {/* Input Area */}
-        <View 
-          style={[
-            styles.inputContainer, 
-            { 
-              backgroundColor: themeName === 'dark' 
-                ? 'rgba(255, 255, 255, 0.08)' 
-                : 'rgba(0, 0, 0, 0.04)',
-              borderTopColor: theme.colors.border,
+  // Update inputContainer and related components in render
+  return (
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: '#121212' }} // Darker background for better contrast
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+    >
+      {/* Single main header with working back button */}
+      <View style={styles.mainHeader}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Halal Assistant</Text>
+        <TouchableOpacity style={styles.menuButton}>
+          <Ionicons name="ellipsis-vertical" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      
+      {/* Messages list */}
+      {showWelcome && messages.length === 0 ? (
+        <WelcomeScreen onSuggestionPress={handleSuggestionPress} />
+      ) : (
+        <>
+          <FlatList
+            ref={flatListRef}
+            style={styles.messagesContainer}
+            data={messages}
+            keyExtractor={(item, index) => `${item.id || index}`}
+            renderItem={({ item, index }) => (
+              <ChatMessage 
+                message={item} 
+                onSuggestionPress={handleSuggestionPress}
+                suggestions={index === messages.length - 1 && item.role === 'assistant' ? suggestions : undefined}
+              />
+            )}
+            ListEmptyComponent={
+              <View style={styles.emptyList}>
+                <Text style={styles.emptyText}>No messages yet. Start a conversation!</Text>
+              </View>
             }
-          ]}
-        >
-          <View 
-            style={[
-              styles.inputWrapper,
-              { 
-                backgroundColor: theme.colors.cardBackground || theme.colors.background,
-                borderColor: theme.colors.border,
-              }
-            ]}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
+          
+
+          {messages.length > 0 && (
+            <View style={styles.floatingButtonContainer}>
+              <TouchableOpacity style={styles.newChatButton} onPress={startNewChat}>
+                <Ionicons name="add-circle-outline" size={18} color="#FFFFFF" />
+                <Text style={styles.newChatText}>New chat</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </>
+      )}
+
+      {isLoading && (
+        <ActivityIndicator 
+          style={styles.loadingIndicator} 
+          size="large" 
+          color="#4CAF50" // Green to match header
+        />
+      )}
+
+      {/* Input area with image preview and status */}
+      <View>
+        {renderImagePreview()}
+        {renderImageStatus()}
+        <View style={styles.inputContainer}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={pickImage}
           >
-            <TextInput
-              ref={inputRef}
-              value={inputText}
-              onChangeText={setInputText}
-              placeholder="Message Halal Life Assistant..."
-              placeholderTextColor={inputPlaceholderColor}
-              style={[styles.input, { color: theme.colors.textPrimary }]}
-              multiline
-              maxLength={1000}
-              blurOnSubmit={false}
-            />
-            
-            <TouchableOpacity
-              onPress={handleInputSubmit}
-              style={[
-                styles.sendButton,
-                {
-                  backgroundColor: inputText.trim() 
-                    ? theme.colors.primary 
-                    : themeName === 'dark'
-                      ? 'rgba(255, 255, 255, 0.15)'
-                      : 'rgba(0, 0, 0, 0.15)',
-                },
-              ]}
-              disabled={!inputText.trim() || isLoading}
-            >
-              <Ionicons name="send" size={20} color="#fff" />
-            </TouchableOpacity>
-          </View>
+            <Ionicons name="image" size={24} color="#4CAF50" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={captureImage}
+          >
+            <Ionicons name="camera" size={24} color="#4CAF50" />
+          </TouchableOpacity>
+          <TextInput
+            ref={inputRef}
+            style={styles.input}
+            placeholder="Ask about ingredients..."
+            placeholderTextColor="#999"
+            value={input}
+            onChangeText={setInput}
+            multiline
+          />
+          <TouchableOpacity
+            style={[
+              styles.sendButton,
+              { backgroundColor: !input.trim() && !currentImageData ? '#2A3044' : '#4CAF50' }
+            ]}
+            onPress={handleSend}
+            disabled={!input.trim() && !currentImageData}
+          >
+            <Ionicons name="send" size={20} color="white" />
+          </TouchableOpacity>
         </View>
-        
-        {/* Settings Modal */}
-        {renderSettingsModal()}
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
+
+export default ChatView;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#121212', // Very dark background
   },
-  keyboardAvoidingView: {
-    flex: 1,
-  },
-  actionsBar: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+  mainHeader: {
+    backgroundColor: '#4CAF50', // Green header background
+    paddingTop: 16,
+    paddingBottom: 16,
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-  },
-  actionButtons: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    elevation: 4, // Add shadow on Android
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
-  actionButton: {
-    padding: 8,
-    marginLeft: 8,
-    borderRadius: 16,
-  },
-  chatContainer: {
+  headerTitle: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
     flex: 1,
-    position: 'relative',
+    textAlign: 'center',
+  },
+  backButton: {
+    padding: 8,
+  },
+  menuButton: {
+    padding: 8,
   },
   messagesContainer: {
     flex: 1,
+    paddingVertical: 8,
   },
-  messagesContent: {
-    padding: 16,
-    paddingBottom: 16,
-  },
-  typingContainer: {
-    flexDirection: 'row',
-    marginVertical: 8,
-    alignItems: 'flex-end',
-  },
-  avatarContainer: {
-    width: 32,
-    marginRight: 8,
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+  emptyList: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 40,
   },
-  typingBubble: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 18,
-    maxWidth: '80%',
-  },
-  typingAnimation: {
-    flexDirection: 'row',
-    width: 40,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  typingDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    opacity: 0.8,
-    // Animation would go here with Animated API
-  },
-  scrollToBottomButton: {
-    position: 'absolute',
-    right: 16,
-    bottom: 16,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 2,
+  emptyText: {
+    color: '#AAAAAA', // Lighter grey for better visibility
+    fontSize: 16,
   },
   inputContainer: {
-    padding: 10,
-    borderTopWidth: 1,
-  },
-  inputWrapper: {
     flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 24,
-    borderWidth: 1,
     paddingHorizontal: 16,
-    paddingVertical: 4,
+    paddingVertical: 12,
+    backgroundColor: '#1A1A1A', // Slightly lighter than background
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.08)', // Subtle separator
+    alignItems: 'center',
+    paddingBottom: 16, // More space at bottom
   },
   input: {
     flex: 1,
-    paddingVertical: 8,
-    maxHeight: 100,
+    backgroundColor: '#2C2C2C', // Darker input field
+    color: '#FFFFFF', // White text for visibility
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    marginRight: 12,
+    maxHeight: 120,
+    fontSize: 16, // Larger font size
   },
   sendButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    backgroundColor: '#4CAF50', // Green to match header
+    borderRadius: 50,
+    width: 42,
+    height: 42,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
   },
-  settingsModalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  settingsModalOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  settingsModalContent: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 24,
-    borderWidth: 1,
-    borderBottomWidth: 0,
-  },
-  settingsModalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  actionButton: {
+    width: 42,
+    height: 42,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginRight: 8,
+    backgroundColor: '#2C2C2C', // Match input background
+    borderRadius: 21,
   },
-  settingsModalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  settingsSection: {
-    marginBottom: 24,
-  },
-  settingsSectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  settingsSectionDescription: {
-    fontSize: 14,
-    marginBottom: 16,
-  },
-  modelOptionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modelOptionButton: {
-    flex: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginHorizontal: 4,
-    alignItems: 'center',
-  },
-  modelOptionButtonActive: {
-    borderWidth: 2,
-  },
-  modelOptionText: {
-    fontSize: 14,
-  },
-  settingsDivider: {
-    height: 1,
+  loadingIndicator: {
     marginVertical: 16,
+    alignSelf: 'center',
   },
-  settingsClearButton: {
+  imagePreviewContainer: {
+    margin: 12,
+    position: 'relative',
+    borderRadius: 12,
+    overflow: 'hidden',
+    height: 120, // Larger preview
+    width: 120, // Larger preview
+    alignSelf: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  imagePreview: {
+    width: '100%',
+    height: '100%',
+  },
+  clearImageButton: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 14,
+    padding: 4,
+  },
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 80,
+    alignSelf: 'center',
+    zIndex: 10,
+  },
+  newChatButton: {
+    backgroundColor: 'rgba(76, 175, 80, 0.9)', // More opaque green
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
-  settingsClearButtonText: {
+  newChatText: {
+    color: '#FFFFFF',
+    marginLeft: 6,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  imageStatusContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: 'rgba(76, 175, 80, 0.15)', // Light green background
+    marginHorizontal: 16,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  imageStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  imageStatusText: {
+    color: '#E0E0E0', // Light gray text
+    fontSize: 14,
     marginLeft: 8,
-    fontSize: 16,
-    fontWeight: '500',
+    flex: 1,
   },
 });
-
-export default ChatView;

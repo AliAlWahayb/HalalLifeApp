@@ -12,20 +12,25 @@ import {
   Keyboard,
   Animated,
   Modal,
+  Image,
 } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import { useTheme } from '../../../themes/ThemeProvider';
 import ModernChatMessage from './ModernChatMessage';
 import ModernWelcomeScreen from './ModernWelcomeScreen';
 
 // Define message types
 export type MessageRole = 'user' | 'assistant' | 'system';
+export type MessageContentType = 'text' | 'image';
 
 export interface Message {
   id: string;
   content: string;
-  role: MessageRole;
+  role: 'user' | 'assistant' | 'system';
   timestamp: Date;
+  contentType?: 'text' | 'image'; // Add contentType to distinguish between text and image messages
+  imageUri?: string; // Add imageUri for image messages
 }
 
 // Options for voice, clarity, etc.
@@ -204,6 +209,7 @@ const ModernChatView: React.FC = () => {
           <TouchableOpacity
             key={option.value}
             style={[
+
               styles.modelOptionButton,
               model === option.value && styles.modelOptionButtonActive,
               { 
@@ -282,6 +288,7 @@ const ModernChatView: React.FC = () => {
                 Response Style
               </Text>
               <Text style={[
+
                 styles.settingsSectionDescription, 
                 { color: themeName === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)' }
               ]}>
@@ -310,6 +317,61 @@ const ModernChatView: React.FC = () => {
         </View>
       </Modal>
     );
+  };
+
+  // Define a new function to handle image picking and sending
+  const handleImagePick = async () => {
+    // Request permission to access the media library
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to upload images!');
+      return;
+    }
+    
+    // Launch image picker
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.8,
+      aspect: [4, 3],
+    });
+    
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const selectedAsset = result.assets[0];
+      
+      // Create a new image message
+      const userImageMessage: Message = {
+        id: `user-${Date.now()}`,
+        content: 'Image upload',  // Default text, user can edit before sending
+        role: 'user',
+        timestamp: new Date(),
+        contentType: 'image',
+        imageUri: selectedAsset.uri
+      };
+      
+      // Update state with the message
+      setShowWelcome(false);
+      setMessages(prev => [...prev, userImageMessage]);
+      
+      // Simulate AI response to the image
+      setIsLoading(true);
+      setTimeout(() => {
+        const responseText = "I've received your image. Is there anything specific about it you'd like me to help with?";
+        
+        // Create assistant message
+        const assistantMessage: Message = {
+          id: `assistant-${Date.now()}`,
+          content: responseText,
+          role: 'assistant',
+          timestamp: new Date()
+        };
+        
+        // Update messages with assistant response
+        setMessages(prev => [...prev, assistantMessage]);
+        setIsLoading(false);
+      }, 1500);
+    }
   };
 
   return (
@@ -455,6 +517,18 @@ const ModernChatView: React.FC = () => {
               }
             ]}
           >
+            {/* Camera/Image upload button */}
+            <TouchableOpacity
+              onPress={handleImagePick}
+              style={styles.cameraButton}
+            >
+              <Ionicons 
+                name="camera-outline" 
+                size={22} 
+                color={themeName === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.6)'} 
+              />
+            </TouchableOpacity>
+            
             <TextInput
               ref={inputRef}
               value={inputText}
