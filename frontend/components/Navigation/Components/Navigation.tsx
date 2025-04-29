@@ -19,6 +19,8 @@ import UserProfile from 'components/com/small/UserProfile';
 import ProtectedScreen from 'components/Shared/ProtectedScreen/ProtectedScreen';
 import { AuthContext } from '../../context/Auth-context';
 import { PressableProps } from 'react-native/Libraries/Components/Pressable/Pressable';
+import ChatView from 'components/chatBot/ChatView';
+import ModernChatView from 'components/chatBot/modern/ModernChatView';
 
 const Tab = createBottomTabNavigator();
 
@@ -185,10 +187,9 @@ const BottomTab: React.FC = () => {
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Search">
         <Tab.Screen
           name="Chat"
-          component={comView}
+          component={ModernChatView}
           options={{
             tabBarIcon: ChatIcon,
-            tabBarBadge: 3,
           }}
         />
         <Tab.Screen

@@ -66,6 +66,10 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "react-phone-input-2": "^2.15.1",
+    "react-native-markdown-display": "^7.0.2",
+    "expo-haptics": "^14.0.1",
+    "expo-blur": "^14.0.3",
+    "@react-native-clipboard/clipboard": "^1.16.2",
     "undefined": "expo-auth-session/providers/google"
   },
   "devDependencies": {
