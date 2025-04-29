@@ -1,89 +1,88 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Accordion from 'components/Shared/Accordion';
-import { Image } from 'expo-image';
-import React, { useMemo } from 'react';
+import { useRoute } from '@react-navigation/native';
+import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
+import Additives from './Components/Additives';
+import Details from './Components/Details';
+import Hero from './Components/Hero';
+import Ingredients from './Components/Ingredients';
+import Nutritional from './Components/Nutritional';
 import ProductButtons from './Components/ProductButtons';
 
 // Interfaces
-interface AccordionItem {
-  title: string;
-  number: number;
-}
-
 interface ProductData {
-  title: string;
-  img: any;
-  accordion: AccordionItem[];
+  code: string;
+  product: {
+    countries: string;
+    origins: string;
+    generic_name: string;
+    product_name_en: string;
+    brands: string;
+    brands_tags: string[];
+    quantity: string;
+    allergens_hierarchy: string[];
+    allergens_tags: string[];
+    labels_tags: string[];
+    additives_tags: string[];
+    nutriments: {
+      [key: string]: number | string;
+    };
+    selected_images: {
+      front: {
+        display: { [key: string]: string };
+        small: { [key: string]: string };
+        thumb: { [key: string]: string };
+      };
+    };
+    nutriscore_grade: string;
+    nova_groups_tags: string[];
+    ingredients_analysis_tags: string[];
+    ingredients: {
+      text: string;
+      percent_estimate?: number;
+      ingredients?: {
+        text: string;
+        percent_estimate?: number;
+      }[];
+    }[];
+  };
 }
 
-// Constants
-const data: ProductData[] = [
-  {
-    title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-    img: require('../../assets/Products/image.png'),
-    accordion: [
-      {
-        title: 'Details',
-        number: 1,
-      },
-      {
-        title: 'Additives',
-        number: 1,
-      },
-      {
-        title: 'Nutritional Facts',
-        number: 1,
-      },
-    ],
-  },
-];
+interface Props {
+  productData: ProductData;
+  halalStatus: string;
+  additives: string[];
+}
 
-const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
-
-const Halal: React.FC = () => {
-  const { theme } = useTheme();
-
-  // Memoize the font size calculation to avoid unnecessary recalculations
-  const titleFontSize = useMemo(() => {
-    const textLength = data[0].title.length;
-    if (textLength < 20) return 'text-3xl'; // Larger font for short text
-    if (textLength < 40) return 'text-2xl'; // Medium font for medium-length text
-    return 'text-xl'; // Smaller font for long text
-  }, [data[0].title]);
+const Halal = () => {
+  const { theme, globalColors } = useTheme();
+  const route = useRoute();
+  const { productData , additives } = route.params as Props;
 
   return (
     <ScrollView className="flex-1 bg-background py-5" contentContainerClassName="items-center">
-      <View className="w-5/6 flex-col items-center justify-center rounded-3xl border-4 border-accent p-3">
-        <View className="rounded-full bg-accent p-2">
+      <View
+        className="w-5/6 flex-col items-center justify-center rounded-3xl border-4  p-3"
+        style={{ borderColor: globalColors.Halal }}>
+        <View className="rounded-full p-2" style={{ backgroundColor: globalColors.Halal }}>
           <FontAwesome name="check" size={48} color={theme.colors.textSecondary} />
         </View>
-        <Text className="text-3xl font-bold text-accent">Halal</Text>
+        <Text className="text-3xl font-bold " style={{ color: globalColors.Halal }}>
+          Halal
+        </Text>
       </View>
       <View className="w-5/6 py-2">
-        <View className="flex flex-col items-center">
-          <Text className={`${titleFontSize} flex-wrap text-center font-bold text-accent`}>
-            {data[0].title}
-          </Text>
-          <Image
-            source={data[0].img}
-            placeholder={{ blurhash }}
-            contentFit="contain"
-            className="aspect-[1.5] h-[150px] w-1/2"
-            alt="product image"
-          />
-        </View>
+        <Hero product={productData} />
         <View className="flex flex-col py-5">
-          {data[0].accordion.map((item, index) => (
-            <Accordion key={index} title={item.title} number={item.number}>
-              <View className="flex w-full items-center justify-center">
-                <Text>Video</Text>
-              </View>
-            </Accordion>
-          ))}
+          <Details product={productData} />
+
+          <Ingredients product={productData} />
+
+          <Additives product={additives} />
+
+          <Nutritional product={productData} />
         </View>
       </View>
       <ProductButtons />

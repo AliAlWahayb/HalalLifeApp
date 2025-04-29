@@ -1,15 +1,15 @@
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import Header from 'components/Users/components/Header';
-import { AuthContext } from 'context/Auth-context';
+import { AuthContext } from '../../context/Auth-context'
 import { useForm } from 'hooks/form-hooks';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { VALIDATOR_REQUIRE, VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from 'util/Validators';
-
 import FacebookImage from '../../../assets/Social/FacebookImge.png';
 import GoogleImage from '../../../assets/Social/GoogleImge.png';
 import Buttons from '../../Shared/components/FormElements/Buttons';
 import InputForm from '../../Shared/components/FormElements/InputForm';
+import { API_BASE } from 'hooks/useProduct';
 
 const Auth = () => {
   const navigation = useNavigation();
@@ -59,10 +59,40 @@ const Auth = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
 
-  const authSubmitHandler = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    console.log(formState.inputs);
-    auth.login();
+  const authSubmitHandler = async () => {
+    const url = isLoginMode
+      ? `${API_BASE}/users/login` //this is my device ip you must replace with your device ip
+      : `${API_BASE}/users/signup`; //this is my device ip you must replace with your device ip
+    const body = {
+      email: formState.inputs.email.value,
+      password: formState.inputs.password.value,
+      ...(isLoginMode ? {} : { name: formState.inputs.name.value }),
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(resData.detail || 'Something went wrong!');
+      }
+
+    
+      auth.login(resData.userId, resData.token, 'email', resData.name, resData.email);
+      console.log("LogIn Done ✅");
+      console.log("User ID:", resData.userId);
+      console.log("Token:", resData.token);
+      navigation.getParent()?.navigate('Navigation');
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
@@ -74,13 +104,13 @@ const Auth = () => {
       </Text>
       {!isLoginMode && (
         <InputForm
-          label="Name"
+          label="UserName"
           element="input"
           id="name"
           type="text"
-          placeholder="Enter your Full Name"
+          placeholder="Enter your UserName"
           validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a name."
+          errorText="Please enter a valid UserName."
           onInput={inputHandler}
         />
       )}
@@ -117,9 +147,7 @@ const Auth = () => {
         </TouchableOpacity>
       )}
 
-      <Buttons onPress={() => navigation.getParent()?.navigate('Navigation')}>
-        {isLoginMode ? 'Log In' : 'Sign Up'}
-      </Buttons>
+      <Buttons onPress={authSubmitHandler}>{isLoginMode ? 'Log In' : 'Sign Up'}</Buttons>
 
       <TouchableOpacity onPress={switchModeHandler}>
         <Text className="text-gry-300 mt-4">

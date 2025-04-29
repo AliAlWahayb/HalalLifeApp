@@ -50,8 +50,8 @@ type UserProfileRouteProp = RouteProp<RootStackParamList, 'UserProfile'>;
 type UserProfileNavigationProp = StackNavigationProp<RootStackParamList>;
 
 interface UserProfileProps {
-  route: UserProfileRouteProp;
-  navigation: UserProfileNavigationProp;
+  route?: UserProfileRouteProp;
+  navigation?: UserProfileNavigationProp;
 }
 
 // Sample user data
@@ -68,19 +68,22 @@ const dummyUser: User = {
   savedPosts: [
     {
       id: '1',
-      image: 'https://images.unsplash.com/photo-1523368749929-6b2bf370dbf8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
+      image:
+        'https://images.unsplash.com/photo-1523368749929-6b2bf370dbf8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
       likes: 110,
       comments: 32,
     },
     {
       id: '2',
-      image: 'https://images.unsplash.com/photo-1529676468696-f3a47aba7d5d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3',
+      image:
+        'https://images.unsplash.com/photo-1529676468696-f3a47aba7d5d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3',
       likes: 56,
       comments: 12,
     },
     {
       id: '3',
-      image: 'https://plus.unsplash.com/premium_photo-1687904479711-026c1c3abdf0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
+      image:
+        'https://plus.unsplash.com/premium_photo-1687904479711-026c1c3abdf0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
       likes: 200,
       comments: 75,
     },
@@ -88,13 +91,15 @@ const dummyUser: User = {
   likedPosts: [
     {
       id: '4',
-      image: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
+      image:
+        'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3',
       likes: 89,
       comments: 21,
     },
     {
       id: '5',
-      image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3',
+      image:
+        'https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3',
       likes: 134,
       comments: 42,
     },
@@ -105,34 +110,34 @@ const { width } = Dimensions.get('window');
 const numColumns = 2;
 const itemWidth = (width - 48) / numColumns; // 48 = padding (16) * 3
 
-const UserProfile: React.FC<UserProfileProps> = ({ route, navigation }) => {
+const UserProfile = ({ route, navigation }: UserProfileProps) => {
   const [user] = useState<User>(dummyUser); // In a real app, fetch based on route.params.userId
   const [activeTab, setActiveTab] = useState<'saved' | 'liked'>('saved');
   const { theme } = useTheme();
-  
+
   // Check if this is the user's own profile (in a real app, you would compare userId with currentUser.id)
   const isOwnProfile = true; // Hardcoded for now
-  
+
   const showProfileOptions = () => {
     // In a real app, you might show an action sheet or modal here
     // For now, navigate directly to account settings
-    navigation.navigate('UserSettings');
+    navigation?.navigate('UserSettings');
   };
-  
+
   const navigateToEditProfile = () => {
-    navigation.navigate('EditProfile');
+    navigation?.navigate('EditProfile');
   };
-  
+
   const navigateToPreferences = () => {
-    navigation.navigate('Preferences');
+    navigation?.navigate('Preferences');
   };
 
   const renderPostItem = ({ item }: { item: SavedPost }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.postItem}
       onPress={() => {
         // In a real app, you would fetch the full post data and navigate
-        navigation.navigate('PostDetail', { 
+        navigation?.navigate('PostDetail', {
           post: {
             id: item.id,
             image: item.image,
@@ -144,13 +149,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ route, navigation }) => {
             likes: item.likes,
             comments: item.comments,
             time: '2h ago',
-          }
+          },
         });
-      }}
-    >
-      <Image 
-        source={{ uri: item.image }} 
-        style={[styles.postImage, { width: itemWidth }]} 
+      }}>
+      <Image
+        source={{ uri: item.image }}
+        style={[styles.postImage, { width: itemWidth }]}
         resizeMode="cover"
       />
       <View style={styles.postStats}>
@@ -168,46 +172,36 @@ const UserProfile: React.FC<UserProfileProps> = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
-      <Header 
-        title={isOwnProfile ? "Profile" : user.username}
+      <Header
+        title={isOwnProfile ? 'Profile' : user.username}
         showBack={true}
         showSearch={false}
         showNotification={false}
         showProfile={false}
         customRightComponent={
           isOwnProfile ? (
-            <TouchableOpacity 
-              style={styles.iconButton} 
-              onPress={showProfileOptions}
-            >
+            <TouchableOpacity style={styles.iconButton} onPress={showProfileOptions}>
               <Icon name="cog" size={20} color={theme.colors.textPrimary} />
             </TouchableOpacity>
           ) : null
         }
       />
-      
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
-      >
+
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Profile Header */}
         <View style={styles.header}>
           <View style={styles.profileContainer}>
-            <Image 
-              source={{ uri: user.profileImage }} 
-              style={styles.profileImage} 
-            />
+            <Image source={{ uri: user.profileImage }} style={styles.profileImage} />
             <View style={styles.profileInfo}>
               <Text style={[styles.username, { color: theme.colors.textPrimary }]}>
                 {user.username}
               </Text>
-              <Text style={[styles.handle, { color: theme.colors.textMuted }]}>
-                {user.handle}
-              </Text>
+              <Text style={[styles.handle, { color: theme.colors.textMuted }]}>{user.handle}</Text>
               <View style={styles.locationContainer}>
-                <Icon 
-                  name="map-marker-alt" 
-                  size={12} 
-                  style={{ color: theme.colors.textMuted, marginRight: 4 }} 
+                <Icon
+                  name="map-marker-alt"
+                  size={12}
+                  style={{ color: theme.colors.textMuted, marginRight: 4 }}
                 />
                 <Text style={[styles.locationText, { color: theme.colors.textMuted }]}>
                   {user.location}
@@ -216,86 +210,69 @@ const UserProfile: React.FC<UserProfileProps> = ({ route, navigation }) => {
             </View>
           </View>
 
-          <Text style={[styles.bio, { color: theme.colors.textPrimary }]}>
-            {user.bio}
-          </Text>
+          <Text style={[styles.bio, { color: theme.colors.textPrimary }]}>{user.bio}</Text>
 
           <View style={styles.statsContainer}>
             <View style={styles.statBlock}>
               <Text style={[styles.statNumber, { color: theme.colors.textPrimary }]}>
                 {user.followers}
               </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.textMuted }]}>
-                Followers
-              </Text>
+              <Text style={[styles.statLabel, { color: theme.colors.textMuted }]}>Followers</Text>
             </View>
             <View style={[styles.separator, { backgroundColor: 'rgba(0,0,0,0.1)' }]} />
             <View style={styles.statBlock}>
               <Text style={[styles.statNumber, { color: theme.colors.textPrimary }]}>
                 {user.following}
               </Text>
-              <Text style={[styles.statLabel, { color: theme.colors.textMuted }]}>
-                Following
-              </Text>
+              <Text style={[styles.statLabel, { color: theme.colors.textMuted }]}>Following</Text>
             </View>
           </View>
 
-          <Text style={[styles.joinDate, { color: theme.colors.textMuted }]}>
-            {user.joinDate}
-          </Text>
+          <Text style={[styles.joinDate, { color: theme.colors.textMuted }]}>{user.joinDate}</Text>
 
           {/* Buttons */}
           <View style={styles.buttonContainer}>
             {isOwnProfile ? (
               <>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[
-                    styles.editButton, 
-                    { 
+                    styles.editButton,
+                    {
                       borderColor: theme.colors.primary,
-                    }
+                    },
                   ]}
-                  onPress={navigateToEditProfile}
-                >
-                  <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>Edit Profile</Text>
+                  onPress={navigateToEditProfile}>
+                  <Text style={{ color: theme.colors.primary, fontWeight: '600' }}>
+                    Edit Profile
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[
-                    styles.preferencesButton, 
-                    { 
+                    styles.preferencesButton,
+                    {
                       backgroundColor: theme.colors.background,
                       borderColor: 'rgba(0,0,0,0.1)',
-                    }
+                    },
                   ]}
-                  onPress={navigateToPreferences}
-                >
+                  onPress={navigateToPreferences}>
                   <Text style={{ color: theme.colors.textPrimary }}>Preferences</Text>
                 </TouchableOpacity>
               </>
             ) : (
               <>
-                <TouchableOpacity 
-                  style={[
-                    styles.followButton, 
-                    { backgroundColor: theme.colors.primary }
-                  ]}
-                >
+                <TouchableOpacity
+                  style={[styles.followButton, { backgroundColor: theme.colors.primary }]}>
                   <Text style={styles.followButtonText}>Follow</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[
-                    styles.messageButton, 
-                    { 
+                    styles.messageButton,
+                    {
                       backgroundColor: theme.colors.background,
                       borderColor: 'rgba(0,0,0,0.1)',
-                    }
-                  ]}
-                >
-                  <Icon 
-                    name="ellipsis-h" 
-                    size={16} 
-                    color={theme.colors.textPrimary} 
-                  />
+                    },
+                  ]}>
+                  <Icon name="ellipsis-h" size={16} color={theme.colors.textPrimary} />
                 </TouchableOpacity>
               </>
             )}
@@ -304,35 +281,37 @@ const UserProfile: React.FC<UserProfileProps> = ({ route, navigation }) => {
 
         {/* Tabs */}
         <View style={[styles.tabsContainer, { borderBottomColor: 'rgba(0,0,0,0.1)' }]}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[
-              styles.tab, 
-              activeTab === 'saved' && [styles.activeTab, { borderBottomColor: theme.colors.primary }]
+              styles.tab,
+              activeTab === 'saved' && [
+                styles.activeTab,
+                { borderBottomColor: theme.colors.primary },
+              ],
             ]}
-            onPress={() => setActiveTab('saved')}
-          >
-            <Text 
+            onPress={() => setActiveTab('saved')}>
+            <Text
               style={[
-                styles.tabText, 
-                { color: activeTab === 'saved' ? theme.colors.primary : theme.colors.textMuted }
-              ]}
-            >
+                styles.tabText,
+                { color: activeTab === 'saved' ? theme.colors.primary : theme.colors.textMuted },
+              ]}>
               Bookmarked
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[
-              styles.tab, 
-              activeTab === 'liked' && [styles.activeTab, { borderBottomColor: theme.colors.primary }]
+              styles.tab,
+              activeTab === 'liked' && [
+                styles.activeTab,
+                { borderBottomColor: theme.colors.primary },
+              ],
             ]}
-            onPress={() => setActiveTab('liked')}
-          >
-            <Text 
+            onPress={() => setActiveTab('liked')}>
+            <Text
               style={[
-                styles.tabText, 
-                { color: activeTab === 'liked' ? theme.colors.primary : theme.colors.textMuted }
-              ]}
-            >
+                styles.tabText,
+                { color: activeTab === 'liked' ? theme.colors.primary : theme.colors.textMuted },
+              ]}>
               Liked
             </Text>
           </TouchableOpacity>
@@ -349,7 +328,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ route, navigation }) => {
             contentContainerStyle={styles.postGrid}
             ListEmptyComponent={
               <View style={styles.emptyState}>
-                <Icon name="bookmark" size={40} color={theme.colors.textMuted} style={{ marginBottom: 12 }} />
+                <Icon
+                  name="bookmark"
+                  size={40}
+                  color={theme.colors.textMuted}
+                  style={{ marginBottom: 12 }}
+                />
                 <Text style={[styles.emptyStateText, { color: theme.colors.textMuted }]}>
                   {activeTab === 'saved' ? 'No bookmarked posts yet' : 'No liked posts yet'}
                 </Text>

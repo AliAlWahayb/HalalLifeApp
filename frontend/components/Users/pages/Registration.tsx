@@ -1,22 +1,25 @@
 import { Text, View, TouchableOpacity } from 'react-native';
+import React, { useState, useContext, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { signInWithPhoneNumber } from 'firebase/auth';
+
 import Buttons from '../../Shared/components/FormElements/Buttons';
 import Header from '../components/Header';
-import React, { useState, useContext } from 'react';
-
-import { useNavigation } from '@react-navigation/native';
-import PhoneInputForm from '../components/PhoneInputForm';
 import InputForm from 'components/Shared/components/FormElements/InputForm';
-import { AuthContext } from 'context/Auth-context';
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_MAXLENGTH, VALIDATOR_PHONE } from 'util/Validators';
+import { auth, firebaseConfig } from '../../firebase/firebase-config';
 import { useForm } from 'hooks/form-hooks';
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH, VALIDATOR_MAXLENGTH , VALIDATOR_PHONE } from 'util/Validators';
+import { AuthContext } from '../../context/Auth-context'
 
 const Registration = () => {
   const navigation = useNavigation();
-  const auth = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
+  const recaptchaVerifier = useRef(null);
 
-  const [formState, inputHandler, setFormData] = useForm(
+  const [formState, inputHandler] = useForm(
     {
-      Number: {
+      numeric: {
         value: '',
         isValid: false,
       },
@@ -24,45 +27,59 @@ const Registration = () => {
     false
   );
 
-  const authSubmitHandler = () => {
+  const sendOtp = async () => {
+    const phoneNumber = '+15555551234';
+
     if (!formState.isValid) {
       console.log('Invalid Number');
       return;
     }
-    console.log('Number verification request sent for: ', formState.inputs.number.value);
-    auth.login();
+
+    try {
+      const confirmation = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier.current);
+      navigation.navigate('VerfyCode', {
+        confirmResult: confirmation,
+        phoneNumber: phoneNumber,
+      });
+    } catch (err) {
+      console.error('Error sending OTP:', err);
+    }
   };
 
   return (
     <View className="flex-1 items-center justify-center bg-white px-8">
+      {/* ✅ مودال reCAPTCHA */}
+      <FirebaseRecaptchaVerifierModal ref={recaptchaVerifier} firebaseConfig={firebaseConfig} />
+
       <Header />
-      <Text className="m-2 mr-32 text-4xl font-bold text-[#77C273]">Registrations</Text>
-      <Text className="mr-24 text-sm font-bold text-gray-400">
+      <Text className="text-3xl font-bold text-[#77C273] mb-2">Registrations</Text>
+      <Text className="text-sm font-bold text-gray-400 text-center mb-4">
         Enter your phone number to verify your account
       </Text>
 
-      <View className="w-full  items-center">
-        <InputForm
-          element="input"
-          id="numeric"
-          type="int"
-          validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(9), VALIDATOR_MAXLENGTH(12),VALIDATOR_PHONE()]}
-          errorText="Please enter a valid phone number (9-12 digits)."
-          onInput={inputHandler}
-        />
+      <InputForm
+        element="input"
+        id="numeric"
+        type="int"
+        validators={[
+          VALIDATOR_REQUIRE(),
+          VALIDATOR_MINLENGTH(9),
+          VALIDATOR_MAXLENGTH(12),
+          VALIDATOR_PHONE(),
+        ]}
+        errorText="Please enter a valid phone number (9-12 digits)."
+        onInput={inputHandler}
+      />
+
+      <View className="mt-4 w-full flex-col items-center">
+        <Buttons onPress={sendOtp}>Send</Buttons>
       </View>
 
-      <View className="mt-4 w-full flex-col  items-center">
-        <Buttons onPress={() => navigation.navigate('VerfyCode' as never)}>Send</Buttons>
-      </View>
-
-      <View>
-        <TouchableOpacity onPress={() => navigation.navigate('Auth', { isLogin: false })}>
-          <Text className="text-gry-300 m-4 ">
-            Sign up in your <Text className="mr-4 font-bold text-[#77C273]  "> E-mail </Text>{' '}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate('Auth', { isLogin: false })}>
+        <Text className="text-gry-300 m-4">
+          Sign up in your <Text className="font-bold text-[#77C273]">E-mail</Text>
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
