@@ -40,6 +40,8 @@ export interface Product {
   product_name: string;
   brands?: string;
   image_url?: string;
+  countries_en?: string;
+  halal_status?: string;
 }
 
 type ProductsPage = Product[];
@@ -51,7 +53,7 @@ const fetchProductsPage = async ({
 }: {
   pageParam?: number;
 }): Promise<ProductsPage> => {
-  const response = await fetch(`${API_BASE}/products?page=${pageParam}&limit=20`);
+  const response = await fetch(`${API_BASE}/products/?page=${pageParam}&limit=20`);
   if (!response.ok) {
     const errorBody = await response.text().catch(() => 'N/A');
     throw new Error(

@@ -12,7 +12,7 @@ def get_all_products(page: int, limit: int, session: SessionDep) -> List[product
         offset = 0
 
 
-    statement = select(productsResponse).offset(offset).limit(limit)
+    statement = select(productsResponse).offset(offset).limit(limit).order_by(productsResponse.halal_status)
 
     results = session.exec(statement).all()
 

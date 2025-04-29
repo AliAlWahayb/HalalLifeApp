@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import React, { useState, useCallback, memo, useMemo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
+import { GLOBAL_COLORS } from 'themes/themes';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -30,21 +31,21 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
   const { theme, globalColors } = useTheme();
   const [imageError, setImageError] = useState(false);
 
-  const handlePress = useCallback(() => {
-  }, [Name]);
+  const handlePress = useCallback(() => {}, [Name]);
 
-  const getStatusColor = useMemo(() => {
-    switch (Status) {
-      case 'Halal':
-        return globalColors.Halal;
-      case 'Haram':
-        return globalColors.Haram;
-      case 'Unknown':
-        return globalColors.Unknown;
-      default:
-        return theme.colors.textMuted;
+  const handleFilterColor = (filter: string) => {
+    if (filter === 'All') {
+      return theme.colors.primary;
+    } else if (filter === 'Halal') {
+      return GLOBAL_COLORS.Halal;
+    } else if (filter === 'Haram') {
+      return GLOBAL_COLORS.Haram;
+    } else if (filter === 'Unknown') {
+      return GLOBAL_COLORS.Unknown;
+    } else {
+      return theme.colors.textMuted;
     }
-  }, [Status, globalColors, theme.colors.textMuted]);
+  };
 
   const handleImageError = useCallback(() => {
     setImageError(true);
@@ -95,9 +96,13 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
             <View
               className="flex-row items-center rounded-full px-3 py-1"
               style={{
-                backgroundColor: getStatusColor,
+                backgroundColor: handleFilterColor(
+                  Status.charAt(0).toUpperCase() + Status.slice(1)
+                ),
               }}>
-              <Text className="text-md font-medium text-textSecondary">{Status}</Text>
+              <Text className="text-md font-medium text-textSecondary">
+                {Status.charAt(0).toUpperCase() + Status.slice(1)}
+              </Text>
             </View>
           </View>
         </View>
