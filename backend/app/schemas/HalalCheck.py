@@ -80,16 +80,5 @@ class EcodesResponse(BaseModel):
 # class IngredientNameResponse(SQLModel):
 #     ingredient_name: str
 
-class product(BaseModel):
-    code : str
-    product: list[str]
-    additives_tags: list[str]
-    allergens: list[str]
-    image_front_url: str
-    ingredients: list[str]
-    ingredients_original_tags: list[str]
-    nutriments: dict
-    product_name: str
-    quantity: str
-    processed: bool
-    halal_analysis: dict
+
+

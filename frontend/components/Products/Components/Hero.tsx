@@ -22,7 +22,7 @@ const Hero = ({ product }: { product: any }) => {
               placeholder={{ blurhash }}
               contentFit="contain"
               style={{ width: '100%', height: 150, aspectRatio: 1.5 }}
-              alt="product image"
+              alt={`${product.product_name} image` }
             />
           </View>
         ) : (

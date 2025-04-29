@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 const NavigationView = () => {
   return (
     <View className="flex-1">
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FirstNavigation">
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Navigation">
         <Stack.Screen name="FirstNavigation" component={FirstNavigation} />
         <Stack.Screen name="Navigation" component={Navigation} />
       </Stack.Navigator>

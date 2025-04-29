@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends
 
 from app.Functions.HalalCheck import *
+from app.Functions.Products import get_all_products
 from app.database.database import get_session
 from app.schemas.HalalCheck import WhyResponse
+from app.schemas.Products import productsResponse
 
 
 
@@ -36,4 +38,24 @@ async def get_presses_why_endpoint(
             detail="No matching entries found"
         )
     
+    return results
+
+@router.get("/",
+            response_model=List[productsResponse],
+            status_code=status.HTTP_200_OK,
+            summary="Get all Products",
+            description="Get all Products from the local database")
+async def get_all_products_endpoint(
+    session: SessionDep ,
+    page: int = Query(1, description="Page number", ge=1),
+    limit: int = Query(20, description="Limit number", ge=1), 
+):
+    results = get_all_products(page, limit, session)
+
+    if not results:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No matching entries found for the requested page/limit."
+        )
+
     return results

@@ -63,7 +63,10 @@ const Scanner = () => {
     if (isSuccess) {
       redirectToProduct();
     }
-  }, [isSuccess]);
+    if (isError) {
+      redirectToNotFound();
+    }
+  }, [isSuccess, isError]);
 
   const redirectToProduct = () => {
     if (data.halal_analysis.halal_status === 'halal') {
@@ -99,6 +102,10 @@ const Scanner = () => {
       console.log('Product is not found');
       (navigation.navigate as any)('NotFound');
     }
+  };
+
+  const redirectToNotFound = () => {
+    (navigation.navigate as any)('NotFound');
   };
 
   const { theme } = useTheme();
@@ -170,11 +177,11 @@ const Scanner = () => {
           </View>
         )} */}
 
-      {isError && (
+      {/* {isError && (
         <View className="absolute bottom-0 w-full bg-red-100 p-4">
           <Text className="text-red-600">Error: {error?.message}</Text>
         </View>
-      )}
+      )} */}
     </CameraView>
   );
 };

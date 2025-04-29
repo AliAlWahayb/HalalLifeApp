@@ -16,10 +16,8 @@ from app.schemas.HalalCheck import EcodesResponse, WhyResponse, ecodes, ingredie
 
 def get_ecodes_from_db(
     session: SessionDep,
-    offset: int = 0,
-    limit: int = 100
 ) -> list[ecodes]:
-        statement = select(ecodes).offset(offset).limit(limit)
+        statement = select(ecodes)
         result = session.exec(statement).all()
         return result
 
@@ -58,10 +56,8 @@ def get_unknown_ecodes(
 
 def get_ingredients(
     session: SessionDep,
-    offset: int = 0,
-    limit: Annotated[int, Query()] = 100,
 ): 
-    statement = select(ingredient).offset(offset).limit(limit)
+    statement = select(ingredient)
     result = session.exec(statement).all()
     
     return result

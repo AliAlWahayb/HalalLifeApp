@@ -11,10 +11,8 @@ router = APIRouter()
 @router.get("/" , status_code=status.HTTP_200_OK , response_model=list[ecodes] ,summary="Get all ecodes" ,description="Get all ecodes from the sqlite database")
 def get_ecodes_endpoint(
     session: SessionDep,
-    offset: int = 0,
-    limit: Annotated[int, Query()] = 100
 ) -> list[ecodes]:
-    ecodes_list = get_ecodes_from_db(session, offset, limit)
+    ecodes_list = get_ecodes_from_db(session)
     if not ecodes_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ecodes not found")
     return ecodes_list
