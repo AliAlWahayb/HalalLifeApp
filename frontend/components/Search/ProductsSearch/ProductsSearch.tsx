@@ -58,7 +58,9 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
         result = result.filter(
           (item) =>
             item.product_name?.toLowerCase().includes(lowerCaseSearchQuery) ||
-            subtext(item.brands, item.countries_en).toLowerCase().includes(lowerCaseSearchQuery)
+            (subtext(item.brands, item.countries_en) || '')
+              .toLowerCase()
+              .includes(lowerCaseSearchQuery)
         );
       }
 
@@ -220,6 +222,7 @@ const ProductsSearch: React.FC<ProductsSearchProps> = ({ searchQuery }) => {
               Source={subtext(item.brands, item.countries_en)}
               Status={item.halal_status || 'unknown'}
               img={item.image_url}
+              code={item.code}
             />
           );
         }}

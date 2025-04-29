@@ -9,7 +9,6 @@ const renderItem = ({ item, index }: { item: any; index: number }) => {
     <CarouselContainer
       baseData={{ item, index, dataIndex: index }}
       onPress={() => {
-        console.log(item.title);
       }}
       key={index}
     />
