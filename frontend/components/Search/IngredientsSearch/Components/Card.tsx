@@ -14,7 +14,6 @@ const Card: React.FC<CardProps> = ({ Name, Source, Status }) => {
 
   const handlePress = () => {
     // Navigate to ingredient details
-    console.log(`Pressed on ingredient: ${Name}`);
   };
 
   const getStatusColor = (status: string) => {
@@ -63,7 +62,7 @@ const Card: React.FC<CardProps> = ({ Name, Source, Status }) => {
           <FontAwesome5
             name="info-circle"
             size={14}
-            color={theme.colors.textMuted}
+            color={Source ? theme.colors.textMuted : theme.colors.textMuted}
             style={{ marginRight: 6, opacity: 0.8 }}
           />
           <Text className="text-sm" style={{ color: theme.colors.textMuted }}>

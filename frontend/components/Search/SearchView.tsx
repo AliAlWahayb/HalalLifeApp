@@ -1,11 +1,12 @@
+import { FontAwesome5 } from '@expo/vector-icons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React, { useState } from 'react';
 import { View, Text, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { useTheme } from 'themes/ThemeProvider';
+
 import IngredientsSearch from './IngredientsSearch/IngredientsSearch';
 import ProductsSearch from './ProductsSearch/ProductsSearch';
-import { useTheme } from 'themes/ThemeProvider';
 import SearchBar from '../Shared/SearchBar';
-import { FontAwesome5 } from '@expo/vector-icons';
 
 const Tab = createMaterialTopTabNavigator();
 

@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
-import { View, Text, Platform } from 'react-native';
-import React, { useState, useMemo, useCallback, memo ,useContext} from 'react';
+import { View, Text, Platform, Pressable } from 'react-native';
+import React, { useState, useMemo, useCallback, memo, useContext } from 'react';
 import { MaterialCommunityIcons, Feather, Octicons, Entypo } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
@@ -18,10 +18,9 @@ import CameraView from 'components/Camera/CameraView';
 import UserProfile from 'components/com/small/UserProfile';
 import ProtectedScreen from 'components/Shared/ProtectedScreen/ProtectedScreen';
 import { AuthContext } from '../../context/Auth-context';
+import { PressableProps } from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const Tab = createBottomTabNavigator();
-
-
 
 // Create placeholder components for screens that don't exist yet
 const NotificationsScreen = () => {
@@ -44,7 +43,6 @@ const NotificationsScreen = () => {
 
 // Use the existing UserProfile component for the Profile screen
 const ProfileScreen = UserProfile;
-
 
 interface TabBarIconProps {
   color: string;
@@ -113,6 +111,20 @@ const BottomTab: React.FC = () => {
         marginTop: 3,
         marginBottom: Platform.OS === 'ios' ? 5 : 3,
       },
+
+      // Custom tabBarButton to remove feedback
+      tabBarButton: (props: any ) => (
+        <Pressable
+          {...props}
+          android_ripple={{ color: 'transparent' }} // Set ripple color to transparent for Android
+          style={props.style} // Keep the default styling from react-navigation
+        >
+          {/* Wrap children in a View to ensure correct layout */}
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            {props.children}
+          </View>
+        </Pressable>
+      ),
     }),
     [IconSize, navigateToInformation, theme.colors, toggleModal]
   );
@@ -171,7 +183,7 @@ const BottomTab: React.FC = () => {
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
-      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Camera">
+      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Search">
         <Tab.Screen
           name="Chat"
           component={comView}
@@ -216,58 +228,51 @@ const BottomTab: React.FC = () => {
         <Tab.Screen
           name="History"
           options={{
-          tabBarItemStyle: { display: 'none' },
-          }}
-          >
-         {() => (
-           <ProtectedScreen>
-              <SearchView />
-          </ProtectedScreen>
-             )}
-           </Tab.Screen>
-
-           <Tab.Screen
-            name="Preferences"
-            options={{
-           tabBarItemStyle: { display: 'none' },
-           }}
-          >
-           {() => (
-            <ProtectedScreen>
-            <Preference />
-           </ProtectedScreen>
-           )}
-          </Tab.Screen>
-
-           <Tab.Screen
-             name="Favorites"
-             options={{
-             tabBarItemStyle: { display: 'none' },
-             }}
-          >
+            tabBarItemStyle: { display: 'none' },
+          }}>
           {() => (
-          <ProtectedScreen>
-           <SearchView />
-         </ProtectedScreen>
+            <ProtectedScreen>
+              <SearchView />
+            </ProtectedScreen>
           )}
-         </Tab.Screen>
+        </Tab.Screen>
 
-        
-         <Tab.Screen
+        <Tab.Screen
+          name="Preferences"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}>
+          {() => (
+            <ProtectedScreen>
+              <Preference />
+            </ProtectedScreen>
+          )}
+        </Tab.Screen>
+
+        <Tab.Screen
+          name="Favorites"
+          options={{
+            tabBarItemStyle: { display: 'none' },
+          }}>
+          {() => (
+            <ProtectedScreen>
+              <SearchView />
+            </ProtectedScreen>
+          )}
+        </Tab.Screen>
+
+        <Tab.Screen
           name="UserSettings"
           options={{
-          tabBarItemStyle: { display: 'none' },
-           }}
-          >
-         {() => (
-         <ProtectedScreen>
-         <UserSettings />
-         </ProtectedScreen>
-           )}
-         </Tab.Screen>
-         
+            tabBarItemStyle: { display: 'none' },
+          }}>
+          {() => (
+            <ProtectedScreen>
+              <UserSettings />
+            </ProtectedScreen>
+          )}
+        </Tab.Screen>
 
-        
         <Tab.Screen
           name="Theme"
           component={Theme}

@@ -31,7 +31,6 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
 
   const handlePress = useCallback(() => {
     // Navigate to product details
-    console.log(`Pressed on product: ${Name}`);
   }, [Name]);
 
   const getStatusColor = useMemo(() => {

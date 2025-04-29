@@ -9,6 +9,8 @@ const ProtectedScreen = ({ children }: { children: React.ReactNode }) => {
   const route = useRoute();
   const [accessAllowed, setAccessAllowed] = useState(true);
 
+
+  // remove for testing todo:|| auth.authType === 'anonymous'
   useEffect(() => {
     if (!auth.isLoggedIn || auth.authType === 'anonymous') {
       Alert.alert('Unauthorized', 'You must be logged in to access this screen.');
