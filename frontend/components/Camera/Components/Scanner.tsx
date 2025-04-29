@@ -62,15 +62,16 @@ const Scanner = () => {
   useEffect(() => {
     if (isSuccess) {
       redirectToProduct();
+      console.log(data.halal_analysis.halal_status);
     }
     if (isError) {
       redirectToNotFound();
     }
+    setBarcode('');
   }, [isSuccess, isError]);
 
   const redirectToProduct = () => {
     if (data.halal_analysis.halal_status === 'halal') {
-      console.log(data);
       (navigation.navigate as any)('Halal', {
         productData: data.product,
         halalStatus: data.halal_analysis.halal_status,
@@ -80,7 +81,6 @@ const Scanner = () => {
     }
 
     if (data.halal_analysis.halal_status === 'haram') {
-      console.log(data);
       (navigation.navigate as any)('Haram', {
         productData: data.product,
         halalStatus: data.halal_analysis.halal_status,
@@ -90,7 +90,6 @@ const Scanner = () => {
     }
 
     if (data.halal_analysis.halal_status === 'unknown') {
-      console.log(data);
       (navigation.navigate as any)('Unknown', {
         productData: data.product,
         halalStatus: data.halal_analysis.halal_status,
@@ -99,7 +98,6 @@ const Scanner = () => {
       });
     }
     if (data.halal_analysis.halal_status === 'not found') {
-      console.log('Product is not found');
       (navigation.navigate as any)('NotFound');
     }
   };
@@ -129,9 +127,11 @@ const Scanner = () => {
       enableTorch={flash}
       autofocus="off"
       onBarcodeScanned={isScanning ? ({ data }) => handleBarCodeScanned(data) : undefined}>
-      <View className="flex-1 items-center justify-center">
-        {isLoading && <ActivityIndicator size={250} color={theme.colors.accent} />}
-      </View>
+      {isLoading && (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size={250} color={theme.colors.accent} />
+        </View>
+      )}
       <View className="absolute top-0 w-full pt-4">
         <View className="mx-auto w-2/3 flex-row items-center">
           {/* Flash Button */}

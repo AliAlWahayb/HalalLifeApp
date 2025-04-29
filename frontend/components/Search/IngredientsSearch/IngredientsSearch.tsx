@@ -55,11 +55,12 @@ const IngredientsSearch: React.FC<IngredientsSearchProps> = ({ searchQuery }) =>
       let result = [...ingredientsData]; // Start with the fetched data
 
       // Apply search query filter
-      if (searchQuery) {
+      if (searchQuery !== null && searchQuery !== undefined && searchQuery.trim() !== '') {
+        const lowerCaseSearchQuery = searchQuery.toLowerCase();
         result = result.filter(
           (item) =>
-            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.category.toLowerCase().includes(searchQuery.toLowerCase())
+            (item.name?.toLowerCase() || '').includes(lowerCaseSearchQuery) ||
+            (item.category?.toLowerCase() || '').includes(lowerCaseSearchQuery)
         );
       }
 
