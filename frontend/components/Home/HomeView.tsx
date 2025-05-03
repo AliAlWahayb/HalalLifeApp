@@ -160,7 +160,7 @@ const HomeView = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: Platform.OS === 'ios' ? 100 : 25,
-          paddingBottom: 30,
+          paddingBottom: Platform.OS === 'ios' ? 5 : 30,
         }}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
           useNativeDriver: false,
