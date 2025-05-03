@@ -1,41 +1,84 @@
-import { View, Text, Pressable, Image } from 'react-native';
-import React, { useState, useCallback, memo, useMemo } from 'react';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useTheme } from 'themes/ThemeProvider';
-import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Image } from 'expo-image';
+
+import { useProduct } from 'hooks/useProduct';
+import { GLOBAL_COLORS } from 'themes/themes';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-/**
- * Product card props interface
- */
 interface CardProps {
-  /** Product name */
   Name: string;
-  /** Product image source */
   img: any;
-  /** Source of the product data */
   Source: string;
-  /** Halal status of the product */
   Status: 'Halal' | 'Haram' | 'Unknown' | string;
+  code: string;
 }
 
-/**
- * Product card component for the search results
- */
-const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
+const Card: React.FC<CardProps> = ({ Name, img, Source, Status, code }) => {
   const navigation = useNavigation();
   const { theme, globalColors } = useTheme();
   const [imageError, setImageError] = useState(false);
+  const [barcode, setBarcode] = useState('');
 
-  const handlePress = useCallback(() => {
-    // Navigate to product details
-    console.log(`Pressed on product: ${Name}`);
-  }, [Name]);
+  const { data, isLoading, isError, error, isSuccess, refetch } = useProduct(barcode);
 
-  const getStatusColor = useMemo(() => {
-    switch (Status) {
+  const redirectToProduct = useCallback(() => {
+    if (!data || !data.halal_analysis) {
+      (navigation.navigate as any)('NotFound');
+      return;
+    }
+
+    const halalStatus = data.halal_analysis.halal_status;
+    const navigationParams = {
+      productData: data.product,
+      halalStatus: halalStatus,
+      why: data.halal_analysis.why,
+      additives: data.halal_analysis.additives,
+    };
+
+
+    switch (halalStatus) {
+      case 'halal':
+        (navigation.navigate as any)('Camera', { screen: 'Halal', params: navigationParams });
+        break;
+      case 'haram':
+        (navigation.navigate as any)('Camera', { screen: 'Haram', params: navigationParams });
+        break;
+      case 'unknown':
+        (navigation.navigate as any)('Camera', { screen: 'Unknown', params: navigationParams });
+        break;
+      case 'not found':
+        (navigation.navigate as any)('NotFound');
+        break;
+      default:
+        (navigation.navigate as any)('NotFound');
+        break;
+    }
+  }, [data, navigation]);
+
+  useEffect(() => {
+    if (barcode) {
+      refetch();
+    }
+  }, [barcode, refetch]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      redirectToProduct();
+    }
+  }, [isSuccess, redirectToProduct]);
+
+  const handlePress = () => {
+    setBarcode(code);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
       case 'Halal':
         return globalColors.Halal;
       case 'Haram':
@@ -45,7 +88,7 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
       default:
         return theme.colors.textMuted;
     }
-  }, [Status, globalColors, theme.colors.textMuted]);
+  };
 
   const handleImageError = useCallback(() => {
     setImageError(true);
@@ -60,50 +103,61 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status }) => {
         shadowColor: theme.colors.textPrimary,
       }}>
       <View className="flex-row p-3">
-        <View className="mr-3 h-20 w-20 items-center justify-center overflow-hidden rounded-lg">
-          {!img || imageError ? (
-            <FontAwesome5
-              name="shopping-bag"
-              size={30}
-              color={theme.colors.textMuted}
-              className="opacity-70"
-            />
-          ) : (
-            <Image
-              source={img}
-              className="h-full w-full"
-              style={{
-                resizeMode: 'contain',
-              }}
-              onError={handleImageError}
-              alt={`${Name} image`}
-            />
-          )}
-        </View>
-
-        <View className="flex-1 justify-between">
-          <View>
-            <Text
-              className="text-lg font-medium text-textPrimary"
-              adjustsFontSizeToFit
-              numberOfLines={1}>
-              {Name}
-            </Text>
-            <Text className="mt-1 text-sm text-textMuted" numberOfLines={1}>
-              {Source}
-            </Text>
+        {isLoading ? (
+          <View className="flex-1 items-center justify-center py-5">
+            <ActivityIndicator size="small" color={theme.colors.accent} />
           </View>
-
-          <View className="mb-0.5 mt-2 flex-row items-center">
-            <View
-              className="flex-row items-center rounded-full px-3 py-1"
-              style={{
-                backgroundColor: getStatusColor,
-              }}>
-              <Text className="text-md font-medium text-textSecondary">{Status}</Text>
+        ) : (
+          <>
+            <View className="mr-3 h-20 w-20 items-center justify-center overflow-hidden rounded-lg">
+              {!img || imageError ? (
+                <Image
+                  source={{ blurhash }}
+                  contentFit="contain"
+                  style={{ width: '100%', height: '100%' }}
+                  alt={`${Name} image`}
+                />
+              ) : (
+                <Image
+                  source={{ uri: img }}
+                  placeholder={{ blurhash }}
+                  contentFit="contain"
+                  style={{ width: '100%', height: '100%' }}
+                  onError={handleImageError}
+                  alt={`${Name} image`}
+                />
+              )}
             </View>
-          </View>
-        </View>
+
+            <View className="flex-1 justify-between">
+              <View>
+                <Text
+                  className="text-lg font-medium text-textPrimary"
+                  adjustsFontSizeToFit
+                  numberOfLines={1}>
+                  {Name}
+                </Text>
+                <Text className="mt-1 text-sm text-textMuted" numberOfLines={1}>
+                  {Source}
+                </Text>
+              </View>
+
+              <View className="mb-0.5 mt-2 flex-row items-center">
+                <View
+                  className="flex-row items-center rounded-full px-3 py-1"
+                  style={{
+                    backgroundColor: getStatusColor(
+                      Status.charAt(0).toUpperCase() + Status.slice(1)
+                    ),
+                  }}>
+                  <Text className="text-md font-medium text-textSecondary">
+                    {Status.charAt(0).toUpperCase() + Status.slice(1)}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </>
+        )}
       </View>
     </Pressable>
   );

@@ -35,7 +35,7 @@ interface PreferenceGroup {
 
 const Preferences: React.FC<PreferencesProps> = ({ navigation }) => {
   const { theme } = useTheme();
-  
+
   // Initial preference groups
   const [preferenceGroups, setPreferenceGroups] = useState<PreferenceGroup[]>([
     {
@@ -79,126 +79,122 @@ const Preferences: React.FC<PreferencesProps> = ({ navigation }) => {
       ],
     },
   ]);
-  
+
   // Additional settings
   const [communitySettings, setCommunitySettings] = useState({
     showPostsInFeed: true,
     allowComments: true,
     showDistance: true,
   });
-  
+
   const togglePreference = (groupId: string, preferenceId: string) => {
-    setPreferenceGroups(prevGroups => prevGroups.map(group => {
-      if (group.id === groupId) {
-        return {
-          ...group,
-          preferences: group.preferences.map(pref => {
-            if (pref.id === preferenceId) {
-              return { ...pref, selected: !pref.selected };
-            }
-            return pref;
-          }),
-        };
-      }
-      return group;
-    }));
+    setPreferenceGroups((prevGroups) =>
+      prevGroups.map((group) => {
+        if (group.id === groupId) {
+          return {
+            ...group,
+            preferences: group.preferences.map((pref) => {
+              if (pref.id === preferenceId) {
+                return { ...pref, selected: !pref.selected };
+              }
+              return pref;
+            }),
+          };
+        }
+        return group;
+      })
+    );
   };
-  
+
   const resetGroup = (groupId: string) => {
     Alert.alert(
       'Reset Preferences',
       'Are you sure you want to reset all preferences in this group?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Reset', 
+        {
+          text: 'Reset',
           onPress: () => {
-            setPreferenceGroups(prevGroups => prevGroups.map(group => {
-              if (group.id === groupId) {
-                return {
-                  ...group,
-                  preferences: group.preferences.map(pref => {
-                    return { ...pref, selected: false };
-                  }),
-                };
-              }
-              return group;
-            }));
+            setPreferenceGroups((prevGroups) =>
+              prevGroups.map((group) => {
+                if (group.id === groupId) {
+                  return {
+                    ...group,
+                    preferences: group.preferences.map((pref) => {
+                      return { ...pref, selected: false };
+                    }),
+                  };
+                }
+                return group;
+              })
+            );
           },
         },
       ]
     );
   };
-  
+
   const toggleCommunitySetting = (setting: keyof typeof communitySettings) => {
     setCommunitySettings({
       ...communitySettings,
       [setting]: !communitySettings[setting],
     });
   };
-  
+
   const handleSave = () => {
     // In a real app, you would save this to a server
     Alert.alert('Success', 'Preferences saved successfully!');
     navigation.goBack();
   };
-  
+
   const renderPreferenceChip = ({ item, groupId }: { item: Preference; groupId: string }) => (
     <TouchableOpacity
       style={[
         styles.preferenceChip,
-        item.selected ? 
-          { backgroundColor: theme.colors.primary } : 
-          { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border }
+        item.selected
+          ? { backgroundColor: theme.colors.primary }
+          : { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border },
       ]}
-      onPress={() => togglePreference(groupId, item.id)}
-    >
-      <Text 
+      onPress={() => togglePreference(groupId, item.id)}>
+      <Text
         style={[
-          styles.preferenceChipText, 
-          { color: item.selected ? '#FFF' : theme.colors.textPrimary }
-        ]}
-      >
+          styles.preferenceChipText,
+          { color: item.selected ? '#FFF' : theme.colors.textPrimary },
+        ]}>
         {item.label}
       </Text>
     </TouchableOpacity>
   );
-  
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Header 
+      <Header
         title="Preferences"
         showBack={true}
         showSearch={false}
         showNotification={false}
         showProfile={false}
         customRightComponent={
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.saveButton, { backgroundColor: theme.colors.primary }]}
-            onPress={handleSave}
-          >
+            onPress={handleSave}>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
         }
       />
-      
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.content}
-      >
-        {preferenceGroups.map(group => (
+
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+        {preferenceGroups.map((group) => (
           <View key={group.id} style={styles.preferenceGroup}>
             <View style={styles.groupHeaderRow}>
               <Text style={[styles.groupTitle, { color: theme.colors.textPrimary }]}>
                 {group.title}
               </Text>
               <TouchableOpacity onPress={() => resetGroup(group.id)}>
-                <Text style={[styles.resetText, { color: theme.colors.primary }]}>
-                  Reset
-                </Text>
+                <Text style={[styles.resetText, { color: theme.colors.primary }]}>Reset</Text>
               </TouchableOpacity>
             </View>
-            
+
             <View style={styles.chipContainer}>
               <FlatList
                 data={group.preferences}
@@ -212,16 +208,21 @@ const Preferences: React.FC<PreferencesProps> = ({ navigation }) => {
             </View>
           </View>
         ))}
-        
+
         {/* Community Features */}
         <View style={styles.preferenceGroup}>
           <Text style={[styles.groupTitle, { color: theme.colors.textPrimary }]}>
             Community Features
           </Text>
-          
+
           <View style={[styles.settingRow, { borderBottomColor: theme.colors.border }]}>
             <View style={styles.settingInfo}>
-              <Icon name="stream" size={18} color={theme.colors.textPrimary} style={styles.settingIcon} />
+              <Icon
+                name="stream"
+                size={18}
+                color={theme.colors.textPrimary}
+                style={styles.settingIcon}
+              />
               <Text style={[styles.settingText, { color: theme.colors.textPrimary }]}>
                 Show Community Posts in Feed
               </Text>
@@ -229,15 +230,20 @@ const Preferences: React.FC<PreferencesProps> = ({ navigation }) => {
             <Switch
               value={communitySettings.showPostsInFeed}
               onValueChange={() => toggleCommunitySetting('showPostsInFeed')}
-              trackColor={{ false: "#767577", true: theme.colors.primary }}
-              thumbColor={"#f4f3f4"}
+              trackColor={{ false: '#767577', true: theme.colors.primary }}
+              thumbColor={'#f4f3f4'}
               ios_backgroundColor="#767577"
             />
           </View>
-          
+
           <View style={[styles.settingRow, { borderBottomColor: theme.colors.border }]}>
             <View style={styles.settingInfo}>
-              <Icon name="comment-alt" size={18} color={theme.colors.textPrimary} style={styles.settingIcon} />
+              <Icon
+                name="comment-alt"
+                size={18}
+                color={theme.colors.textPrimary}
+                style={styles.settingIcon}
+              />
               <Text style={[styles.settingText, { color: theme.colors.textPrimary }]}>
                 Allow Comments on Your Posts
               </Text>
@@ -245,15 +251,20 @@ const Preferences: React.FC<PreferencesProps> = ({ navigation }) => {
             <Switch
               value={communitySettings.allowComments}
               onValueChange={() => toggleCommunitySetting('allowComments')}
-              trackColor={{ false: "#767577", true: theme.colors.primary }}
-              thumbColor={"#f4f3f4"}
+              trackColor={{ false: '#767577', true: theme.colors.primary }}
+              thumbColor={'#f4f3f4'}
               ios_backgroundColor="#767577"
             />
           </View>
-          
+
           <View style={[styles.settingRow, { borderBottomColor: theme.colors.border }]}>
             <View style={styles.settingInfo}>
-              <Icon name="map-marker-alt" size={18} color={theme.colors.textPrimary} style={styles.settingIcon} />
+              <Icon
+                name="map-marker-alt"
+                size={18}
+                color={theme.colors.textPrimary}
+                style={styles.settingIcon}
+              />
               <Text style={[styles.settingText, { color: theme.colors.textPrimary }]}>
                 Show Distance for Nearby Places
               </Text>
@@ -261,8 +272,8 @@ const Preferences: React.FC<PreferencesProps> = ({ navigation }) => {
             <Switch
               value={communitySettings.showDistance}
               onValueChange={() => toggleCommunitySetting('showDistance')}
-              trackColor={{ false: "#767577", true: theme.colors.primary }}
-              thumbColor={"#f4f3f4"}
+              trackColor={{ false: '#767577', true: theme.colors.primary }}
+              thumbColor={'#f4f3f4'}
               ios_backgroundColor="#767577"
             />
           </View>
@@ -350,4 +361,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Preferences; 
+export default Preferences;

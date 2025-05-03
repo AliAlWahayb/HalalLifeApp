@@ -1,6 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from app.Functions.HalalCheck import *
+from app.Functions.Products import get_all_products
+from app.database.database import get_session
+from app.schemas.HalalCheck import WhyResponse
+from app.schemas.Products import productsResponse
 
 
 
@@ -17,12 +21,41 @@ async def get_product_endpoint(barcode: int, session: SessionDep):
     return result
 
 
-@router.get("/offline" , status_code=status.HTTP_200_OK , summary="Get product by barcode" ,description="Get product by id from the local files for testing")
-def get_product_endpoint(
-    session: SessionDep,
+@router.get("/ecodes/", 
+           response_model=List[EcodesResponse],
+           status_code=status.HTTP_200_OK,
+           summary="Get all why",
+           description="Get all why from the local database")
+async def get_presses_why_endpoint(
+    session: SessionDep ,
+    reasons: List[str] = Query(..., description="List of search terms"),
 ):
-    result = get_from_openfoodfacts_offline(session)
+    results = process_Ecodes(reasons, session)  
+    
+    if not results:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="No matching entries found"
+        )
+    
+    return results
 
-    if not result:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
-    return result
+@router.get("/",
+            response_model=List[productsResponse],
+            status_code=status.HTTP_200_OK,
+            summary="Get all Products",
+            description="Get all Products from the local database")
+async def get_all_products_endpoint(
+    session: SessionDep ,
+    page: int = Query(1, description="Page number", ge=1),
+    limit: int = Query(20, description="Limit number", ge=1), 
+):
+    results = get_all_products(page, limit, session)
+
+    if not results:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No matching entries found for the requested page/limit."
+        )
+
+    return results

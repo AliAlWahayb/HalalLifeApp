@@ -1,29 +1,42 @@
-import { View, Text, Button } from 'react-native';
-import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import Buttons from 'components/Shared/Buttons/AliButtons';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { View, Text, Button } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 const NotFound = () => {
   const { theme } = useTheme();
 
-  const navigation = useNavigation();
+  type RootStackParamList = {
+    Chat: undefined;
+    Search: undefined;
+    [key: string]: undefined;
+  };
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const HandleBack = () => {
     navigation.goBack();
   };
 
+  const HandleChat = () => {
+    navigation.navigate('Chat');
+  };
+  const HandleSearch = () => {
+    navigation.navigate('Search');
+  };
+
   return (
-    <View className="bg-background flex-1  items-center py-5">
-      <View className="border-Haram flex w-5/6 flex-col items-center justify-center gap-2 rounded-3xl border-4 p-3">
-        <View className="bg-Haram rounded-full p-2">
+    <View className="flex-1 items-center  bg-background py-5">
+      <View className="flex w-5/6 flex-col items-center justify-center gap-2 rounded-3xl border-4 border-Haram p-3">
+        <View className="rounded-full bg-Haram p-2">
           <Ionicons name="alert-sharp" size={42} color={theme.colors.textSecondary} />
         </View>
-        <Text className="text-textPrimary text-3xl font-bold">Item Not Found</Text>
+        <Text className="text-3xl font-bold text-textPrimary">Item Not Found</Text>
         <View className="flex flex-col gap-3">
-          <Buttons title="Chat Bot" classname="w-fit" onPress={() => {}} />
-          <Buttons title="Search ingredients" classname="w-fit" onPress={() => {}} />
+          <Buttons title="Chat Bot" classname="w-fit" onPress={HandleChat} />
+          <Buttons title="Search ingredients" classname="w-fit" onPress={HandleSearch} />
           <Buttons title="Go Back" classname="w-fit" onPress={HandleBack} />
         </View>
       </View>

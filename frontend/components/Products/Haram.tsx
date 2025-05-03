@@ -52,39 +52,50 @@ interface ProductData {
   };
 }
 
+interface why {
+  desc: string | null;
+  name: string;
+}
+interface additive {
+  name: string;
+  ingredient_name: string | null;
+}
+
 interface Props {
   productData: ProductData;
   halalStatus: string;
-  haram_ingredients_found: string[];
+  why: why[];
+  additives: additive[];
+
 }
 
 const Haram = () => {
   const { theme } = useTheme();
   const route = useRoute();
-  const { productData, haram_ingredients_found } = route.params as Props;
+  const { productData, halalStatus, why, additives  } = route.params as Props;
 
-  const alternatives = [
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-    {
-      title: 'Crunchy Peanut Butter Chocolate - Schogetten',
-      img: require('../../assets/Products/image.png'),
-    },
-  ];
+  // const alternatives = [
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  //   {
+  //     title: 'Crunchy Peanut Butter Chocolate - Schogetten',
+  //     img: require('../../assets/Products/image.png'),
+  //   },
+  // ];
 
   return (
     <ScrollView className="flex-1 bg-background py-5" contentContainerClassName="items-center">
@@ -101,17 +112,17 @@ const Haram = () => {
 
           <Ingredients product={productData} />
 
-          <Additives product={productData} />
+          <Additives product={additives} />
 
           <Nutritional product={productData} />
 
-          {/* <Why product={haram_ingredients_found} /> */}
+          <Why product={why} />
         </View>
       </View>
-      <View className="mb-5 flex h-36 w-full flex-col gap-3 ">
+      {/* <View className="mb-5 flex h-36 w-full flex-col gap-3 ">
         <Text className="text-center text-2xl font-bold">Alternatives</Text>
         <AlternativeCarousel carouselItems={alternatives} />
-      </View>
+      </View> */}
       <ProductButtons />
     </ScrollView>
   );

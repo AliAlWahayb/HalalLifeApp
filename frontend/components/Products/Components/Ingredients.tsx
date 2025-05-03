@@ -82,7 +82,8 @@ const Ingredients = ({ product }: { product: any }) => {
                         ? 'text-base font-normal text-textPrimary'
                         : 'text-sm font-thin text-textPrimary'
                   }`}>
-                  {ingredient.name.charAt(0).toUpperCase() + ingredient.name.slice(1)}
+                  {ingredient.name.replace(/-/g, ' ').charAt(0).toUpperCase() +
+                    ingredient.name.replace(/-/g, ' ').slice(1)}
                 </Text>
 
                 <Text

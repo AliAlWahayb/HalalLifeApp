@@ -5,6 +5,7 @@ import { API_BASE } from 'hooks/useProduct';
 import { useRef, useState, useContext } from 'react';
 import { Alert, View, TextInput, TouchableOpacity,Text } from 'react-native';
 
+
 const VerifyCom = () => {
   const inputRefs = useRef([]);
   const [code, setCode] = useState(['', '', '', '', '', '']);

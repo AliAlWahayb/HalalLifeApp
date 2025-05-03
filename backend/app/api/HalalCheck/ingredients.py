@@ -13,10 +13,8 @@ router = APIRouter()
 @router.get("/" , status_code=status.HTTP_200_OK , response_model=list[ingredient] ,summary="Get all ingredients" ,description="Get all ingredients from the sqlite database")
 def get_ingredients_endpoint(
     session: SessionDep,
-    offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 100,
 ) -> list[ingredient]: 
-    ingredients_list = get_ingredients(session, offset, limit)
+    ingredients_list = get_ingredients(session)
     if not ingredients_list:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ingredients not found")
     return ingredients_list

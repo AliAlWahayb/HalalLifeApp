@@ -8,7 +8,7 @@ import httpx
 from sqlmodel import SQLModel, or_, select
 from app.Functions.Helpers import *
 from app.database.database import SessionDep
-from app.schemas.HalalCheck import ecodes, ingredient, the_status
+from app.schemas.HalalCheck import EcodesResponse, WhyResponse, ecodes, ingredient, the_status
 
 
 
@@ -16,10 +16,8 @@ from app.schemas.HalalCheck import ecodes, ingredient, the_status
 
 def get_ecodes_from_db(
     session: SessionDep,
-    offset: int = 0,
-    limit: int = 100
 ) -> list[ecodes]:
-        statement = select(ecodes).offset(offset).limit(limit)
+        statement = select(ecodes)
         result = session.exec(statement).all()
         return result
 
@@ -58,10 +56,8 @@ def get_unknown_ecodes(
 
 def get_ingredients(
     session: SessionDep,
-    offset: int = 0,
-    limit: Annotated[int, Query()] = 100,
 ): 
-    statement = select(ingredient).offset(offset).limit(limit)
+    statement = select(ingredient)
     result = session.exec(statement).all()
     
     return result
@@ -120,7 +116,57 @@ def get_status_id(
 
 
 
-def check_halal(data):
+def process_why(why_list: List[str], session: SessionDep) -> List[WhyResponse]:
+    results: List[WhyResponse] = []
+
+    for name in why_list:
+        ecode_result = session.exec(
+            select(ecodes).where(ecodes.ecode.ilike(name))
+        ).first()
+
+        if ecode_result:
+            results.append(WhyResponse.model_validate(ecode_result))
+            continue # Move to the next name once a match is found
+
+        ingredient_result = session.exec(
+            select(ingredient).where(ingredient.ingredient_name.ilike(name))
+        ).first()
+
+        if ingredient_result:
+            results.append(WhyResponse.model_validate(ingredient_result))
+            continue # Move to the next name once a match is found
+
+        # Default case if no match is found
+        default_data = {
+            "name": name,
+            "desc": "unknown"
+        }
+        results.append(WhyResponse.model_validate(default_data))
+
+    return results
+
+def process_Ecodes(ecodes_list: List[str], session: SessionDep) -> List[EcodesResponse]:
+    results: List[EcodesResponse] = []
+
+    for name in ecodes_list:
+        ecode_result = session.exec(
+            select(ecodes).where(ecodes.ecode.ilike(name))
+        ).first()
+
+        if ecode_result:
+            results.append(EcodesResponse.model_validate(ecode_result))
+            continue # Move to the next name once a match is found
+
+        # Default case if no match is found
+        default_data = {
+            "name": name,
+            "ingredient_name": " "
+        }
+        results.append(EcodesResponse.model_validate(default_data))
+
+    return results
+
+def check_halal(data, session: SessionDep):
     
     # Clean and prepare ingredients list
     # ingredients_tags = extract_json_list_values(data, ["product", "_keywords"])
@@ -130,10 +176,17 @@ def check_halal(data):
     # halal_keywords = [
     #     "vegan","halal-certified", "halal"
     # ]  
+    additives_tags = extract_json_list_values(data, ["product", "additives_original_tags"])
+    additives_tags = clean_data(additives_tags)
+    additives = process_Ecodes(additives_tags, session)
     
+    nutriments = extract_json_list_values(data, ["product", "nutriments"])
+
     # Prepare result
     result = {
         "halal_status": "halal",
+        "additives": additives,
+        "nutriments":nutriments,
         "total_ingredients_checked": len(ingredients_tags)
     }
 
@@ -171,10 +224,20 @@ def check_haram(data, session: SessionDep):
 
     ingredients_checked = len(ingredients_tags) + len(keywords_tags)
 
+    why = process_why(ingredients_found, session)
+
+    additives_tags = extract_json_list_values(data, ["product", "additives_original_tags"])
+    additives_tags = clean_data(additives_tags)
+    additives = process_Ecodes(additives_tags, session)
+
+    nutriments = extract_json_list_values(data, ["product", "nutriments"])
+
     # Prepare result
     result = {
         "halal_status": "haram",
-        "haram_ingredients_found": ingredients_found,
+        "why": why,
+        "additives": additives,
+        "nutriments": nutriments,
         "total_ingredients_checked": ingredients_checked
     }
     
@@ -195,13 +258,22 @@ def check_unknown(data, session: SessionDep ):
     unknown_ecodes_list = extract_column_values("ecode", get_unknown_ecodes(session))
 
 
-    
     Match = find_matching_items(ingredients_tags, unknown_ingredients_list, unknown_ecodes_list)
-    
+
+    why = process_why(Match, session) 
+
+    additives_tags = extract_json_list_values(data, ["product", "additives_original_tags"])
+    additives_tags = clean_data(additives_tags)
+    additives = process_Ecodes(additives_tags, session)
+
+    nutriments = extract_json_list_values(data, ["product", "nutriments"])
+
     # Prepare result
     result = {
         "halal_status": "unknown",
-        "unknown_ingredients_found": Match,
+        "why": why,
+        "additives": additives,
+        "nutriments":nutriments,
         "total_ingredients_checked": len(ingredients_tags)
     }
     
@@ -227,7 +299,7 @@ def Not_found(data):
 
 
 def check_all(data, session: SessionDep):
-    halal_result = check_halal(data)
+    halal_result = check_halal(data, session)
     haram_result = check_haram(data, session)
     unknown_result = check_unknown(data, session)
     Not_found_result = Not_found(data)

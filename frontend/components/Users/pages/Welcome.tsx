@@ -1,18 +1,61 @@
-import * as Google from 'expo-auth-session/providers/google';
-import * as Facebook from 'expo-auth-session/providers/facebook';
-import * as WebBrowser from 'expo-web-browser';
-import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, ImageBackground, TouchableOpacity, Image } from 'react-native';
+import { auth } from 'components/firebase/firebase-config';
+import * as Facebook from 'expo-auth-session/providers/facebook';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+import { useContext, useEffect, useState } from 'react';
+import { View, Text, ImageBackground, TouchableOpacity, Image, Alert } from 'react-native';
+
 import FacebookImage from '../../../assets/Social/FacebookImge.png';
 import GoogleImage from '../../../assets/Social/GoogleImge.png';
 import WelcomeImge from '../../../assets/Welcome/WelcomeImge.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+
+
+import 'react-native-get-random-values'; // Import this for uuid to work in React Native
+import { AuthContext } from 'components/context/Auth-context';
+import { signInAnonymously } from 'firebase/auth';
 
 WebBrowser.maybeCompleteAuthSession();
+
+
 
 const Welcome = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
+  const authCtx = useContext(AuthContext); // Get the AuthContext
+
+  // Handle the "skip" button press for anonymous login using Firebase Auth
+  const HandleSkip = async () => {
+    try {
+      // Sign in anonymously using Firebase Authentication
+      // Call signInAnonymously as a function with the auth instance
+      const userCredential = await signInAnonymously(auth);
+      const firebaseUser = userCredential.user;
+
+      // Get the Firebase ID token for the anonymous user
+      const token = await firebaseUser.getIdToken();
+
+      // console.log('Firebase Anonymous User signed in:', firebaseUser.uid);
+
+      // Use the auth context's login function to update the app's state
+      // Pass the Firebase UID as the userId and the Firebase ID token
+      // Set authType to 'anonymous'
+      authCtx.login(firebaseUser.uid, token, 'anonymous');
+
+      // Navigate to the main part of the app
+      navigation.getParent()?.navigate('Navigation');
+    } catch (error) {
+      console.error('Error signing in anonymously with Firebase:', error);
+      // Display a user-friendly error message
+      Alert.alert(
+        'Anonymous Login Failed',
+        'Could not start anonymous session. Please try again later.'
+      );
+    }
+  };
 
   // Facebook Login
   const [fbRequest, fbResponse, fbPromptAsync] = Facebook.useAuthRequest({
@@ -53,7 +96,6 @@ const Welcome = () => {
     const result = await fbPromptAsync();
     if (result.type !== 'success') {
       alert('Uh oh, something went wrong');
-      return;
     }
   };
 
@@ -65,7 +107,7 @@ const Welcome = () => {
       <View className="absolute inset-0 bg-black opacity-50" />
 
       <TouchableOpacity
-        onPress={() => navigation.getParent()?.navigate('Navigation')}
+        onPress={HandleSkip}
         className="absolute right-8 top-12 rounded-full bg-[#77C273] px-4 py-2">
         <Text className="text-1xl font-bold text-white">skip</Text>
       </TouchableOpacity>
