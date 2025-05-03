@@ -3,7 +3,8 @@ import axios from 'axios';
 import { AuthContext } from 'components/context/Auth-context';
 import { API_BASE } from 'hooks/useProduct';
 import { useRef, useState, useContext } from 'react';
-import { Alert, View, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, View, TextInput, TouchableOpacity,Text } from 'react-native';
+
 
 const VerifyCom = () => {
   const inputRefs = useRef([]);
@@ -39,7 +40,7 @@ const VerifyCom = () => {
       auth.login(user.uid, 'phone-token','phone');
       console.log(" Verification Done ✅");
 
-      await axios.post(`${API_BASE}/phone-auth`, {
+      await axios.post(`${API_BASE}/users/phone-auth`, {
         //this is my device ip you must replace with your device ip
         uid: user.uid,
         phone_number: user.phoneNumber,

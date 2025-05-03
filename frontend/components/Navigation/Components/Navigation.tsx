@@ -69,7 +69,7 @@ const BottomTab: React.FC = () => {
       headerShown: true,
       headerTitle: () => null,
       headerStyle: {
-        minHeight: Platform.OS === 'ios' ? 88 : 50,
+        minHeight: Platform.OS === 'ios' ? 95 : 50,
         backgroundColor: theme.colors.background,
       },
       headerLeft: () => (
@@ -183,7 +183,8 @@ const BottomTab: React.FC = () => {
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
-      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Search">
+
+      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
         <Tab.Screen
           name="Chat"
           component={ChatView}

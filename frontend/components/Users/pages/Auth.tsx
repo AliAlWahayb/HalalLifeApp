@@ -127,6 +127,7 @@ const Auth = () => {
       />
       <InputForm
         element="input"
+        placeholder="Enter your password"
         id="password"
         type="password"
         label="Password"
