@@ -20,6 +20,7 @@ import ProtectedScreen from 'components/Shared/ProtectedScreen/ProtectedScreen';
 import { AuthContext } from '../../context/Auth-context';
 import { PressableProps } from 'react-native/Libraries/Components/Pressable/Pressable';
 import ChatView from 'components/chatBot/ChatView';
+import HistoryView from 'components/History/HistoryView';
 
 const Tab = createBottomTabNavigator();
 
@@ -113,7 +114,7 @@ const BottomTab: React.FC = () => {
         marginBottom: Platform.OS === 'ios' ? 5 : 3,
       },
       // Custom tabBarButton to remove feedback
-      tabBarButton: (props: any ) => (
+      tabBarButton: (props: any) => (
         <Pressable
           {...props}
           android_ripple={{ color: 'transparent' }} // Set ripple color to transparent for Android
@@ -232,7 +233,7 @@ const BottomTab: React.FC = () => {
           }}>
           {() => (
             <ProtectedScreen>
-              <SearchView />
+              <HistoryView />
             </ProtectedScreen>
           )}
         </Tab.Screen>

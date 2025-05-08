@@ -24,12 +24,14 @@ const CheckBox: React.FC<CheckBoxProps> = ({ title, onPress, isChecked = false }
       onPress={handleChange}
       className="flex flex-row items-center rounded-xl bg-background py-2">
       <Checkbox
-        style={{ marginLeft: 20, marginRight: 10 }}
+        style={{ marginLeft: 10, marginRight: 10 }}
         value={checked}
         onValueChange={handleChange}
         color={checked ? theme.colors.secondary : undefined}
       />
-      <Text className="text-2xl font-semibold text-textPrimary">{title}</Text>
+      <Text className="text-xl font-semibold text-textPrimary" adjustsFontSizeToFit>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };

@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import React, { useEffect, useState } from 'react';
@@ -31,17 +32,35 @@ const Scanner = () => {
     requestPermission();
   }, []);
 
+  const saveProductLocally = async (barcode: string, productData: any) => {
+    try {
+      await AsyncStorage.setItem(barcode, JSON.stringify(productData));
+    } catch (error) {
+      console.error('Error saving product locally:', error);
+    }
+  };
+
+  const getProductFromLocal = async (barcode: string) => {
+    try {
+      const productData = await AsyncStorage.getItem(barcode);
+      if (productData) {
+        return { ...JSON.parse(productData), isFromLocal: true };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error retrieving product from local storage:', error);
+      return null;
+    }
+  };
+
   // Handle barcode scanning
-  const handleBarCodeScanned = (scannedBarcode: string) => {
+  const handleBarCodeScanned = async (scannedBarcode: React.SetStateAction<string>) => {
     if (!isScanning) return; // Prevent multiple scans
 
-    setIsScanning(false);
+    setIsScanning(false); // Disable scanner immediately
     setBarcode(scannedBarcode);
 
-    // Reset scanner after 2 seconds
-    setTimeout(() => {
-      setIsScanning(true);
-    }, 2000);
+    setTimeout(() => setIsScanning(true), 2000); // Re-enable scanner after processing
   };
 
   const handleManualSubmit = () => {
@@ -55,13 +74,29 @@ const Scanner = () => {
   // Trigger fetch when barcode changes
   useEffect(() => {
     if (barcode) {
-      refetch();
+      const fetchProduct = async () => {
+        const localProduct = await getProductFromLocal(barcode);
+        if (localProduct) {
+          console.log('Product found locally.');
+          if (localProduct.isFromLocal) {
+            console.log('This product was retrieved from local storage.');
+          }
+          redirectToProduct(localProduct);
+          return; // Exit early to prevent API call
+        }
+
+        // If not found locally, fetch from server
+        refetch();
+      };
+
+      fetchProduct();
     }
   }, [barcode]);
 
   useEffect(() => {
     if (isSuccess) {
-      redirectToProduct();
+      saveProductLocally(barcode, data);
+      redirectToProduct(data);
       console.log(data.halal_analysis.halal_status);
     }
     if (isError) {
@@ -70,34 +105,37 @@ const Scanner = () => {
     setBarcode('');
   }, [isSuccess, isError]);
 
-  const redirectToProduct = () => {
-    if (data.halal_analysis.halal_status === 'halal') {
+  const redirectToProduct = (productData: {
+    halal_analysis: { halal_status: string; why: any; additives: any };
+    product: any;
+  }) => {
+    if (productData.halal_analysis.halal_status === 'halal') {
       (navigation.navigate as any)('Halal', {
-        productData: data.product,
-        halalStatus: data.halal_analysis.halal_status,
-        why: data.halal_analysis.why,
-        additives: data.halal_analysis.additives,
+        productData: productData.product,
+        halalStatus: productData.halal_analysis.halal_status,
+        why: productData.halal_analysis.why,
+        additives: productData.halal_analysis.additives,
       });
     }
 
-    if (data.halal_analysis.halal_status === 'haram') {
+    if (productData.halal_analysis.halal_status === 'haram') {
       (navigation.navigate as any)('Haram', {
-        productData: data.product,
-        halalStatus: data.halal_analysis.halal_status,
-        why: data.halal_analysis.why,
-        additives: data.halal_analysis.additives,
+        productData: productData.product,
+        halalStatus: productData.halal_analysis.halal_status,
+        why: productData.halal_analysis.why,
+        additives: productData.halal_analysis.additives,
       });
     }
 
-    if (data.halal_analysis.halal_status === 'unknown') {
+    if (productData.halal_analysis.halal_status === 'unknown') {
       (navigation.navigate as any)('Unknown', {
-        productData: data.product,
-        halalStatus: data.halal_analysis.halal_status,
-        why: data.halal_analysis.why,
-        additives: data.halal_analysis.additives,
+        productData: productData.product,
+        halalStatus: productData.halal_analysis.halal_status,
+        why: productData.halal_analysis.why,
+        additives: productData.halal_analysis.additives,
       });
     }
-    if (data.halal_analysis.halal_status === 'not found') {
+    if (productData.halal_analysis.halal_status === 'not found') {
       (navigation.navigate as any)('NotFound');
     }
   };

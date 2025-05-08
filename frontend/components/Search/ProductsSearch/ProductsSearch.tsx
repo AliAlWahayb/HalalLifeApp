@@ -3,11 +3,11 @@ import { useInfiniteProducts, Product } from 'hooks/useSearch';
 import React, { useState, useEffect, useMemo, memo } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
-
-import Card from './Components/Card';
-const MemoizedCard = memo(Card); // Create a memoized version of your Card component
-
 import { GLOBAL_COLORS } from 'themes/themes';
+
+import Card from './Components/Card'; // Create a memoized version of your Card component
+
+const MemoizedCard = memo(Card);
 
 interface ProductsSearchProps {
   searchQuery: string;

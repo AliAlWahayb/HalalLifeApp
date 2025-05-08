@@ -1,8 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import AlternativeCarousel from 'components/Shared/Carousel/AlternativeCarousel';
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, ScrollView, BackHandler } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 import Additives from './Components/Additives';
@@ -15,6 +15,7 @@ import Why from './Components/Why';
 
 // Interfaces
 interface ProductData {
+  _id: string;
   code: string;
   product: {
     countries: string;
@@ -61,7 +62,6 @@ interface additive {
   ingredient_name: string | null;
 }
 
-
 interface Props {
   productData: ProductData;
   halalStatus: string;
@@ -96,6 +96,18 @@ const Unknown = () => {
   //     img: require('../../assets/Products/image.png'),
   //   },
   // ];
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const backAction = () => {
+      (navigation.navigate as any)({ name: 'Scanner' });
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, []);
 
   return (
     <ScrollView className="flex-1 bg-background py-5" contentContainerClassName="items-center">
