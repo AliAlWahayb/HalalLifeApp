@@ -7,6 +7,7 @@ import { Image } from 'expo-image';
 
 import { useProduct } from 'hooks/useProduct';
 import { GLOBAL_COLORS } from 'themes/themes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -27,55 +28,111 @@ const Card: React.FC<CardProps> = ({ Name, img, Source, Status, code }) => {
 
   const { data, isLoading, isError, error, isSuccess, refetch } = useProduct(barcode);
 
-  const redirectToProduct = useCallback(() => {
-    if (!data || !data.halal_analysis) {
-      (navigation.navigate as any)('NotFound');
-      return;
+  const saveProductLocally = async (barcode: string, productData: any) => {
+    try {
+      await AsyncStorage.setItem(String(barcode), JSON.stringify(productData));
+    } catch (error) {
+      console.error('Error saving product locally:', error);
     }
+  };
 
-    const halalStatus = data.halal_analysis.halal_status;
-    const navigationParams = {
-      productData: data.product,
-      halalStatus: halalStatus,
-      why: data.halal_analysis.why,
-      additives: data.halal_analysis.additives,
-    };
-
-
-    switch (halalStatus) {
-      case 'halal':
-        (navigation.navigate as any)('Camera', { screen: 'Halal', params: navigationParams });
-        break;
-      case 'haram':
-        (navigation.navigate as any)('Camera', { screen: 'Haram', params: navigationParams });
-        break;
-      case 'unknown':
-        (navigation.navigate as any)('Camera', { screen: 'Unknown', params: navigationParams });
-        break;
-      case 'not found':
-        (navigation.navigate as any)('NotFound');
-        break;
-      default:
-        (navigation.navigate as any)('NotFound');
-        break;
+  const getProductFromLocal = async (barcode: string) => {
+    try {
+      const productData = await AsyncStorage.getItem(String(barcode));
+      if (productData) {
+        return { ...JSON.parse(productData), isFromLocal: true };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error retrieving product from local storage:', error);
+      return null;
     }
-  }, [data, navigation]);
+  };
 
-  useEffect(() => {
-    if (barcode) {
-      refetch();
-    }
-  }, [barcode, refetch]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      redirectToProduct();
-    }
-  }, [isSuccess, redirectToProduct]);
+  const redirectToProduct = useCallback(
+    (productData: {
+      halal_analysis: { halal_status: string; why: any; additives: any };
+      product: any;
+    }) => {
+      if (productData.halal_analysis.halal_status === 'halal') {
+        (navigation.navigate as any)('Camera', {
+          screen: 'Halal',
+          params: {
+            productData: productData.product,
+            halalStatus: productData.halal_analysis.halal_status,
+            why: productData.halal_analysis.why,
+            additives: productData.halal_analysis.additives,
+          },
+        });
+      }
+      if (productData.halal_analysis.halal_status === 'haram') {
+        (navigation.navigate as any)('Camera', {
+          screen: 'Haram',
+          params: {
+            productData: productData.product,
+            halalStatus: productData.halal_analysis.halal_status,
+            why: productData.halal_analysis.why,
+            additives: productData.halal_analysis.additives,
+          },
+        });
+      }
+      if (productData.halal_analysis.halal_status === 'unknown') {
+        (navigation.navigate as any)('Camera', {
+          screen: 'Unknown',
+          params: {
+            productData: productData.product,
+            halalStatus: productData.halal_analysis.halal_status,
+            why: productData.halal_analysis.why,
+            additives: productData.halal_analysis.additives,
+          },
+        });
+      }
+      if (productData.halal_analysis.halal_status === 'not found') {
+        (navigation.navigate as any)('Camera', {
+          screen: 'NotFound',
+        });
+      }
+    },
+    [navigation]
+  );
 
   const handlePress = () => {
     setBarcode(code);
   };
+
+  useEffect(() => {
+    if (barcode) {
+      const fetchProduct = async () => {
+        const localProduct = await getProductFromLocal(barcode);
+        if (localProduct) {
+          console.log('Product found locally.');
+          if (localProduct.isFromLocal) {
+            console.log('This product was retrieved from local storage.');
+          }
+          redirectToProduct(localProduct);
+          return; // Exit early to prevent API call
+        }
+
+        // If not found locally, fetch from server
+        refetch();
+      };
+
+      fetchProduct();
+    }
+  }, [barcode, refetch, redirectToProduct]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      saveProductLocally(barcode, data);
+      redirectToProduct(data);
+    }
+    if (isError) {
+      (navigation.navigate as any)('Camera', {
+        screen: 'NotFound',
+      });
+    }
+    setBarcode('');
+  }, [isSuccess, isError, data, navigation]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

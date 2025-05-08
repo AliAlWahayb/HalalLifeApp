@@ -1,4 +1,5 @@
 import { Fontisto, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import TwoButtons from 'components/Shared/Buttons/TwoButtons';
 import React, { useState } from 'react';
 import { useTheme } from 'themes/ThemeProvider';
@@ -6,10 +7,14 @@ import { useTheme } from 'themes/ThemeProvider';
 const ProductButtons = () => {
   const [Favoriteicon, setFavoriteicon] = useState(false);
 
+  const navigation = useNavigation();
+
   const handleFavorite = () => {
     setFavoriteicon(!Favoriteicon);
   };
-  const handleReport = () => {};
+  const handleReport = () => {
+    (navigation.navigate as any)({ name: 'ReportView' });
+  };
 
   const { theme } = useTheme();
 
