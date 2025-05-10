@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, ScrollView, BackHandler } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 import ProductButtons from './Components/ProductButtons';
@@ -11,10 +11,11 @@ import Details from './Components/Details';
 import Hero from './Components/Hero';
 import AlternativeCarousel from 'components/Shared/Carousel/AlternativeCarousel';
 import Why from './Components/Why';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 // Interfaces
 interface ProductData {
+  _id: string;
   code: string;
   product: {
     countries: string;
@@ -66,13 +67,13 @@ interface Props {
   halalStatus: string;
   why: why[];
   additives: additive[];
-
 }
 
 const Haram = () => {
   const { theme } = useTheme();
   const route = useRoute();
-  const { productData, halalStatus, why, additives  } = route.params as Props;
+  const { productData, halalStatus, why, additives } = route.params as Props;
+  const barcode = productData?._id || productData?.code;
 
   // const alternatives = [
   //   {
@@ -96,6 +97,18 @@ const Haram = () => {
   //     img: require('../../assets/Products/image.png'),
   //   },
   // ];
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const backAction = () => {
+      (navigation.navigate as any)({ name: 'Scanner' });
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, []);
 
   return (
     <ScrollView className="flex-1 bg-background py-5" contentContainerClassName="items-center">

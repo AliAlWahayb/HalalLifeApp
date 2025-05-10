@@ -20,7 +20,7 @@ const TextInputCheckBox = ({ title, onPress }: { title: string; onPress: () => v
       onPress={HandleChange}
       className="flex flex-row items-center py-2">
       <Checkbox
-        style={{ marginLeft: 20, marginRight: 10 }}
+        style={{ marginLeft: 10, marginRight: 10 }}
         value={isChecked}
         onValueChange={setChecked}
         color={isChecked ? theme.colors.secondary : undefined}

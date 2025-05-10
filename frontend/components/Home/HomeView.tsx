@@ -160,7 +160,7 @@ const HomeView = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingTop: Platform.OS === 'ios' ? 100 : 25,
-          paddingBottom: 30,
+          paddingBottom: Platform.OS === 'ios' ? 5 : 30,
         }}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
           useNativeDriver: false,
@@ -309,7 +309,7 @@ const HomeView = () => {
         </View>
 
         {/* Contributors Section */}
-        <View className="mb-5">
+        {/* <View className="mb-5">
           <View className="mb-4 flex-row items-center justify-between px-4">
             <Text
               className="text-xl font-bold"
@@ -336,7 +336,7 @@ const HomeView = () => {
               />
             ))}
           </View>
-        </View>
+        </View> */}
       </Animated.ScrollView>
     </View>
   );

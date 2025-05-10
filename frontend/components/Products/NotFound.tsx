@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import Buttons from 'components/Shared/Buttons/AliButtons';
-import React from 'react';
-import { View, Text, Button } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Button, BackHandler } from 'react-native';
 import { useTheme } from 'themes/ThemeProvider';
 
 const NotFound = () => {
@@ -26,6 +26,16 @@ const NotFound = () => {
   const HandleSearch = () => {
     navigation.navigate('Search');
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      (navigation.navigate as any)({ name: 'Scanner' });
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () => BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, []);
 
   return (
     <View className="flex-1 items-center  bg-background py-5">

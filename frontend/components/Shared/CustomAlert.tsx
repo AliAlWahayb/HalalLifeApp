@@ -7,7 +7,7 @@ import { View, Text, Modal, TouchableOpacity } from 'react-native';
 interface CustomAlertProps {
   visible: boolean; // Controls if the alert is shown
   title: string;
-  message: string;
+  message?: string;
   onClose: () => void; // Function to call when the alert should be closed
   // You can add more props for multiple buttons, different button actions, etc.
   confirmButtonText?: string; // Optional text for the confirmation button
@@ -41,7 +41,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
           <Text className="mb-3 pt-5 text-center text-2xl font-bold text-textPrimary">{title}</Text>
 
           {/* Message */}
-          <Text className="mb-6 text-center text-base text-textMuted">{message}</Text>
+          {message && <Text className="mb-6 text-center text-base text-textMuted">{message}</Text>}
 
           {/* Buttons Container */}
           <View className="flex-row justify-center gap-2 py-3">

@@ -20,6 +20,7 @@ import ProtectedScreen from 'components/Shared/ProtectedScreen/ProtectedScreen';
 import { AuthContext } from '../../context/Auth-context';
 import { PressableProps } from 'react-native/Libraries/Components/Pressable/Pressable';
 import ChatView from 'components/chatBot/ChatView';
+import HistoryView from 'components/History/HistoryView';
 
 const Tab = createBottomTabNavigator();
 
@@ -69,7 +70,7 @@ const BottomTab: React.FC = () => {
       headerShown: true,
       headerTitle: () => null,
       headerStyle: {
-        minHeight: Platform.OS === 'ios' ? 88 : 50,
+        minHeight: Platform.OS === 'ios' ? 95 : 50,
         backgroundColor: theme.colors.background,
       },
       headerLeft: () => (
@@ -113,7 +114,7 @@ const BottomTab: React.FC = () => {
         marginBottom: Platform.OS === 'ios' ? 5 : 3,
       },
       // Custom tabBarButton to remove feedback
-      tabBarButton: (props: any ) => (
+      tabBarButton: (props: any) => (
         <Pressable
           {...props}
           android_ripple={{ color: 'transparent' }} // Set ripple color to transparent for Android
@@ -183,7 +184,7 @@ const BottomTab: React.FC = () => {
       {/* Pass modalVisible and setModalVisible to SideMenu */}
       <SideMenu modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
-      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Search">
+      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Home">
         <Tab.Screen
           name="Chat"
           component={ChatView}
@@ -231,7 +232,7 @@ const BottomTab: React.FC = () => {
           }}>
           {() => (
             <ProtectedScreen>
-              <SearchView />
+              <HistoryView />
             </ProtectedScreen>
           )}
         </Tab.Screen>
@@ -244,18 +245,6 @@ const BottomTab: React.FC = () => {
           {() => (
             <ProtectedScreen>
               <Preference />
-            </ProtectedScreen>
-          )}
-        </Tab.Screen>
-
-        <Tab.Screen
-          name="Favorites"
-          options={{
-            tabBarItemStyle: { display: 'none' },
-          }}>
-          {() => (
-            <ProtectedScreen>
-              <SearchView />
             </ProtectedScreen>
           )}
         </Tab.Screen>
