@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa" />
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Community Contribution Workflow</text>
+  
+  <!-- User Journey -->
+  <rect x="100" y="100" width="140" height="70" rx="10" ry="10" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" />
+  <text x="170" y="135" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">User</text>
+  <text x="170" y="155" font-family="Arial" font-size="12" text-anchor="middle">Community Member</text>
+  
+  <rect x="340" y="100" width="140" height="70" rx="10" ry="10" fill="#e8f5e9" stroke="#388e3c" stroke-width="2" />
+  <text x="410" y="135" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Contribution</text>
+  <text x="410" y="155" font-family="Arial" font-size="12" text-anchor="middle">Data Submission</text>
+  
+  <rect x="580" y="100" width="140" height="70" rx="10" ry="10" fill="#fff3e0" stroke="#ff8f00" stroke-width="2" />
+  <text x="650" y="135" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Validation</text>
+  <text x="650" y="155" font-family="Arial" font-size="12" text-anchor="middle">Review Process</text>
+  
+  <rect x="580" y="250" width="140" height="70" rx="10" ry="10" fill="#f3e5f5" stroke="#8e24aa" stroke-width="2" />
+  <text x="650" y="285" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Database</text>
+  <text x="650" y="305" font-family="Arial" font-size="12" text-anchor="middle">Storage & Processing</text>
+  
+  <rect x="340" y="250" width="140" height="70" rx="10" ry="10" fill="#fce4ec" stroke="#c2185b" stroke-width="2" />
+  <text x="410" y="285" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Rewards</text>
+  <text x="410" y="305" font-family="Arial" font-size="12" text-anchor="middle">Points & Recognition</text>
+  
+  <rect x="100" y="250" width="140" height="70" rx="10" ry="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" />
+  <text x="170" y="285" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Community</text>
+  <text x="170" y="305" font-family="Arial" font-size="12" text-anchor="middle">Shared Knowledge</text>
+  
+  <!-- Arrows -->
+  <line x1="240" y1="135" x2="340" y2="135" stroke="#666" stroke-width="2" />
+  <polygon points="340,135 330,130 330,140" fill="#666" />
+  
+  <line x1="480" y1="135" x2="580" y2="135" stroke="#666" stroke-width="2" />
+  <polygon points="580,135 570,130 570,140" fill="#666" />
+  
+  <line x1="650" y1="170" x2="650" y2="250" stroke="#666" stroke-width="2" />
+  <polygon points="650,250 645,240 655,240" fill="#666" />
+  
+  <line x1="580" y1="285" x2="480" y2="285" stroke="#666" stroke-width="2" />
+  <polygon points="480,285 490,280 490,290" fill="#666" />
+  
+  <line x1="340" y1="285" x2="240" y2="285" stroke="#666" stroke-width="2" />
+  <polygon points="240,285 250,280 250,290" fill="#666" />
+  
+  <line x1="170" y1="250" x2="170" y2="170" stroke="#666" stroke-width="2" />
+  <polygon points="170,170 165,180 175,180" fill="#666" />
+  
+  <!-- Content Details -->
+  <rect x="100" y="350" width="620" height="230" rx="10" ry="10" fill="white" stroke="#bdbdbd" stroke-width="2" />
+  
+  <!-- Submission Form -->
+  <rect x="120" y="370" width="270" height="190" rx="5" ry="5" fill="#fff" stroke="#bdbdbd" stroke-width="1" />
+  <text x="255" y="390" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Product Submission Form</text>
+  
+  <rect x="140" y="405" width="230" height="25" rx="3" ry="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" />
+  <text x="155" y="422" font-family="Arial" font-size="12" text-anchor="start" fill="#757575">Barcode: 8901764023766</text>
+  
+  <rect x="140" y="440" width="230" height="25" rx="3" ry="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" />
+  <text x="155" y="457" font-family="Arial" font-size="12" text-anchor="start" fill="#757575">Product Name: Halal Chicken Sausage</text>
+  
+  <rect x="140" y="475" width="230" height="25" rx="3" ry="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" />
+  <text x="155" y="492" font-family="Arial" font-size="12" text-anchor="start" fill="#757575">Brand: Premium Foods</text>
+  
+  <rect x="140" y="510" width="230" height="25" rx="3" ry="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" />
+  <text x="155" y="527" font-family="Arial" font-size="12" text-anchor="start" fill="#757575">Ingredients: Chicken, Salt, Spices...</text>
+  
+  <rect x="215" y="545" width="80" height="30" rx="15" ry="15" fill="#4CAF50" stroke="#388e3c" stroke-width="1" />
+  <text x="255" y="565" font-family="Arial" font-size="14" text-anchor="middle" fill="white" font-weight="bold">Submit</text>
+  
+  <!-- Point System -->
+  <rect x="430" y="370" width="270" height="190" rx="5" ry="5" fill="#fff" stroke="#bdbdbd" stroke-width="1" />
+  <text x="565" y="390" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Community Points System</text>
+  
+  <!-- Points Table -->
+  <rect x="450" y="405" width="230" height="25" rx="0" ry="0" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" />
+  <text x="465" y="422" font-family="Arial" font-size="12" text-anchor="start" font-weight="bold">Activity</text>
+  <text x="630" y="422" font-family="Arial" font-size="12" text-anchor="end" font-weight="bold">Points</text>
+  
+  <rect x="450" y="430" width="230" height="25" rx="0" ry="0" fill="#fff" stroke="#bdbdbd" stroke-width="1" />
+  <text x="465" y="447" font-family="Arial" font-size="12" text-anchor="start">Product Submission</text>
+  <text x="630" y="447" font-family="Arial" font-size="12" text-anchor="end">10</text>
+  
+  <rect x="450" y="455" width="230" height="25" rx="0" ry="0" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" />
+  <text x="465" y="472" font-family="Arial" font-size="12" text-anchor="start">Verified Submission</text>
+  <text x="630" y="472" font-family="Arial" font-size="12" text-anchor="end">25</text>
+  
+  <rect x="450" y="480" width="230" height="25" rx="0" ry="0" fill="#fff" stroke="#bdbdbd" stroke-width="1" />
+  <text x="465" y="497" font-family="Arial" font-size="12" text-anchor="start">Correction Report</text>
+  <text x="630" y="497" font-family="Arial" font-size="12" text-anchor="end">5</text>
+  
+  <rect x="450" y="505" width="230" height="25" rx="0" ry="0" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" />
+  <text x="465" y="522" font-family="Arial" font-size="12" text-anchor="start">Scanning & Confirmation</text>
+  <text x="630" y="522" font-family="Arial" font-size="12" text-anchor="end">1</text>
+  
+  <rect x="450" y="530" width="230" height="40" rx="0" ry="0" fill="#e8f5e9" stroke="#388e3c" stroke-width="1" />
+  <text x="565" y="550" font-family="Arial" font-size="12" text-anchor="middle">Top Contributors earn badges and</text>
+  <text x="565" y="565" font-family="Arial" font-size="12" text-anchor="middle">appear on the leaderboard!</text>
+</svg>
